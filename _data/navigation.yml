@@ -1,10 +1,12 @@
 main:
   - title: "About Me"
     url: /about/
-  - title: "Teaching Resources"
+  - title: "Teaching"
     url: /teaching/
   - title: "Research"
     url: /research/
+  - title: "Learning Resources"
+    url: /learning/
   - title: "CV"
     url: /cv/
   - title: "Posts"
