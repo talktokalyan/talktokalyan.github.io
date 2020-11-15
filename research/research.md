@@ -1,8 +1,8 @@
 ---
-title: "Teaching experience 1"
+title: "My Ongoing Research"
 collection: teaching
-type: "course"
-permalink: /teaching/
+type: "Undergraduate course"
+permalink: /research/
 # venue: "University 1, Department"
 # date: 2014-01-01
 # location: "City, Country"

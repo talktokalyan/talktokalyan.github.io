@@ -1,6 +1,6 @@
 ---
-permalink: /about/
 title: "About Me"
+permalink: /about/
 ---
 
 About Kalyan
