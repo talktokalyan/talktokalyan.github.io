@@ -140,14 +140,21 @@ defaults:
   # _research
   - scope:
       path: ""
-      type: teaching
+      type: research
     values:
       layout: single
       author_profile: true
-  # _teaching
+  # _learning
   - scope:
       path: ""
-      type: teaching
+      type: learning
+    values:
+      layout: single
+      author_profile: true
+  # _cv
+  - scope:
+      path: ""
+      type: cv
     values:
       layout: single
       author_profile: true
