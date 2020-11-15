@@ -1,5 +1,5 @@
 ---
-title: "Learning Resources for Economics"
+title: "Curriculum Vitae - Kalyan"
 collection: cv
 type: "simulation"
 permalink: /cv/
