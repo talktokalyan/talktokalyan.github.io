@@ -1,6 +1,6 @@
 ---
 title: "My Ongoing Research"
-collection: teaching
+collection: research
 type: "Undergraduate course"
 permalink: /research/
 # venue: "University 1, Department"
@@ -8,7 +8,7 @@ permalink: /research/
 # location: "City, Country"
 ---
 
-This is a description of Kalyan's teaching experience. You can use markdown like any other post.
+This is a description of Kalyan's ongoing research. 
 
 Heading 1
 ======

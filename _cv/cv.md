@@ -1,14 +1,15 @@
 ---
 title: "Learning Resources for Economics"
-collection: learning
+collection: cv
 type: "simulation"
-permalink: /learning/
+permalink: /cv/
 # venue: "University 1, Department"
 # date: 2014-01-01
 # location: "City, Country"
 ---
 
-This is a description of Kalyan's  learning resources. You can use markdown like any other post.
+This is a Kalyan's  CV resources. You can use markdown like any other post.
+[See pdf version of CV here](https://talktokalyan.github.io/cv/paper1.pdf)
 
 Heading 1
 ======
