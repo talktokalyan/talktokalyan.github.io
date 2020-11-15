@@ -36,7 +36,8 @@ timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 include:
   - _pages
- 
+  - files
+  - teaching
 
 
 # Exclude from processing.
@@ -128,7 +129,7 @@ defaults:
   # _teaching
   - scope:
       path: "teaching"
-      type: pages
+      type: teaching
     values:
       layout: single
       author_profile: true
