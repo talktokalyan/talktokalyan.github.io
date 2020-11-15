@@ -1,7 +1,7 @@
 ---
 title: "Curriculum Vitae - Kalyan"
 collection: cv
-type: "simulation"
+type: "cv"
 permalink: /cv/
 # venue: "University 1, Department"
 # date: 2014-01-01
