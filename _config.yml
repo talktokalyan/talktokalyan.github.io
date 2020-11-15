@@ -36,8 +36,11 @@ timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 include:
   - _pages
-  - files
   - _teaching
+  - _research
+  - _learning
+  - _cv
+
 
 
 
@@ -134,7 +137,20 @@ defaults:
     values:
       layout: single
       author_profile: true
-
+  # _research
+  - scope:
+      path: ""
+      type: teaching
+    values:
+      layout: single
+      author_profile: true
+  # _teaching
+  - scope:
+      path: ""
+      type: teaching
+    values:
+      layout: single
+      author_profile: true
 
 category_archive:
   type: liquid
