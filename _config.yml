@@ -126,9 +126,9 @@ defaults:
     values:
       layout: single
       author_profile: true
-  # _teaching
+  # teaching
   - scope:
-      path: "teaching"
+      path: ""
       type: teaching
     values:
       layout: single
