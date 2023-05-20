@@ -12,7 +12,7 @@ Hi, I am Kalyan Kolukuluri, an Assistant Professor in Economics at the Indian In
 
 My research interests are in applied econometrics, particularly in investigating issues related to health and household economics. I am very interested in understanding the advances to causal inference theory and apply various methods to infer causation in secondary data. My work has been accepted at _Empirical Economics_ and the _International Journal of Health Economics and Management_.
 
-I also develop teaching simulations in my spare time, an example of which is [here](http://tarangini-sim.herokuapp.com/).
+I also develop teaching simulations in my spare time, an example of which is [here](https://tarangini.onrender.com/home).
 
 
 
