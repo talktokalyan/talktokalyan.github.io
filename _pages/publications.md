@@ -19,7 +19,7 @@ Informal Credit Markets,
 
 ## Policy Articles (In Progress):
 1.	Kolukuluri K., Pani Saroj K., (2022), National Expert Report (India), in Sunil Kumar (Eds.), _Research on Institutional Ecosystem to drive Productivity_, Asian Productivity Organization, Tokyo.      
-2.	Chakraborty T., Kolukuluri K., and Verma A., (2023), _Domestic Economic Policy Uncertainty and Propagation of Shocks to Trade and Investment within the G20_, T20 Policy Briefs, G20 Secretariat.
+2.	Chakraborty T., Kolukuluri K., and Verma A., (2023), _Domestic Economic Policy Uncertainty and Propagation of Shocks to Trade and Investment within the G20_, T20 Policy Briefs, G20 Secretariat. (<a href="../files/Online-Appendix-EPU-G20.pdf" target="_blank">Access online appendix here.</a>)
 
 
 <!-- {% if author.googlescholar %}
