@@ -7,16 +7,19 @@ main:
     url: /publications/
 
   - title: "Teaching Resources"
-    url: /teaching/  
+    url: /teaching-resources/  
     
   # - title: "Talks"
   #   url: /talks/      
     
   # - title: "Portfolio"
   #   url: /portfolio/
-        
-  - title: "Musings"
-    url: /year-archive/
+  
+  # - title: "Musings"
+  #   url: /year-archive/ 
+    
+  - title: "Learning Resources for Economists"
+    url: /learning-resources/
     
   # - title: "Guide"
   #   url: /markdown/

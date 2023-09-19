@@ -1,23 +1,18 @@
 ---
 layout: archive
 title: ""
-permalink: /teaching/
+permalink: /learning-resources/
 author_profile: true
 ---
-## Learning Resources
+## Learning Resources I have developed
 [_**Tarangini**_](https://tarangini.onrender.com/home) is a web based listing of teaching simulations I have developed. It is a work in progress. Tarangini can be used as a companion to visualize concepts in Economics & Econometrics. Example of some simulations, developed using Python and Dash framework:
 * Economic cost functions
 * Solow growth model
 * Basic Utility maximization
 * Central limit theorem
 
-## Teaching
-### Macroeconomics
-1. Post-Graduate Program in Management (MBA)
-2. Post-Graduate Program in Management for Experienced Professional (Executive MBA)
-  
-### Introductory Econometrics
-1. PhD in Management 
+## Publicly available databases
+1. [_**DBIE**_](https://cimsdbie.rbi.org.in/#/dbie/home) is RBI's Database on the Indian Economy.
 
 
 <!-- {% if author.googlescholar %}
