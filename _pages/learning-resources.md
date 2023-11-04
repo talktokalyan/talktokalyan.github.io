@@ -11,8 +11,9 @@ author_profile: true
 * Basic Utility maximization
 * Central limit theorem
 
-## Publicly available databases
+## Publicly available data
 1. [_**DBIE**_](https://cimsdbie.rbi.org.in/#/dbie/home) is RBI's Database on the Indian Economy.
+2. [**RBI's Data Releases (Daily, Monthly, Quarterly, Annual)**](https://www.rbi.org.in/Scripts/Statistics.aspx)
 
 
 <!-- {% if author.googlescholar %}
