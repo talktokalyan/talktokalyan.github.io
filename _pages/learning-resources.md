@@ -28,8 +28,8 @@ World Trade and International Economics
 ## Open Source Books (BookDown and Others)
 1. [**Principles of Econometrics with R**](https://bookdown.org/ccolonescu/RPoE4/)
 2. [**Epidemiology in R**](https://bookdown.org/jbrophy115/bookdown-clinepi/)
-3. [**Forecasting: Principles and Practice**](https://otexts.com/fpp3/)
-4. 
+3. [** Forecasting: Principles and Practice - Rob Hyndman and George Athanopolous **](https://otexts.com/fpp3/)
+4. [**Econometrics with R**](https://www.econometrics-with-r.org)
 <!-- {% if author.googlescholar %}
   You can also find my articles on <u><a href="{{author.googlescholar}}">my Google Scholar profile</a>.</u>
 {% endif %}
