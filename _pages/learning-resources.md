@@ -30,6 +30,7 @@ World Trade and International Economics
 2. [**Epidemiology in R**](https://bookdown.org/jbrophy115/bookdown-clinepi/)
 3. [**Forecasting: Principles and Practice - Rob Hyndman and George Athanopolous**](https://otexts.com/fpp3/)
 4. [**Econometrics with R**](https://www.econometrics-with-r.org)
+5. [**A Short Course in Time Series Analysis - R.Peng**](https://bookdown.org/rdpeng/timeseriesbook/)
 
 <!-- {% if author.googlescholar %}
   You can also find my articles on <u><a href="{{author.googlescholar}}">my Google Scholar profile</a>.</u>
