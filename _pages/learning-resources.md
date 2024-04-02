@@ -31,6 +31,7 @@ World Trade and International Economics
 3. [**Forecasting: Principles and Practice - Rob Hyndman and George Athanopolous**](https://otexts.com/fpp3/)
 4. [**Econometrics with R**](https://www.econometrics-with-r.org)
 5. [**A Short Course in Time Series Analysis - R.Peng**](https://bookdown.org/rdpeng/timeseriesbook/)
+6. [**Causal Inference-Animation-Nick Huntington Klein**](https://nickchk.com/causalgraphs.html)
 
 <!-- {% if author.googlescholar %}
   You can also find my articles on <u><a href="{{author.googlescholar}}">my Google Scholar profile</a>.</u>
