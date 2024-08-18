@@ -20,6 +20,10 @@ World Trade and International Economics
 1. [World Integrated Trade Solution (WITS)](https://wits.worldbank.org/)
 2. [UNCTAD](https://unctad.org/statistics)
 3. [International Debt Statistics, World Bank](https://www.worldbank.org/en/programs/debt-statistics/ids)
+4. [Chatham House Resource Trade Database (CHRTD) - Natural Resources Trade](https://resourcetrade.earth/)
+5. [NYU Stern Globalization Explorer (CAGE, MAPS) - Gravity Trade Model](https://globalization.stern.nyu.edu/maps)
+6. []()
+
 
 ## Indian Elections Data
 1. [Election Commision of India](https://www.eci.gov.in/statistical-reports)
