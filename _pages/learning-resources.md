@@ -12,21 +12,23 @@ author_profile: true
 * Central limit theorem
 
 ## Publicly available data
-India
+### India
 1. [DBIE](https://cimsdbie.rbi.org.in/#/dbie/home) is RBI's Database on the Indian Economy.
 2. [RBI's Data Releases (Daily, Monthly, Quarterly, Annual)](https://www.rbi.org.in/Scripts/Statistics.aspx)
 
-World Trade and International Economics
+### World Trade and International Economics
 1. [World Integrated Trade Solution (WITS)](https://wits.worldbank.org/)
 2. [UNCTAD](https://unctad.org/statistics)
 3. [International Debt Statistics, World Bank](https://www.worldbank.org/en/programs/debt-statistics/ids)
 4. [Chatham House Resource Trade Database (CHRTD) - Natural Resources Trade](https://resourcetrade.earth/)
 5. [NYU Stern Globalization Explorer (CAGE, MAPS) - Gravity Trade Model](https://globalization.stern.nyu.edu/maps)
-6. []()
 
+### Journal Replication Datasets
+1. [Harvard Dataverse](https://dataverse.harvard.edu/)
+2. [Journal of Applied Econometrics Datasets](https://journaldata.zbw.eu/journals/jae)
 
 ## Indian Elections Data
-1. [Election Commision of India](https://www.eci.gov.in/statistical-reports)
+1. [Election Commission of India](https://www.eci.gov.in/statistical-reports)
 2. [Trivedi Centre for Political Data, Ashoka University](https://tcpd.ashoka.edu.in/data/)
 
 ## Statistics and Econometrics
