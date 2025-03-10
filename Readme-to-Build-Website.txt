@@ -3,7 +3,7 @@
 * Basic config options: _config.yml
 * Top navigation bar config: _data/navigation.yml
 * Single pages: _pages/
-	This is the one that matters to Kalysn's Website
+	This is the one that matters to Kalyan's Personal Website
 * Collections of pages are .md or .html files in:
   * _publications/
   * _portfolio/
