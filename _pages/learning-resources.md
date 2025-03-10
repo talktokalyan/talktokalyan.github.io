@@ -5,15 +5,15 @@ permalink: /learning-resources/
 author_profile: true
 ---
 ## Learning Resources I have developed
-[_**Tarangini**_](https://tarangini.onrender.com/home) is a web based listing of teaching simulations I have developed. It is a work in progress. Tarangini can be used as a companion to visualize concepts in Economics & Econometrics. Example of some simulations, developed using Python and Dash framework:
+[_**Tarangini**_](https://tarangini.onrender.com/home){:target="_blank"} is a web based listing of teaching simulations I have developed. It is a work in progress. Tarangini can be used as a companion to visualize concepts in Economics & Econometrics. Example of some simulations, developed using Python and Dash framework:
 * Economic cost functions
 * Solow growth model
 * Basic Utility maximization
 * Central limit theorem
 
 ## Journal Replication Data
-1. [Harvard Dataverse](https://dataverse.harvard.edu/)
-2. [Journal of Applied Econometrics Data](https://journaldata.zbw.eu/journals/jae)
+1. [Harvard Dataverse](https://dataverse.harvard.edu/){:target="_blank"}
+2. [Journal of Applied Econometrics Data](https://journaldata.zbw.eu/journals/jae){:target="_blank"}
    
 ## Publicly available data
 ### India
