@@ -27,7 +27,7 @@ author_profile: true
 4. [Chatham House Resource Trade Database (CHRTD) - Natural Resources Trade](https://resourcetrade.earth/)
 5. [NYU Stern Globalization Explorer (CAGE, MAPS) - Gravity Trade Model](https://globalization.stern.nyu.edu/maps)
 6. [Harvard Economic Complexity Atlas - HS2 level Trade Viz b/w countries](https://atlas.hks.harvard.edu/explore/treemap?exporter=country-356)
-7. [ITC-Export Potential Map](https://exportpotential.intracen.org/en/)
+7. [ITC-Export Potential Map](https://exportpotential.intracen.org/en/){:target="_blank"}
    
 ## Indian Elections Data
 1. [Election Commission of India](https://www.eci.gov.in/statistical-reports)
