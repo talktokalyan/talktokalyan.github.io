@@ -5,13 +5,13 @@ permalink: /learning-resources/
 author_profile: true
 ---
 ## Learning Resources I have developed
-[_**Tarangini**_](https://tarangini.onrender.com/home) is a web based listing of teaching simulations I have developed. It is a work in progress. Tarangini can be used as a companion to visualize concepts in Economics & Econometrics. Example of some simulations, developed using Python and Dash framework:
+[_**Tarangini**_](https://tarangini.onrender.com/home) is a web-based listing of teaching simulations I have developed. It is a work in progress. Tarangini can be used as a companion to visualize concepts in Economics & Econometrics. Example of some simulations, developed using Python and the Dash framework:
 * Economic cost functions
 * Solow growth model
 * Basic Utility maximization
 * Central limit theorem
 
-## Journal Replication Data
+## Replication Datasets for Journal Published Studies
 1. [Harvard Dataverse](https://dataverse.harvard.edu/)
 2. [Journal of Applied Econometrics Data](https://journaldata.zbw.eu/journals/jae)
    
@@ -26,9 +26,11 @@ author_profile: true
 3. [International Debt Statistics, World Bank](https://www.worldbank.org/en/programs/debt-statistics/ids)
 4. [Chatham House Resource Trade Database (CHRTD) - Natural Resources Trade](https://resourcetrade.earth/)
 5. [NYU Stern Globalization Explorer (CAGE, MAPS) - Gravity Trade Model](https://globalization.stern.nyu.edu/maps)
+6. [Harvard Economic Complexity Atlas - HS2 level Trade Viz b/w countries](https://atlas.hks.harvard.edu/explore/treemap?exporter=country-356)
+7. [ITC-Export Potential Map](https://exportpotential.intracen.org/en/)
    
 ## Indian Elections Data
-1. [Election Commision of India](https://www.eci.gov.in/statistical-reports)
+1. [Election Commission of India](https://www.eci.gov.in/statistical-reports)
 2. [Trivedi Centre for Political Data, Ashoka University](https://tcpd.ashoka.edu.in/data/)
 
 ## Statistics and Econometrics
