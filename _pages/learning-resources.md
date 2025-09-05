@@ -24,6 +24,9 @@ author_profile: true
 1. [World Integrated Trade Solution (WITS)](https://wits.worldbank.org/){:target="_blank"}
 2. [UNCOMTRADE - Time Series of HS6 level Merchandise Trade b/w Countries](https://comtradeplus.un.org/){:target="_blank"}
 3. [UNCTAD](https://unctad.org/statistics){:target="_blank"}
+   A. [Food Processing trade](https://unctadstat.unctad.org/EN/ProcessedFood.html){:target="_blank"}
+   B. [Trade and Transport Costs](https://unctadstat.unctad.org/EN/TransportCost.html){:target="_blank"}
+   C. [Non Tariff Measures data](https://trainsonline.unctad.org/detailedSearch){:target="_blank"}
 4. [International Debt Statistics, World Bank](https://www.worldbank.org/en/programs/debt-statistics/ids){:target="_blank"}
 5. [Chatham House Resource Trade Database (CHRTD) - Natural Resources Trade](https://resourcetrade.earth/){:target="_blank"}
 6. [NYU Stern Globalization Explorer (CAGE, MAPS) - Gravity Trade Model](https://globalization.stern.nyu.edu/maps){:target="_blank"}
