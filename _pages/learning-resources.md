@@ -24,12 +24,16 @@ author_profile: true
 1. [World Integrated Trade Solution (WITS)](https://wits.worldbank.org/){:target="_blank"}
 2. [UNCOMTRADE - Time Series of HS6 level Merchandise Trade b/w Countries](https://comtradeplus.un.org/){:target="_blank"}
 3. [UNCTAD](https://unctad.org/statistics){:target="_blank"}
+   A. [UNCTAD Data Centre](https://unctadstat.unctad.org/datacentre/){:target="_blank"}
+   B. [Revealed Comparative Advantage](https://unctadstat.unctad.org/EN/RcaRadar.html){:target="_blank"}
+   C. [Trade and Transport Dataset ](https://unctadstat.unctad.org/EN/TransportCost.html){:target="_blank"}
 4. [International Debt Statistics, World Bank](https://www.worldbank.org/en/programs/debt-statistics/ids){:target="_blank"}
 5. [Chatham House Resource Trade Database (CHRTD) - Natural Resources Trade](https://resourcetrade.earth/){:target="_blank"}
 6. [NYU Stern Globalization Explorer (CAGE, MAPS) - Gravity Trade Model](https://globalization.stern.nyu.edu/maps){:target="_blank"}
 7. [Harvard Economic Complexity Atlas - HS2 level Trade Viz b/w countries](https://atlas.hks.harvard.edu/explore/treemap?exporter=country-356){:target="_blank"}
 8. [ITC-Export Potential Map](https://exportpotential.intracen.org/en/){:target="_blank"}
-   
+9. [WTO Tariff Data](https://www.wto.org/english/res_e/statis_e/statis_e.htm){:target="_blank"}
+
 ## Indian Elections Data
 1. [Election Commission of India](https://www.eci.gov.in/statistical-reports){:target="_blank"}
 2. [Trivedi Centre for Political Data, Ashoka University](https://tcpd.ashoka.edu.in/data/){:target="_blank"}
