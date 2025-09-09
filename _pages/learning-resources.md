@@ -32,6 +32,7 @@ author_profile: true
 6. [NYU Stern Globalization Explorer (CAGE, MAPS) - Gravity Trade Model](https://globalization.stern.nyu.edu/maps){:target="_blank"}
 7. [Harvard Economic Complexity Atlas - HS2 level Trade Viz b/w countries](https://atlas.hks.harvard.edu/explore/treemap?exporter=country-356){:target="_blank"}
 8. [ITC-Export Potential Map](https://exportpotential.intracen.org/en/){:target="_blank"}
+9. [BIS Triennial Survey - Global Forex and OTC Derivates Markets](https://www.bis.org/stats_triennial_surveys/index.htm){:target="_blank"}
    
 ## Indian Elections Data
 1. [Election Commission of India](https://www.eci.gov.in/statistical-reports){:target="_blank"}
