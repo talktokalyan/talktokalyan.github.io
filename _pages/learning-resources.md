@@ -58,7 +58,9 @@ author_profile: true
 3.[OECD Toolkit](https://oecd-opsi.org/toolkits/){:target="_blank"}
 4.[UN Practioner Toolkit](https://migrantprotection.iom.int/en/resources/guideline/un-practitioners-guide-getting-started-behavioural-science){:target="_blank"}
 5.[Behaviour Change Intervention Ontology](https://www.bciontology.org/){:target="_blank"}
-<!-- {% if author.googlescholar %}
+
+<!-- 
+{% if author.googlescholar %}
   You can also find my articles on <u><a href="{{author.googlescholar}}">my Google Scholar profile</a>.</u>
 {% endif %}
 
@@ -66,4 +68,5 @@ author_profile: true
 
 {% for post in site.publications reversed %}
   {% include archive-single.html %}
-{% endfor %} -->
+{% endfor %} 
+-->
