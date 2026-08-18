@@ -22,6 +22,7 @@ author_profile: true
 6. [Tackle Endogeneity - Panel Data (Fixed Effects)](../files/IEX-LN/LN-13-PanelData-Technique.pdf){:target="_blank"}
 7. [Tackle Endogeneity - Difference in Differences](../files/IEX-LN/LN-14-Diff-in-Diff.pdf){:target="_blank"}
 8. [Dynamic panel GMM](../files/IEX-LN/LN-Causal-Inference-Overview.pdf){:target="_blank"}
+9. 
 
 
 <!-- {% if author.googlescholar %}
