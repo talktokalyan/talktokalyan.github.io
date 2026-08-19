@@ -10,8 +10,9 @@ author_profile: true
 ### Macroeconomics 
 **Visualizations**
   1.[Circularflow in a Macroeconomy](../files/Visualizations/animated-circularflow.html){:target="_blank"}
-  2.[India's Govt Budget](../files/Visualizations/animated-india-budget.html){:target="_blank"}
-  3.[India's Economic Policy Uncertainty](../files/Visualizations/india-epu.html){:target="_blank"}
+  2.[India's CPI Inflation](../files/Visualizations/india-cpi-inflation.html){:target="_blank"}
+  3.[India's Govt Budget](../files/Visualizations/animated-india-budget.html){:target="_blank"}
+  4.[India's Economic Policy Uncertainty](../files/Visualizations/india-epu.html){:target="_blank"}
   
 ### Introductory Econometrics (PhD Level)
 **Lecture Notes**
