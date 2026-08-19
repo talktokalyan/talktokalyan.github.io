@@ -7,11 +7,11 @@ author_profile: true
 
 
 ## Teaching
-
 ### Macroeconomics 
 **Visualizations**
-    1.[Circularflow in a Macroeconomy](../files/Visualizations/animated-circularflow.html){:target="_blank"}
-    2.[India's Govt Budget](../files/Visualizations/animated-india-budget.html){:target="_blank"}
+  1.[Circularflow in a Macroeconomy](../files/Visualizations/animated-circularflow.html){:target="_blank"}
+  2.[India's Govt Budget](../files/Visualizations/animated-india-budget.html){:target="_blank"}
+  3.[India's Economic Policy Uncertainty](../files/Visualizations/india-epu.html){:target="_blank"}
   
 ### Introductory Econometrics (PhD Level)
 **Lecture Notes**
@@ -25,13 +25,3 @@ author_profile: true
   8. [Dynamic panel GMM](../files/IEX-LN/LN-Causal-Inference-Overview.pdf){:target="_blank"}
  
 
-
-<!-- {% if author.googlescholar %}
-  You can also find my articles on <u><a href="{{author.googlescholar}}">my Google Scholar profile</a>.</u>
-{% endif %}
-
-{% include base_path %}
-
-{% for post in site.publications reversed %}
-  {% include archive-single.html %}
-{% endfor %} -->
