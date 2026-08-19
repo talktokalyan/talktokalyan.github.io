@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Macroeconomic Circular Flow Model</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background-color:#0f172a;color:#f8fafc;display:flex;flex-direction:column;align-items:center;padding:16px;min-height:100vh}
+h1{font-size:22px;color:#38bdf8;margin-bottom:4px;text-align:center}
+p.subtitle{font-size:13px;color:#94a3b8;margin-bottom:14px;text-align:center;font-style:italic}
+.controls{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center;background:#1e293b;padding:12px 20px;border-radius:12px;border:1px solid #334155;margin-bottom:16px;width:100%;max-width:1520px}
+.control-group{display:flex;align-items:center;gap:8px;font-size:13px;color:#cbd5e1}
+button{background:#0284c7;color:white;border:none;padding:7px 14px;border-radius:6px;font-weight:600;font-size:12px;cursor:pointer;transition:background .2s}
+button:hover{background:#0369a1} button.active{background:#38bdf8;color:#0f172a}
+select,input[type=range]{background:#334155;color:white;border:1px solid #475569;padding:5px 8px;border-radius:6px;font-size:12px;outline:none}
+select:focus{border-color:#38bdf8}
+.app-container{display:flex;flex-direction:row;gap:16px;width:100%;max-width:1520px;align-items:flex-start}
+.canvas-card{position:relative;background:#1e293b;border-radius:16px;border:1px solid #334155;overflow:hidden;flex:1;display:flex;justify-content:center;align-items:center}
+canvas{display:block}
+.sidebar{width:340px;background:#1e293b;border:1px solid #334155;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:14px}
+.sidebar h2{font-size:15px;color:#38bdf8;border-bottom:1px solid #334155;padding-bottom:6px}
+.card-box{background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px 12px}
+.card-box h3{font-size:11px;text-transform:uppercase;color:#94a3b8;margin-bottom:4px;letter-spacing:.5px}
+.formula{font-family:"Courier New",Courier,monospace;font-weight:bold;font-size:15px;color:#10b981;margin-bottom:4px}
+.formula-desc{font-size:11px;color:#cbd5e1;line-height:1.35}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:11px;margin-top:4px;color:#cbd5e1}
+.legend-color{width:12px;height:12px;border-radius:3px}
+</style>
+</head>
+<body>
+<h1>MACROECONOMIC CIRCULAR FLOW MODEL</h1>
+<p class="subtitle">Credit - Prof. Kalyan Kolukuluri (with Google Gemini as TA)</p>
+<div class="controls">
+<div class="control-group"><label>Model:</label><button id="btn2Sector" onclick="setModel(2)">2-Sector</button><button id="btn3Sector" onclick="setModel(3)">3-Sector (+Gov & Fin)</button><button id="btn4Sector" class="active" onclick="setModel(4)">4-Sector (+Intl Sector)</button></div>
+<div class="control-group"><label for="flowTypeSelect">Flow Filter:</label><select id="flowTypeSelect" onchange="setFlowType(this.value)"><option value="all">All Flows</option><option value="real">Real Flows Only (Services/Goods)</option><option value="money">Financial Flows Only (Money/Taxes)</option></select></div>
+<div class="control-group"><button id="btnPlayPause" onclick="togglePlay()">Pause</button></div>
+<div class="control-group"><label for="speedSlider">Speed:</label><input type="range" id="speedSlider" min="0.3" max="2.5" step="0.1" value="1" oninput="setSpeed(this.value)"></div>
+</div>
+<div class="app-container">
+<div class="canvas-card"><canvas id="flowCanvas" width="1120" height="740"></canvas></div>
+<div class="sidebar">
+<h2 id="sidebarModelTitle">4-Sector Open Economy</h2>
+<div class="card-box"><h3>Aggregate Demand / Output (Y)</h3><div class="formula" id="formulaDemand">Y = C + I + G + (X - M)</div><div class="formula-desc" id="descDemand">National Output equals total spending across Consumption, Investment, Government Purchases, and Net Exports.</div></div>
+<div class="card-box"><h3>Leakages & Injections Equilibrium</h3><div class="formula" id="formulaEquilibrium" style="color:#f59e0b">S + T + M = I + G + X + TR</div><div class="formula-desc" id="descEquilibrium">Equilibrium holds when total economy Leakages (S + T + M) match total Injections (I + G + X + TR).</div></div>
+<div class="card-box"><h3>Disposable Income (Yd)</h3><div class="formula" id="formulaDisposable" style="color:#38bdf8">Yd = Y - T + TR</div><div class="formula-desc" id="descDisposable">Income available to Households after paying Direct Taxes (T) to Government and receiving Transfers (TR).</div></div>
+<div class="card-box"><h3>Flow Legend</h3><div class="legend-item"><div class="legend-color" style="background:#10b981"></div><span>Financial / Monetary Flows (Solid)</span></div><div class="legend-item"><div class="legend-color" style="background:#f59e0b"></div><span>Real Flows (Dashed Lines)</span></div></div>
+</div></div>
+<script>
+const canvas=document.getElementById('flowCanvas'),ctx=canvas.getContext('2d');
+let isRunning=true,animationSpeed=1,currentModel=4,currentFlowType='all';
+const sectors={
+households:{id:'households',label:'HOUSEHOLDS',sub:'Consumers & Owners',x:170,y:350,w:160,h:65,shape:'rectangle',color:'#0284c7',category:2},
+government:{id:'government',label:'GOVERNMENT',sub:'Fiscal Authority',x:470,y:350,w:160,h:65,shape:'rectangle',color:'#059669',category:3},
+firms:{id:'firms',label:'FIRMS',sub:'Producers & Employers',x:930,y:350,w:160,h:65,shape:'rectangle',color:'#0284c7',category:2},
+factorMkt:{id:'factorMkt',label:'FACTOR / LABOUR MARKET',sub:'Labor, Capital, Land',x:470,y:90,w:240,h:70,shape:'diamond',color:'#334155',category:2},
+financial:{id:'financial',label:'DOMESTIC FINANCIAL MARKET',sub:'Banks & Capital Markets',x:470,y:220,w:240,h:65,shape:'diamond',color:'#7e22ce',category:3},
+goodsMkt:{id:'goodsMkt',label:'GOODS & SERVICES MARKET',sub:'Products & Services',x:470,y:500,w:240,h:70,shape:'diamond',color:'#334155',category:2},
+restOfWorld:{id:'restOfWorld',label:'REST OF THE WORLD',sub:'Foreign Trade Sector',x:470,y:645,w:180,h:60,shape:'circle',color:'#d97706',category:4},
+intFinMkt:{id:'intFinMkt',label:'INTL FINANCIAL MARKET',sub:'Global Capital Flows',x:80,y:220,w:200,h:60,shape:'circle',color:'#7e22ce',category:4}};
+function getDX(id,y,side){let n=sectors[id];if(n.shape==='rectangle')return side==='left'?n.x-n.w/2:n.x+n.w/2;if(n.shape==='circle'){const r=Math.min(n.w,n.h)/2,dy=y-n.y,dx=Math.sqrt(Math.max(0,r*r-dy*dy));return side==='left'?n.x-dx:n.x+dx}let dy=Math.abs(y-n.y),dx=(n.w/2)*(1-dy/(n.h/2));return side==='left'?n.x-dx:n.x+dx}
+function getDY(id,x,side){let n=sectors[id];if(n.shape==='rectangle')return side==='top'?n.y-n.h/2:n.y+n.h/2;if(n.shape==='circle'){const r=Math.min(n.w,n.h)/2,dx=x-n.x,dy=Math.sqrt(Math.max(0,r*r-dx*dx));return side==='top'?n.y-dy:n.y+dy}let dx=Math.abs(x-n.x),dy=(n.h/2)*(1-dx/(n.w/2));return side==='top'?n.y-dy:n.y+dy}
+let allFlows=[];
+function buildFlows(){allFlows=[
+{from:'households',to:'factorMkt',label:'Factor Services (Labor)',type:'real',sectorReq:2,path:[{x:140,y:317.5},{x:140,y:75},{x:getDX('factorMkt',75,'left'),y:75}],lblSeg:1,lblAlign:'above',lblRatio:.4},
+{from:'factorMkt',to:'households',label:'National Income - Y',type:'money',sectorReq:2,path:[{x:getDX('factorMkt',105,'left'),y:105},{x:190,y:105},{x:190,y:317.5}],lblSeg:0,lblAlign:'below',lblRatio:.6},
+{from:'factorMkt',to:'firms',label:'Resource Inputs',type:'real',sectorReq:2,path:[{x:getDX('factorMkt',75,'right'),y:75},{x:960,y:75},{x:960,y:317.5}],lblSeg:0,lblAlign:'above',lblRatio:.4},
+{from:'firms',to:'factorMkt',label:'Factor payments (Wages+ Rents+ Profits)',type:'money',sectorReq:2,path:[{x:910,y:317.5},{x:910,y:105},{x:getDX('factorMkt',105,'right'),y:105}],lblSeg:1,lblAlign:'below',lblRatio:.6},
+{from:'households',to:'goodsMkt',label:'Consumption Expenditure - C',type:'money',sectorReq:2,path:[{x:190,y:382.5},{x:190,y:480},{x:getDX('goodsMkt',480,'left'),y:480}],lblSeg:1,lblAlign:'above',lblRatio:.6},
+{from:'goodsMkt',to:'households',label:'Goods & Services Delivered',type:'real',sectorReq:2,path:[{x:getDX('goodsMkt',520,'left'),y:520},{x:140,y:520},{x:140,y:382.5}],lblSeg:0,lblAlign:'below',lblRatio:.4},
+{from:'goodsMkt',to:'firms',label:'Sales Revenue',type:'money',sectorReq:2,path:[{x:getDX('goodsMkt',520,'right'),y:520},{x:960,y:520},{x:960,y:382.5}],lblSeg:0,lblAlign:'below',lblRatio:.6},
+{from:'firms',to:'goodsMkt',label:'Goods Output',type:'real',sectorReq:2,path:[{x:930,y:382.5},{x:930,y:490},{x:getDX('goodsMkt',490,'right'),y:490}],lblSeg:1,lblAlign:'above',lblRatio:.7},
+{from:'firms',to:'goodsMkt',label:'Investment Expenditure - I',type:'money',sectorReq:2,path:[{x:890,y:382.5},{x:890,y:470},{x:getDX('goodsMkt',470,'right'),y:470}],lblSeg:1,lblAlign:'above',lblRatio:.3},
+{from:'households',to:'government',label:'Taxes Paid (Income & GST)',type:'money',sectorReq:3,path:[{x:250,y:340},{x:390,y:340}],lblSeg:0,lblAlign:'above',lblRatio:.5},
+{from:'government',to:'households',label:'Transfers & Wages',type:'money',sectorReq:3,path:[{x:390,y:360},{x:250,y:360}],lblSeg:0,lblAlign:'below',lblRatio:.5},
+{from:'firms',to:'government',label:'Corporate Taxes',type:'money',sectorReq:3,path:[{x:850,y:350},{x:550,y:350}],lblSeg:0,lblAlign:'above',lblRatio:.5},
+{from:'government',to:'goodsMkt',label:'Government Expenditure - G',type:'money',sectorReq:3,path:[{x:470,y:382.5},{x:470,y:getDY('goodsMkt',470,'top')}],lblSeg:0,lblAlign:'right',lblRatio:.5},
+{from:'government',to:'financial',label:'Public Savings',type:'money',sectorReq:3,path:[{x:470,y:317.5},{x:470,y:getDY('financial',470,'bottom')}],lblSeg:0,lblAlign:'right',lblRatio:.5},
+{from:'households',to:'financial',label:'Private Savings (S)',type:'money',sectorReq:3,path:[{x:230,y:317.5},{x:230,y:230},{x:getDX('financial',250,'left'),y:230}],lblSeg:1,lblAlign:'below',lblRatio:.5},
+{from:'financial',to:'firms',label:'Investment Loans',type:'money',sectorReq:3,path:[{x:getDX('financial',230,'right'),y:230},{x:870,y:230},{x:870,y:317.5}],lblSeg:0,lblAlign:'below',lblRatio:.5},
+{from:'goodsMkt',to:'restOfWorld',label:'Imports Payment (M)',type:'money',sectorReq:4,path:[{x:360,y:getDY('goodsMkt',360,'bottom')},{x:360,y:610},{x:getDX('restOfWorld',610,'left'),y:610}],lblSeg:1,lblAlign:'left',lblRatio:.5},
+{from:'restOfWorld',to:'goodsMkt',label:'Exports Revenue (X)',type:'money',sectorReq:4,path:[{x:getDX('restOfWorld',635,'right'),y:635},{x:580,y:635},{x:580,y:getDY('goodsMkt',580,'bottom')}],lblSeg:1,lblAlign:'right',lblRatio:.5},
+{from:'goodsMkt',to:'restOfWorld',label:'Real Flow of Goods (Exports Out)',type:'real',sectorReq:4,path:[{x:545,y:getDY('goodsMkt',545,'bottom')},{x:545,y:615},{x:getDX('restOfWorld',615,'right'),y:615}],lblSeg:1,lblAlign:'right',lblRatio:.5},
+{from:'restOfWorld',to:'goodsMkt',label:'Real Flow of Goods (Imports In)',type:'real',sectorReq:4,path:[{x:getDX('restOfWorld',610,'right'),y:620},{x:400,y:620},{x:400,y:getDY('goodsMkt',400,'bottom')}],lblSeg:1,lblAlign:'right',lblRatio:.5},
+{from:'intFinMkt',to:'financial',label:'Capital Inflow (Kin)',type:'money',sectorReq:4,path:[{x:getDX('intFinMkt',215,'right'),y:215},{x:getDX('financial',215,'left'),y:215}],lblSeg:0,lblAlign:'above',lblRatio:.65},
+{from:'financial',to:'intFinMkt',label:'Capital Outflow (Kout)',type:'money',sectorReq:4,path:[{x:getDX('financial',200,'left'),y:200},{x:getDX('intFinMkt',165,'right'),y:200}],lblSeg:0,lblAlign:'above',lblRatio:.25}]}
+let particles=[];buildFlows();
+function initParticles(){particles=[];getActiveFlows().forEach(flow=>{for(let i=0;i<4;i++)particles.push({flow,progress:Math.random(),speed:.002+Math.random()*.001,size:4})})}
+function getActiveFlows(){return allFlows.filter(f=>f.sectorReq<=currentModel&&(currentFlowType==='all'||f.type===currentFlowType))}
+function getPathLength(pts){let len=0;for(let i=0;i<pts.length-1;i++)len+=Math.hypot(pts[i+1].x-pts[i].x,pts[i+1].y-pts[i].y);return len}
+function getPointOnPath(pts,progress){let target=getPathLength(pts)*progress,curr=0;for(let i=0;i<pts.length-1;i++){let segLen=Math.hypot(pts[i+1].x-pts[i].x,pts[i+1].y-pts[i].y);if(curr+segLen>=target||i===pts.length-2){let r=Math.max(0,Math.min(1,(target-curr)/segLen));return{x:pts[i].x+r*(pts[i+1].x-pts[i].x),y:pts[i].y+r*(pts[i+1].y-pts[i].y)}}curr+=segLen}return pts[pts.length-1]}
+function drawArrowhead(x,y,pX,pY,color){const angle=Math.atan2(y-pY,x-pX),headLen=8;ctx.save();ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x-headLen*Math.cos(angle-Math.PI/6),y-headLen*Math.sin(angle-Math.PI/6));ctx.lineTo(x-headLen*Math.cos(angle+Math.PI/6),y-headLen*Math.sin(angle+Math.PI/6));ctx.closePath();ctx.fill();ctx.restore()}
+function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);const activeFlows=getActiveFlows();activeFlows.forEach(flow=>{const pts=flow.path,color=flow.type==='money'?'#10b981':'#f59e0b';ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);for(let i=1;i<pts.length-1;i++)ctx.arcTo(pts[i].x,pts[i].y,pts[i+1].x,pts[i+1].y,10);ctx.lineTo(pts[pts.length-1].x,pts[pts.length-1].y);ctx.strokeStyle=color;ctx.globalAlpha=.5;ctx.lineWidth=2.5;ctx.setLineDash(flow.type==='real'?[5,5]:[]);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;drawArrowhead(pts[pts.length-1].x,pts[pts.length-1].y,pts[pts.length-2].x,pts[pts.length-2].y,color);const a=pts[flow.lblSeg],b=pts[flow.lblSeg+1];let lx=a.x+(b.x-a.x)*flow.lblRatio,ly=a.y+(b.y-a.y)*flow.lblRatio;if(flow.lblAlign==='above')ly-=11;else if(flow.lblAlign==='below')ly+=11;else if(flow.lblAlign==='left')lx-=50;else if(flow.lblAlign==='right')lx+=50;ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';const tw=ctx.measureText(flow.label).width;ctx.fillStyle='rgba(15,23,42,1)';ctx.fillRect(lx-tw/2-4,ly-7,tw+8,14);ctx.fillStyle=color;ctx.fillText(flow.label,lx,ly)});
+particles.forEach(pt=>{if(isRunning){pt.progress+=pt.speed*animationSpeed;if(pt.progress>1)pt.progress=0}if(!activeFlows.includes(pt.flow))return;const pos=getPointOnPath(pt.flow.path,pt.progress),color=pt.flow.type==='money'?'#10b981':'#f59e0b';ctx.beginPath();ctx.arc(pos.x,pos.y,pt.size,0,Math.PI*2);ctx.fillStyle=color;ctx.fill()});
+Object.values(sectors).forEach(sec=>{if(sec.category>currentModel)return;ctx.fillStyle=sec.color;ctx.strokeStyle='#fff';ctx.lineWidth=1.8;if(sec.shape==='rectangle'){ctx.beginPath();ctx.roundRect(sec.x-sec.w/2,sec.y-sec.h/2,sec.w,sec.h,8);ctx.fill();ctx.stroke()}else if(sec.shape==='circle'){ctx.beginPath();ctx.arc(sec.x,sec.y,Math.min(sec.w,sec.h)/2,0,Math.PI*2);ctx.fill();ctx.stroke()}else{ctx.beginPath();ctx.moveTo(sec.x,sec.y-sec.h/2);ctx.lineTo(sec.x+sec.w/2,sec.y);ctx.lineTo(sec.x,sec.y+sec.h/2);ctx.lineTo(sec.x-sec.w/2,sec.y);ctx.closePath();ctx.fill();ctx.stroke()}ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='bold 12px sans-serif';ctx.fillText(sec.label,sec.x,sec.y-5);ctx.font='9.5px sans-serif';ctx.fillStyle='#cbd5e1';ctx.fillText(sec.sub,sec.x,sec.y+11)});
+requestAnimationFrame(draw)}
+function setModel(level){currentModel=level;document.getElementById('btn2Sector').classList.toggle('active',level===2);document.getElementById('btn3Sector').classList.toggle('active',level===3);document.getElementById('btn4Sector').classList.toggle('active',level===4);updateSidebar(level);initParticles()}
+function updateSidebar(level){const t=document.getElementById('sidebarModelTitle'),fd=document.getElementById('formulaDemand'),dd=document.getElementById('descDemand'),fe=document.getElementById('formulaEquilibrium'),de=document.getElementById('descEquilibrium'),fdi=document.getElementById('formulaDisposable'),ddi=document.getElementById('descDisposable');if(level===2){t.textContent='2-Sector Closed Economy';fd.textContent='Y = C + I';dd.textContent='National Output (Y) equals Household Consumption (C) plus Firm Investment (I).';fe.textContent='S = I';de.textContent='Household Leakage (Savings S) equals Financial Injection (Investment I).';fdi.textContent='Yd = Y';ddi.textContent='Disposable Income equals total National Income (no government taxes or transfers).'}else if(level===3){t.textContent='3-Sector Model (+ Gov & Finance)';fd.textContent='Y = C + I + G';dd.textContent='National Income includes Government Purchases (G).';fe.textContent='S + T = I + G + TR';de.textContent='Total Leakages (Savings S + Taxes T) equal Injections (Investment I + Gov Spending G + Transfers TR).';fdi.textContent='Yd = Y - T + TR';ddi.textContent='Disposable Income equals Income minus Taxes paid plus Transfer payments.'}else{t.textContent='4-Sector Open Economy';fd.textContent='Y = C + I + G + (X - M)';dd.textContent='National Output includes Net Exports (Exports X minus Imports M).';fe.textContent='S + T + M = I + G + X + TR';de.textContent='Total Leakages (S + T + M) equal Total Injections (I + G + X + TR).';fdi.textContent='Yd = Y - T + TR';ddi.textContent='Disposable Income after Net Taxes (T) and Government Transfers (TR).'}}
+function setFlowType(v){currentFlowType=v;initParticles()} function togglePlay(){isRunning=!isRunning;document.getElementById('btnPlayPause').textContent=isRunning?'Pause':'Resume'} function setSpeed(v){animationSpeed=parseFloat(v)}
+initParticles();draw();
+</script>
+</body>
+</html>

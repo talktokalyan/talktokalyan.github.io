@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Budget Flow Profile - Interactive Diagram</title>
+<style>
+:root{--bg-color:#f8fafc;--panel-bg:#fff;--primary:#4f46e5;--text-dark:#1e293b;--border-color:#e2e8f0}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body{background:var(--bg-color);color:var(--text-dark);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+header{background:var(--panel-bg);border-bottom:1px solid var(--border-color);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 3px rgba(0,0,0,.05);z-index:10}
+.title-container h1{font-size:1.25rem;font-weight:700;color:#0f172a}.title-container span{font-size:.85rem;color:#64748b;font-weight:400}
+.toolbar{display:flex;align-items:center;gap:10px}.btn{background:#fff;border:1px solid var(--border-color);padding:6px 14px;border-radius:6px;font-size:.85rem;font-weight:600;color:#334155;cursor:pointer}.btn-primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+#canvas-container{flex:1;position:relative;cursor:grab;overflow:hidden;background:#f8fafc}
+#canvas-container:active{cursor:grabbing}canvas{display:block;position:absolute;top:0;left:0}
+.legend{position:absolute;bottom:20px;left:20px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border:1px solid var(--border-color);padding:12px 16px;border-radius:8px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);display:flex;gap:16px;font-size:.8rem;pointer-events:none}
+.legend-item{display:flex;align-items:center;gap:6px}.legend-color{width:12px;height:12px;border-radius:50%;border:1px solid rgba(0,0,0,.2)}
+.tooltip{position:absolute;pointer-events:none;background:rgba(15,23,42,.9);color:#fff;padding:8px 12px;border-radius:6px;font-size:.8rem;box-shadow:0 4px 12px rgba(0,0,0,.15);display:none;z-index:100}
+</style></head><body>
+<header><div class="title-container"><h1>BUDGET PROFILE FLOW <span>(₹ In lakh crore)</span></h1><div style="font-size:.8rem;color:#64748b;margin-top:2px;">Prof. Kalyan Kolukuluri (with Google Gemini as TA)</div></div>
+<div class="toolbar"><button class="btn" id="btnZoomIn">➕ Zoom In</button><button class="btn" id="btnZoomOut">➖ Zoom Out</button><button class="btn" id="btnReset">🔄 Reset View</button><button class="btn btn-primary" id="btnExport">📷 Export Image</button></div></header>
+<div id="canvas-container"><canvas id="budgetCanvas"></canvas>
+<div class="legend"><div class="legend-item"><div class="legend-color" style="background:#9370DB"></div>Budget Size (Level 0)</div><div class="legend-item"><div class="legend-color" style="background:#87CEFA"></div>Capital / Receipts</div><div class="legend-item"><div class="legend-color" style="background:#32CD32"></div>Taxes / Revenues</div><div class="legend-item"><div class="legend-color" style="background:#D2B48C"></div>Sector Expenditure</div><div class="legend-item"><div class="legend-color" style="background:#FFB6C1"></div>Schemes & Transfers</div></div>
+<div class="tooltip" id="tooltip"></div></div>
+<script>
+const nodesData=[
+{id:'BudgetSize',label:'Budget Size',val:'53.47',level:0,x:800,y:500,radius:65,color:'#9370DB',textColor:'#ffffff'},
+{id:'CapReceipts',label:'Capital\nReceipts',val:'18.14',level:-1,x:550,y:280,radius:44,color:'#87CEFA',textColor:'#000000'},
+{id:'NetTax',label:'Net Tax\nReceipts',val:'28.67',level:-1,x:550,y:520,radius:52,color:'#32CD32',textColor:'#000000'},
+{id:'NonTax',label:'Non-Tax\nRevenue',val:'6.66',level:-1,x:550,y:780,radius:30,color:'#A9A9A9',textColor:'#000000'},
+{id:'DebtRec',label:'Debt\nReceipts',val:'16.96',level:-2,x:330,y:200,radius:40,color:'#87CEFA',textColor:'#000000'},
+{id:'NDCR',label:'NDCR',val:'1.18',level:-2,x:330,y:340,radius:20,color:'#87CEFA',textColor:'#000000'},
+{id:'GrossTax',label:'Gross Tax\nRevenue',val:'44.04',level:-2,x:330,y:520,radius:58,color:'#32CD32',textColor:'#000000'},
+{id:'InterestIn',label:'Interest\nReceipt',val:'0.42',level:-2,x:330,y:700,radius:18,color:'#A9A9A9',textColor:'#000000'},
+{id:'Dividend',label:'Dividend\n& Profit',val:'3.91',level:-2,x:330,y:790,radius:25,color:'#A9A9A9',textColor:'#000000'},
+{id:'OthersIn',label:'Others',val:'2.33',level:-2,x:330,y:880,radius:22,color:'#A9A9A9',textColor:'#000000'},
+{id:'MkLoans',label:'Market\nLoans',val:'13.03',level:-3,x:110,y:150,radius:36,color:'#87CEFA',textColor:'#000000'},
+{id:'SmallSav',label:'Small\nSavings',val:'3.93',level:-3,x:110,y:250,radius:26,color:'#87CEFA',textColor:'#000000'},
+{id:'Corporation',label:'Corporation\nTax',val:'12.31',level:-3,x:110,y:360,radius:35,color:'#32CD32',textColor:'#000000'},
+{id:'IncomeTax',label:'Taxes on\nIncome',val:'14.66',level:-3,x:110,y:460,radius:38,color:'#32CD32',textColor:'#000000'},
+{id:'GST',label:'GST',val:'10.19',level:-3,x:110,y:550,radius:32,color:'#32CD32',textColor:'#000000'},
+{id:'UnionEx',label:'Union\nExcise',val:'3.89',level:-3,x:110,y:630,radius:25,color:'#32CD32',textColor:'#000000'},
+{id:'Customs',label:'Customs',val:'2.71',level:-3,x:110,y:710,radius:22,color:'#32CD32',textColor:'#000000'},
+{id:'TaxesUT',label:'Taxes of\nUTs',val:'0.10',level:-3,x:110,y:780,radius:12,color:'#32CD32',textColor:'#000000'},
+{id:'OtherTax',label:'Others',val:'0.18',level:-3,x:110,y:830,radius:14,color:'#32CD32',textColor:'#000000'},
+{id:'StateShareTaxes',label:'State Share\nof Taxes',val:'15.26',level:-3,x:250,y:880,radius:44,color:'#32CD32',textColor:'#000000',hatched:true},
+{id:'TransferNDRF',label:'Transfer\nto NDRF',val:'0.11',level:-3,x:170,y:880,radius:12,color:'#32CD32',textColor:'#000000',hatched:true},
+{id:'SchemeExp',label:'Scheme\nExpenditure',val:'23.21',level:1,x:1050,y:340,radius:48,color:'#D2B48C',textColor:'#000000'},
+{id:'TransfersEst',label:'Transfers,\nEstablishment...',val:'30.26',level:1,x:1050,y:680,radius:54,color:'#D2B48C',textColor:'#000000'},
+{id:'CentralSec',label:'Central Sector\nSchemes',val:'17.72',level:2,x:1280,y:240,radius:42,color:'#D2B48C',textColor:'#000000'},
+{id:'CentrallySpon',label:'Centrally\nSponsored',val:'5.49',level:2,x:1280,y:380,radius:28,color:'#FFB6C1',textColor:'#000000'},
+{id:'Establishment',label:'Establishment\nExpenditure',val:'8.24',level:2,x:1280,y:540,radius:32,color:'#FFB6C1',textColor:'#000000'},
+{id:'OtherCentral',label:'Other Central\nExpenditure',val:'17.61',level:2,x:1280,y:660,radius:42,color:'#D2B48C',textColor:'#000000'},
+{id:'StateTransfers',label:'Transfers to\nStates',val:'4.41',level:2,x:1280,y:780,radius:26,color:'#D2B48C',textColor:'#000000'},
+{id:'InterestPay',label:'Interest\nPayment',val:'14.04',level:2,x:1280,y:880,radius:38,color:'#D2B48C',textColor:'#000000'},
+{id:'Economic',label:'Economic\nServices',val:'9.16',level:3,x:1510,y:160,radius:33,color:'#D2B48C',textColor:'#000000'},
+{id:'GeneralServ',label:'General\nServices',val:'2.62',level:3,x:1510,y:240,radius:22,color:'#D2B48C',textColor:'#000000'},
+{id:'Subsidy',label:'Subsidies',val:'4.55',level:3,x:1510,y:320,radius:26,color:'#D2B48C',textColor:'#000000'},
+{id:'Salary',label:'Salary',val:'1.66',level:3,x:1510,y:480,radius:20,color:'#FFB6C1',textColor:'#000000'},
+{id:'Pension',label:'Pension',val:'2.96',level:3,x:1510,y:540,radius:23,color:'#FFB6C1',textColor:'#000000'},
+{id:'OthersEst',label:'Others',val:'3.62',level:3,x:1510,y:600,radius:25,color:'#FFB6C1',textColor:'#000000'},
+{id:'FinComm',label:'Finance Comm.\nTransfers',val:'1.29',level:3,x:1510,y:750,radius:18,color:'#FFB6C1',textColor:'#000000'},
+{id:'OtherTransfers',label:'Other\nTransfers',val:'3.12',level:3,x:1510,y:820,radius:24,color:'#FFB6C1',textColor:'#000000'}];
+
+const connectionsData=[
+{from:'MkLoans',to:'DebtRec',label:'13.03'},{from:'SmallSav',to:'DebtRec',label:'3.93'},
+{from:'Corporation',to:'GrossTax',label:'12.31'},{from:'IncomeTax',to:'GrossTax',label:'14.66'},{from:'GST',to:'GrossTax',label:'10.19'},{from:'UnionEx',to:'GrossTax',label:'3.89'},{from:'Customs',to:'GrossTax',label:'2.71'},{from:'TaxesUT',to:'GrossTax',label:'0.10'},{from:'OtherTax',to:'GrossTax',label:'0.18'},
+{from:'DebtRec',to:'CapReceipts',label:'16.96'},{from:'NDCR',to:'CapReceipts',label:'1.18'},{from:'GrossTax',to:'NetTax',label:'44.04'},{from:'GrossTax',to:'StateShareTaxes',label:'15.26',redMarker:true},{from:'GrossTax',to:'TransferNDRF',label:'0.11',redMarker:true},{from:'InterestIn',to:'NonTax',label:'0.42'},{from:'Dividend',to:'NonTax',label:'3.91'},{from:'OthersIn',to:'NonTax',label:'2.33'},
+{from:'CapReceipts',to:'BudgetSize',label:'Inflow 18.14'},{from:'NetTax',to:'BudgetSize',label:'Inflow 28.67'},{from:'NonTax',to:'BudgetSize',label:'Inflow 6.66'},
+{from:'BudgetSize',to:'SchemeExp',label:'Alloc 23.21'},{from:'BudgetSize',to:'TransfersEst',label:'Alloc 30.26'},
+{from:'SchemeExp',to:'CentralSec',label:'17.72'},{from:'SchemeExp',to:'CentrallySpon',label:'5.49'},{from:'TransfersEst',to:'Establishment',label:'8.24'},{from:'TransfersEst',to:'OtherCentral',label:'17.61'},{from:'TransfersEst',to:'StateTransfers',label:'4.41'},{from:'TransfersEst',to:'InterestPay',label:'14.04'},
+{from:'CentralSec',to:'Economic',label:'9.16'},{from:'CentralSec',to:'GeneralServ',label:'2.62'},{from:'CentralSec',to:'Subsidy',label:'4.55'},{from:'Establishment',to:'Salary',label:'1.66'},{from:'Establishment',to:'Pension',label:'2.96'},{from:'Establishment',to:'OthersEst',label:'3.62'},{from:'StateTransfers',to:'FinComm',label:'1.29'},{from:'StateTransfers',to:'OtherTransfers',label:'3.12'}];
+
+const canvas=document.getElementById('budgetCanvas'),ctx=canvas.getContext('2d'),container=document.getElementById('canvas-container'),tooltip=document.getElementById('tooltip');
+let scale=1,panX=0,panY=0,isDragging=false,startX,startY,hoveredNode=null;
+const nodeMap={};nodesData.forEach(n=>nodeMap[n.id]=n);
+
+function curvePoints(src,tgt,t){
+ const dx=tgt.x-src.x,cp1x=src.x+dx*.45,cp1y=src.y,cp2x=tgt.x-dx*.45,cp2y=tgt.y;
+ const u=1-t;
+ return {x:u*u*u*src.x+3*u*u*t*cp1x+3*u*t*t*cp2x+t*t*t*tgt.x,y:u*u*u*src.y+3*u*u*t*cp1y+3*u*t*t*cp2y+t*t*t*tgt.y};
+}
+function tangent(src,tgt,t){
+ const dx=tgt.x-src.x,cp1x=src.x+dx*.45,cp1y=src.y,cp2x=tgt.x-dx*.45,cp2y=tgt.y,u=1-t;
+ return {x:3*u*u*(cp1x-src.x)+6*u*t*(cp2x-cp1x)+3*t*t*(tgt.x-cp2x),y:3*u*u*(cp1y-src.y)+6*u*t*(cp2y-cp1y)+3*t*t*(tgt.y-cp2y)};
+}
+let flowParticles=connectionsData.flatMap((conn,ci)=>Array.from({length:3},(_,j)=>({ci,t:(j/3+Math.random()*.08)%1,speed:.0022+Math.random()*.0012,size:4+Math.random()*1.5})));
+
+function drawLabel(x,y,text,isHighlighted){
+ ctx.save();ctx.font='bold 9px sans-serif';const w=ctx.measureText(text).width,p=6,h=20;
+ ctx.fillStyle=isHighlighted?'rgba(238,242,255,.98)':'rgba(255,255,255,.95)';
+ ctx.beginPath();ctx.roundRect(x-w/2-p,y-h/2,w+2*p,h,3);ctx.fill();
+ ctx.strokeStyle=isHighlighted?'#6366f1':'#cbd5e1';ctx.lineWidth=1;ctx.stroke();
+ ctx.fillStyle=isHighlighted?'#312e81':'#334155';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,x,y);ctx.restore();
+}
+function drawArrow(src,tgt,isHighlighted,isDimmed){
+ const dx=tgt.x-src.x,cp1x=src.x+dx*.45,cp1y=src.y,cp2x=tgt.x-dx*.45,cp2y=tgt.y;
+ ctx.beginPath();ctx.moveTo(src.x,src.y);ctx.bezierCurveTo(cp1x,cp1y,cp2x,cp2y,tgt.x,tgt.y);
+ const markerRed=window.__activeConn&&window.__activeConn.redMarker;
+ ctx.strokeStyle=markerRed?(isDimmed?'rgba(239,68,68,.25)':'rgba(239,68,68,.82)'):(isHighlighted?'#6366f1':isDimmed?'rgba(203,213,225,.3)':'rgba(100,116,139,.4)');
+ ctx.lineWidth=isHighlighted?3.5:isDimmed?1:1.8;ctx.stroke();
+ const q=curvePoints(src,tgt,.985),v=tangent(src,tgt,.985),a=Math.atan2(v.y,v.x);
+ ctx.fillStyle=isHighlighted?'#6366f1':'rgba(100,116,139,.72)';
+ ctx.beginPath();ctx.moveTo(q.x,q.y);ctx.lineTo(q.x-9*Math.cos(a-Math.PI/6),q.y-9*Math.sin(a-Math.PI/6));ctx.lineTo(q.x-9*Math.cos(a+Math.PI/6),q.y-9*Math.sin(a+Math.PI/6));ctx.closePath();ctx.fill();
+}
+function draw(){
+ ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.translate(panX,panY);ctx.scale(scale,scale);
+ connectionsData.forEach((conn)=>{
+  const src=nodeMap[conn.from],tgt=nodeMap[conn.to],hi=hoveredNode&&(hoveredNode.id===src.id||hoveredNode.id===tgt.id),dim=hoveredNode&&!hi;
+  window.__activeConn=conn;drawArrow(src,tgt,hi,dim);if(conn.label&&!dim){const p=curvePoints(src,tgt,.5);drawLabel(p.x,p.y,conn.label,hi)}
+ });
+ // Directional flow animation: every particle moves exactly from conn.from toward conn.to.
+ flowParticles.forEach(p=>{
+  const conn=connectionsData[p.ci],src=nodeMap[conn.from],tgt=nodeMap[conn.to],hi=hoveredNode&&(hoveredNode.id===src.id||hoveredNode.id===tgt.id);
+  if(!hoveredNode||hi){
+   p.t=(p.t+p.speed)%1;
+   const q=curvePoints(src,tgt,p.t);
+   ctx.save();ctx.globalAlpha=hoveredNode?1:.9;ctx.shadowBlur=10;ctx.shadowColor='#4f46e5';ctx.fillStyle='#6366f1';ctx.beginPath();ctx.arc(q.x,q.y,p.size,0,Math.PI*2);ctx.fill();ctx.restore();
+  }
+ });
+ nodesData.forEach(node=>{
+  const hi=hoveredNode&&hoveredNode.id===node.id,dim=hoveredNode&&hoveredNode.id!==node.id;ctx.save();ctx.globalAlpha=dim?.35:1;
+  ctx.beginPath();ctx.arc(node.x,node.y,node.radius,0,Math.PI*2);ctx.fillStyle=node.color;ctx.fill();
+  if(node.hatched){
+    ctx.save();ctx.clip();
+    ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=1;
+    for(let k=node.x-node.radius*2;k<node.x+node.radius*2;k+=6){
+      ctx.beginPath();ctx.moveTo(k,node.y+node.radius);ctx.lineTo(k+node.radius*2,node.y-node.radius);ctx.stroke();
+    }
+    ctx.restore();
+  }
+  ctx.lineWidth=hi?3.5:1.5;ctx.strokeStyle=hi?'#1e1b4b':'rgba(0,0,0,.25)';ctx.stroke();
+  ctx.fillStyle=node.textColor;ctx.textAlign='center';ctx.textBaseline='middle';const lines=node.label.split('\n'),lh=12,total=(lines.length+1)*lh,start=node.y-total/2+lh/2;
+  ctx.font=node.level===0?'bold 13px sans-serif':'bold 10px sans-serif';lines.forEach((line,i)=>ctx.fillText(line,node.x,start+i*lh));
+  ctx.font='bold 11px sans-serif';ctx.fillStyle=node.textColor==='#ffffff'?'#ffe4e6':'#1e293b';ctx.fillText(`₹ ${node.val}`,node.x,start+lines.length*lh+2);
+  ctx.restore();
+ });
+ ctx.restore();requestAnimationFrame(draw);
+}
+function resizeCanvas(){const dpr=window.devicePixelRatio||1;canvas.width=container.clientWidth*dpr;canvas.height=container.clientHeight*dpr;canvas.style.width=container.clientWidth+'px';canvas.style.height=container.clientHeight+'px';}
+function resetView(){scale=Math.min(container.clientWidth/1650,container.clientHeight/1050);panX=(container.clientWidth-1650*scale)/2;panY=(container.clientHeight-1050*scale)/2}
+function coords(e){const r=container.getBoundingClientRect();return{x:(e.clientX-r.left-panX)/scale,y:(e.clientY-r.top-panY)/scale}}
+container.addEventListener('mousedown',e=>{isDragging=true;startX=e.clientX-panX;startY=e.clientY-panY});
+window.addEventListener('mousemove',e=>{if(isDragging){panX=e.clientX-startX;panY=e.clientY-startY;return}const c=coords(e);hoveredNode=nodesData.find(n=>Math.hypot(n.x-c.x,n.y-c.y)<=n.radius)||null;if(hoveredNode){tooltip.style.display='block';tooltip.style.left=(e.clientX-container.getBoundingClientRect().left+15)+'px';tooltip.style.top=(e.clientY-container.getBoundingClientRect().top+15)+'px';tooltip.innerHTML=`<strong>${hoveredNode.label.replace('\n',' ')}</strong><br>Allocation: ₹ ${hoveredNode.val} lakh crore`}else tooltip.style.display='none'});
+window.addEventListener('mouseup',()=>isDragging=false);container.addEventListener('wheel',e=>{e.preventDefault();scale*=e.deltaY<0?1.1:.9;scale=Math.min(Math.max(.3,scale),3)});
+document.getElementById('btnZoomIn').onclick=()=>scale*=1.15;document.getElementById('btnZoomOut').onclick=()=>scale*=.85;document.getElementById('btnReset').onclick=resetView;document.getElementById('btnExport').onclick=()=>{const a=document.createElement('a');a.download='budget_flow_diagram.png';a.href=canvas.toDataURL('image/png');a.click()};
+window.addEventListener('resize',()=>{resizeCanvas();resetView()});resizeCanvas();resetView();draw();
+</script></body></html>
