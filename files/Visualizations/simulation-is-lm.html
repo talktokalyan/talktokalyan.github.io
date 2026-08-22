@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interactive IS–LM Closed Economy Simulator</title>
+<style>
+:root{--ink:#14213d;--muted:#64748b;--line:#dbe3ef;--bg:#f4f7fb;--blue:#2563eb;--orange:#ea580c;--green:#059669;--purple:#7c3aed}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+header{text-align:center;background:#fff;padding:20px;border-bottom:1px solid var(--line)}h1{margin:0;font-size:28px}.sub{margin-top:5px;color:var(--muted);font-size:14px}
+.app{max-width:1700px;margin:auto;padding:18px;display:grid;grid-template-columns:310px 410px minmax(500px,1fr);gap:18px}.panel{background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:0 3px 14px #14213d0d}
+.sidebar,.results,.graph{padding:18px}.panel h2{margin:0 0 12px;font-size:19px}.group{padding:13px 0;border-top:1px solid #edf1f6}.group:first-of-type{border-top:0}.group h3{margin:0 0 5px;font-size:15px}.note{font-size:11.5px;color:var(--muted);line-height:1.4}
+label{display:flex;justify-content:space-between;font-size:12px;font-weight:bold;margin-top:10px}output{color:var(--blue)}input[type=range]{width:100%;accent-color:var(--blue)}
+.buttons{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}button{border:0;border-radius:8px;padding:9px 11px;background:var(--blue);color:#fff;font-weight:bold;cursor:pointer}.secondary,.tab{background:#eaf0f9;color:var(--ink)}.tab.active{background:var(--ink);color:#fff}
+.hero{padding:14px;border:1px solid #dbeafe;border-radius:12px;background:#f7fbff}.eqs,.metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px}.eqs{margin-top:8px}.big{font-size:28px;font-weight:bold;color:var(--blue)}.orange{color:var(--orange)}
+.metrics{margin-top:13px}.metric{padding:9px;border:1px solid #edf1f6;border-radius:9px}.metric span{font-size:10px;color:var(--muted);display:block;text-transform:uppercase}.metric b{font-size:16px}
+.box{margin-top:12px;padding:11px;border-radius:8px;font-size:12px;line-height:1.5;background:#f8fafc;border-left:4px solid var(--purple)}.shock{border-left-color:var(--green);background:#f0fdf4}
+.tabs{display:flex;gap:6px;margin-bottom:10px}svg{width:100%;height:520px;border:1px solid #edf1f6;border-radius:10px;background:#fff}.legend{text-align:center;font-size:12px;color:var(--muted);margin-top:8px}.formula{font-size:12px;line-height:1.6;margin-top:12px;color:#475569}.history{font-size:12px;margin-top:12px}.history ul{margin:5px 0;padding-left:18px;max-height:120px;overflow:auto}
+@media(max-width:1200px){.app{grid-template-columns:300px 1fr}.graph{grid-column:1/-1}}@media(max-width:700px){.app{display:block;padding:10px}.panel{margin-bottom:10px}h1{font-size:22px}}
+</style></head>
+<body>
+<header><h1>Interactive IS–LM Model: Closed Economy</h1><div class="sub">Goods-market and money-market equilibrium • fiscal and monetary policy experiments (Prof. Kalyan Kolukuluri)</div></header>
+<main class="app">
+<section class="panel sidebar"><h2>Model Inputs</h2>
+<div class="group"><h3 style="color:#2563eb">Private-Sector Behaviour</h3><div class="note">Consumption and investment functions</div>
+<label>C₀ <output id="C0Out"></output></label><input id="C0" type="range" min="0" max="500" step="10" value="100">
+<label>Marginal propensity to consume c <output id="cOut"></output></label><input id="c" type="range" min=".05" max=".95" step=".05" value=".8">
+<label>I₀ <output id="I0Out"></output></label><input id="I0" type="range" min="0" max="500" step="10" value="100">
+<label>Investment interest sensitivity b <output id="bOut"></output></label><input id="b" type="range" min="1" max="100" step="1" value="20"></div>
+<div class="group"><h3 style="color:#059669">Fiscal Policy</h3>
+<label>Government spending G <output id="GOut"></output></label><input id="G" type="range" min="0" max="600" step="10" value="200">
+<label>Lump-sum taxes T <output id="TaxOut"></output></label><input id="Tax" type="range" min="0" max="500" step="10" value="100"></div>
+<div class="group"><h3 style="color:#ea580c">Monetary Conditions</h3>
+<label>Nominal money supply M <output id="MOut"></output></label><input id="M" type="range" min="10" max="2000" step="10" value="500">
+<label>Price level P <output id="POut"></output></label><input id="P" type="range" min=".5" max="10" step=".5" value="1"></div>
+<div class="group"><h3 style="color:#7c3aed">Money Demand</h3><div class="note">M/P = kY − hr</div>
+<label>Income sensitivity k <output id="kOut"></output></label><input id="k" type="range" min=".05" max="2" step=".05" value=".5">
+<label>Interest sensitivity h <output id="hOut"></output></label><input id="h" type="range" min="1" max="300" step="5" value="100"></div>
+<div class="buttons"><button id="simulate">Simulate</button><button id="baseline" class="secondary">Set Baseline</button><button id="reset" class="secondary">Reset</button></div></section>
+
+<section class="panel results"><h2>Equilibrium Results</h2>
+<div class="hero"><small>SIMULTANEOUS EQUILIBRIUM</small><div class="eqs"><div><small>National income</small><div class="big" id="Ystar"></div></div><div><small>Interest rate</small><div class="big orange" id="rstar"></div></div></div></div>
+<div class="metrics"><div class="metric"><span>Consumption C*</span><b id="Cstar"></b></div><div class="metric"><span>Investment I*</span><b id="Istar"></b></div><div class="metric"><span>Real money supply</span><b id="realM"></b></div><div class="metric"><span>Money demand</span><b id="moneyD"></b></div><div class="metric"><span>IS intercept</span><b id="isInt"></b></div><div class="metric"><span>LM slope</span><b id="lmSlope"></b></div></div>
+<div class="box" id="interpret"></div><div class="box shock" id="shock"></div>
+<div class="formula"><b>Model:</b><br>C = C₀ + c(Y − T)<br>I = I₀ − br<br>Y = C + I + G<br>M/P = kY − hr</div>
+<div class="history"><b>Experiment history</b><ul id="history"><li>Initial model loaded.</li></ul></div></section>
+
+<section class="panel graph"><h2>Interactive Diagram</h2><div class="tabs"><button class="tab active" data-mode="islm">IS–LM</button><button class="tab" data-mode="components">Components</button></div><svg id="chart" viewBox="0 0 800 520"></svg><div class="legend" id="legend"></div></section>
+</main>
+<script>
+const defaults={C0:100,c:.8,I0:100,b:20,G:200,Tax:100,M:500,P:1,k:.5,h:100};
+const ids=Object.keys(defaults),$=id=>document.getElementById(id);
+let baseline=null,mode="islm",history=[];
+function fmt(v){return Number.isFinite(v)?v.toLocaleString(undefined,{maximumFractionDigits:2}):"N/A"}
+function params(){let o={};ids.forEach(id=>o[id]=Number($(id).value));return o}
+function solve(){
+ const p=params(),A=(p.C0-p.c*p.Tax+p.I0+p.G)/(1-p.c),d=p.b/(1-p.c),m=p.M/p.P;
+ const Y=(A+d*m/p.h)/(1+d*p.k/p.h),r=(p.k*Y-m)/p.h;
+ return {...p,A,d,m,Y,r,C:p.C0+p.c*(Y-p.Tax),I:p.I0-p.b*r,md:p.k*Y-p.h*r};
+}
+function updateOutputs(){ids.forEach(id=>$(id+"Out").textContent=fmt(Number($(id).value)))}
+function render(){
+ updateOutputs();const s=solve();
+ $("Ystar").textContent="Y* = "+fmt(s.Y);$("rstar").textContent="r* = "+fmt(s.r);
+ [["Cstar",s.C],["Istar",s.I],["realM",s.m],["moneyD",s.md],["isInt",s.A],["lmSlope",s.k/s.h]].forEach(x=>$(x[0]).textContent=fmt(x[1]));
+ $("interpret").innerHTML="<b>Equilibrium interpretation.</b> At Y* = "+fmt(s.Y)+" and r* = "+fmt(s.r)+", the goods market and money market clear simultaneously.";
+ $("shock").textContent=baseline?"Relative to baseline: ΔY = "+fmt(s.Y-baseline.Y)+", Δr = "+fmt(s.r-baseline.r)+".":"Set a baseline before changing parameters to compare policy effects.";
+ if(mode==="islm") drawISLM(s); else drawComponents(s);
+}
+function el(svg,tag,a={},text=""){const e=document.createElementNS("http://www.w3.org/2000/svg",tag);Object.keys(a).forEach(k=>e.setAttribute(k,a[k]));if(text)e.textContent=text;svg.appendChild(e);return e}
+function drawISLM(s){
+ const svg=$("chart");svg.innerHTML="";const W=800,H=520,L=70,R=30,T=30,B=55,cw=W-L-R,ch=H-T-B;
+ let xmax=Math.max(100,s.Y*1.35,baseline?baseline.Y*1.25:0);
+ let vals=[s.r,0,baseline?baseline.r:0];let rmin=Math.min(...vals)-10,rmax=Math.max(...vals)+15;if(rmax-rmin<20){rmin-=10;rmax+=10}
+ const X=v=>L+(v/xmax)*cw,Y=v=>T+(rmax-v)/(rmax-rmin)*ch;
+ el(svg,"line",{x1:L,y1:T,x2:L,y2:H-B,stroke:"#64748b"});el(svg,"line",{x1:L,y1:H-B,x2:W-R,y2:H-B,stroke:"#64748b"});
+ for(let i=0;i<=5;i++){let xv=xmax*i/5,xx=X(xv);el(svg,"line",{x1:xx,y1:T,x2:xx,y2:H-B,stroke:"#edf1f6"});el(svg,"text",{x:xx,y:H-B+20,"text-anchor":"middle","font-size":"11",fill:"#64748b"},fmt(xv))}
+ for(let i=0;i<=5;i++){let rv=rmin+(rmax-rmin)*i/5,yy=Y(rv);el(svg,"line",{x1:L,y1:yy,x2:W-R,y2:yy,stroke:"#edf1f6"});el(svg,"text",{x:L-8,y:yy+4,"text-anchor":"end","font-size":"11",fill:"#64748b"},fmt(rv))}
+ el(svg,"text",{x:W/2,y:H-12,"text-anchor":"middle","font-size":"13",fill:"#475569"},"Income / Output (Y)");
+ el(svg,"text",{x:18,y:H/2,transform:"rotate(-90 18 "+(H/2)+")","text-anchor":"middle","font-size":"13",fill:"#475569"},"Interest rate (r)");
+ function curve(fn,color,label){let d="";for(let i=0;i<=120;i++){let xx=xmax*i/120,rr=fn(xx);d+=(i?"L":"M")+X(xx).toFixed(2)+","+Y(rr).toFixed(2)}el(svg,"path",{d,fill:"none",stroke:color,"stroke-width":"3"});let xx=xmax*.82,rr=fn(xx);el(svg,"text",{x:X(xx)+5,y:Y(rr)-6,fill:color,"font-weight":"bold"},label)}
+ curve(q=>(s.A-q)/s.d,"#2563eb","IS");curve(q=>(s.k*q-s.m)/s.h,"#ea580c","LM");
+ if(baseline){el(svg,"circle",{cx:X(baseline.Y),cy:Y(baseline.r),r:6,fill:"#94a3b8"});el(svg,"text",{x:X(baseline.Y)+8,y:Y(baseline.r)-8,fill:"#64748b"},"E₀")}
+ el(svg,"circle",{cx:X(s.Y),cy:Y(s.r),r:7,fill:"#7c3aed"});el(svg,"text",{x:X(s.Y)+9,y:Y(s.r)-9,fill:"#7c3aed","font-weight":"bold"},baseline?"E₁":"E");
+ el(svg,"line",{x1:X(s.Y),y1:Y(s.r),x2:X(s.Y),y2:H-B,stroke:"#7c3aed","stroke-dasharray":"5 4"});el(svg,"line",{x1:L,y1:Y(s.r),x2:X(s.Y),y2:Y(s.r),stroke:"#7c3aed","stroke-dasharray":"5 4"});
+ $("legend").textContent="Blue: IS (goods market)   •   Orange: LM (money market)   •   Purple: current equilibrium";
+}
+function drawComponents(s){
+ const svg=$("chart");svg.innerHTML="";const data=[["Consumption",s.C,"#2563eb"],["Investment",s.I,"#ea580c"],["Government",s.G,"#059669"],["Real money supply",s.m,"#7c3aed"]];
+ const max=Math.max(...data.map(d=>Math.abs(d[1])),1);data.forEach((d,i)=>{const x=90+i*175,h=330*Math.abs(d[1])/max;el(svg,"rect",{x:x,y:420-h,width:95,height:h,rx:7,fill:d[2]});el(svg,"text",{x:x+47,y:443,"text-anchor":"middle","font-size":"11",fill:"#475569"},d[0]);el(svg,"text",{x:x+47,y:410-h,"text-anchor":"middle","font-size":"13","font-weight":"bold"},fmt(d[1]))});
+ $("legend").textContent="Values are calculated at the current IS–LM equilibrium.";
+}
+ids.forEach(id=>$(id).addEventListener("input",render));
+$("simulate").onclick=()=>{const s=solve();history.unshift("Y*="+fmt(s.Y)+", r*="+fmt(s.r));history=history.slice(0,8);$("history").innerHTML=history.map(v=>"<li>"+v+"</li>").join("");render()};
+$("baseline").onclick=()=>{baseline=solve();$("history").innerHTML="<li>Baseline: Y*="+fmt(baseline.Y)+", r*="+fmt(baseline.r)+"</li>";render()};
+$("reset").onclick=()=>{Object.entries(defaults).forEach(([k,v])=>$(k).value=v);baseline=null;history=[];$("history").innerHTML="<li>Model reset to defaults.</li>";render()};
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");mode=b.dataset.mode;render()});
+render();
+</script></body></html>

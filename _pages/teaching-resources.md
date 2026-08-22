@@ -15,7 +15,8 @@ author_profile: true
   4.[India's Balance of Payments](../files/Visualizations/animated-bop.html){:target="_blank"}
   5.[India's Economic Policy Uncertainty](../files/Visualizations/india-epu.html){:target="_blank"}
   6.[Simulation of Labour Demand](../files/Visualizations/simulation-labour-demand.html){:target="_blank"}
-  
+  7.[Simulation of IS-LM (Closed)](../files/Visualizations/simulation-is-lm.html){:target="_blank"}
+
 ### Introductory Econometrics (PhD Level)
 **Lecture Notes**
   1. [Classical OLS](../files/IEX-LN/LN-1-Classical-OLS.pdf){:target="_blank"}
