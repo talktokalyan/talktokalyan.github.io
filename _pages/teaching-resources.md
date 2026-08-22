@@ -14,6 +14,7 @@ author_profile: true
   3.[India's Govt Budget](../files/Visualizations/animated-india-budget.html){:target="_blank"}
   4.[India's Balance of Payments](../files/Visualizations/animated-bop.html){:target="_blank"}
   5.[India's Economic Policy Uncertainty](../files/Visualizations/india-epu.html){:target="_blank"}
+  6.[Simulation of Labour Demand](../files/Visualizations/simulation-labour-demand.html){:target="_blank"}
   
 ### Introductory Econometrics (PhD Level)
 **Lecture Notes**
