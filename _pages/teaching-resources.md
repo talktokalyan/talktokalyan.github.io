@@ -20,7 +20,7 @@ author_profile: true
 
 ### Introductory Econometrics (PhD Level)
 **Lecture Notes**
-  1. [Directed Acyclic Graph (DAG)](../files/Visualizations/animated-dag.html){:target="_blank"}
+  1. [Directed Acyclic Graphs (DAGs)](../files/Visualizations/animated-dag.html){:target="_blank"}
   1. [Classical OLS](../files/IEX-LN/LN-1-Classical-OLS.pdf){:target="_blank"}
   1. [CLRM Assumptions and violations](../files/IEX-LN/LN-2-CLRM-Assumptions.pdf){:target="_blank"}
   1. [Multiple Linear Regression](../files/IEX-LN/LN-3-MLR.pdf){:target="_blank"}
