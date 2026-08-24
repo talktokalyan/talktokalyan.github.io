@@ -37,6 +37,7 @@ author_profile: true
 ## Indian Elections Data
 1. [Election Commission of India](https://www.eci.gov.in/statistical-reports){:target="_blank"}
 2. [Trivedi Centre for Political Data, Ashoka University](https://tcpd.ashoka.edu.in/data/){:target="_blank"}
+3. [SHRUG - Socioeconomic High-resolution Rural-Urban Geographic Platform for India](https://www.devdatalab.org/shrug){:target="_blank"}
 
 ## Statistics and Econometrics
 1. [Quantoid](https://quantoid.net/){:target="_blank"}
