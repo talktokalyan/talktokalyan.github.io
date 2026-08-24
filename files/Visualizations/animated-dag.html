@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Directed Acyclic Graph (DAG)</title>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+:root{
+  --ink:#183028; --muted:#66766d; --line:#d9e2dc; --bg:#f4f8f5;
+  --green:#22a447; --green-dark:#137a31; --red:#dc2626; --red-dark:#991b1b;
+  --blue:#4b6bff; --blue-soft:#eef4ff; --panel:#fbfdfb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+.page{min-height:100vh;display:grid;place-items:center;padding:28px}
+.card{width:min(1380px,96vw);background:#fff;border:1px solid var(--line);border-radius:22px;padding:28px;box-shadow:0 12px 35px rgba(24,48,40,.10)}
+h1{text-align:center;margin:0;font-size:30px}
+.subtitle{text-align:center;color:var(--muted);margin:7px 0 22px;font-size:14px}
+.nav{display:flex;justify-content:center;gap:8px;margin-bottom:16px;align-items:center}
+.nav button,.controls button{border:0;border-radius:9px;padding:10px 15px;font-weight:700;cursor:pointer}
+.nav button{background:#e7eee9;color:#294236}
+.nav button.active{background:var(--ink);color:white}
+.layout{display:grid;grid-template-columns:minmax(700px,1.75fr) minmax(300px,.72fr);gap:34px;align-items:center}
+.viz{border:1px solid #e3ebe5;border-radius:16px;padding:16px;background:var(--panel)}
+svg{width:100%;height:500px;display:block}
+.scm{background:#f7fbf8;border-left:4px solid var(--green);border-radius:12px;padding:24px}
+.scm h2{margin-top:0;font-size:20px}
+.eq{font-size:18px;text-align:center;background:#fff;border:1px solid #e1e9e3;border-radius:10px;padding:14px;margin:12px 0}
+.regression-box{background:#fff;border:1px solid #e1e9e3;border-radius:10px;padding:14px;margin:12px 0;font-size:14px;text-align:center}
+.reg-red{color:var(--red);font-weight:bold;margin:4px 0}
+.reg-green{color:var(--green);font-weight:bold;margin:4px 0}
+.scm p{font-size:13px;line-height:1.5;color:#526158;margin:8px 0}
+.footnote{font-size:11px;color:var(--muted);font-style:italic;margin-top:6px}
+.controls{text-align:center;margin-top:10px}
+.controls button{margin:4px;background:var(--green);color:white}
+.controls .secondary{background:#e7eee9;color:#294236}
+.controls .export{background:var(--blue)}
+.caption{text-align:center;font-size:12px;color:var(--muted);margin-top:5px}
+.badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:11px;background:#eef7f0;color:var(--green-dark);font-weight:bold}
+@media(max-width:850px){.card{width:min(96vw,100%);padding:18px}.layout{grid-template-columns:1fr}.scm{border-left:0;border-top:4px solid var(--green)}svg{height:440px}}
+</style>
+</head>
+<body>
+<div class="page">
+<main class="card">
+  <h1>Directed Acyclic Graph (DAG)</h1>
+  <div class="subtitle">Animated causal graphs and structural causal models</div>
+
+  <div class="nav">
+    <button class="active" data-card="0">DAG 1: X → Y + ε</button>
+    <button data-card="1">DAG 2: Chain</button>
+    <button data-card="2">DAG 3: Fork / Confounder</button>
+    <button data-card="3">DAG 4: Collider</button>
+  </div>
+
+  <section class="layout">
+    <div class="viz">
+      <svg id="dagSVG" viewBox="0 0 700 500" aria-label="Directed acyclic graph visualization"></svg>
+      <div class="controls">
+        <button id="playBtn">▶ Play Flow</button>
+        <button id="biasBtn" class="secondary" style="background:#dc2626; color:white; display:none;">⚡ Trigger Collider Bias (Condition on C)</button>
+        <button id="resetBtn" class="secondary">↺ Reset</button>
+        <button id="exportBtn" class="export">⬇ Export Image</button>
+      </div>
+      <div class="caption" id="caption"></div>
+    </div>
+
+    <aside class="scm">
+      <span class="badge" id="dagLabel">DAG 1</span>
+      <h2 id="scmTitle">Structural Causal Model</h2>
+      <div class="eq" id="equation">\(Y := f_Y(X,\varepsilon)\)</div>
+      <div class="footnote">Note: \(:=\) indicates causal nature of relationship.</div>
+      <div id="regressionSection"></div>
+      <div id="scmText"></div>
+    </aside>
+  </section>
+</main>
+</div>
+
+<script>
+const svg = document.getElementById('dagSVG');
+const playBtn = document.getElementById('playBtn');
+const biasBtn = document.getElementById('biasBtn');
+const resetBtn = document.getElementById('resetBtn');
+const exportBtn = document.getElementById('exportBtn');
+const equation = document.getElementById('equation');
+const scmText = document.getElementById('scmText');
+const regressionSection = document.getElementById('regressionSection');
+const caption = document.getElementById('caption');
+const dagLabel = document.getElementById('dagLabel');
+const navButtons = [...document.querySelectorAll('.nav button')];
+
+let currentCard = 0;
+let running = false;
+let raf = null;
+
+const NS = 'http://www.w3.org/2000/svg';
+function E(tag, attrs={}, text=''){
+  const el=document.createElementNS(NS,tag);
+  for(const [k,v] of Object.entries(attrs)) el.setAttribute(k,v);
+  if(text) el.textContent=text;
+  return el;
+}
+function smooth(t){return t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2}
+function clearSVG(){cancelAnimationFrame(raf);running=false;svg.innerHTML=''}
+
+function addSquare(x,y,size,label,sub,stroke,fillId,fillColor,dashed=false){
+  svg.appendChild(E('rect',{x,y,width:size,height:size,fill:'white',stroke, 'stroke-width':3,
+    'stroke-dasharray':dashed?'6 4':''}));
+  const liquid=E('rect',{id:fillId,x,y:y+size,width:size,height:0,fill:fillColor});
+  svg.appendChild(liquid);
+  svg.appendChild(E('rect',{x,y,width:size,height:size,fill:'none',stroke,'stroke-width':3,
+    'stroke-dasharray':dashed?'6 4':''}));
+  svg.appendChild(E('text',{x:x+size/2,y:y+size/2+8,'text-anchor':'middle','font-size':34,
+    'font-weight':'700',fill:'#183028'},label));
+  svg.appendChild(E('text',{x:x+size/2,y:y+size+26,'text-anchor':'middle','font-size':12,
+    fill:'#526158'},sub));
+  return liquid;
+}
+
+function addArrow(x1,y1,x2,y2,color='#4b6bff'){
+  svg.appendChild(E('line',{x1,y1,x2,y2,stroke:color,'stroke-width':4.5,
+    'stroke-linecap':'round','marker-end':'url(#arrow)'}));
+}
+function addText(x,y,text,color='#66766d',size=12){
+  svg.appendChild(E('text',{x,y,'text-anchor':'middle',fill:color,'font-size':size},text));
+}
+function addDefs(){
+  const defs=E('defs');
+  const marker=E('marker',{id:'arrow',markerWidth:8,markerHeight:8,refX:7,refY:4,orient:'auto'});
+  marker.appendChild(E('path',{d:'M0 0 L8 4 L0 8 Z',fill:'#4b6bff'}));
+  defs.appendChild(marker); 
+  
+  const markerRed=E('marker',{id:'arrowRed',markerWidth:8,markerHeight:8,refX:7,refY:4,orient:'auto'});
+  markerRed.appendChild(E('path',{d:'M0 0 L8 4 L0 8 Z',fill:'#dc2626'}));
+  defs.appendChild(markerRed);
+
+  svg.appendChild(defs);
+}
+function addAssociationBox(text){
+  svg.appendChild(E('rect',{x:95,y:420,width:510,height:36,rx:6,fill:'#eef4ff',
+    stroke:'#4b6bff','stroke-width':1.2}));
+  svg.appendChild(E('text',{x:350,y:443,'text-anchor':'middle',fill:'#4b6bff','font-size':12},text));
+}
+
+function regressionModelHTML(content){
+  regressionSection.innerHTML = `<div class="regression-box">${content}</div>`;
+}
+
+/* ---------------- DAG 1 ---------------- */
+function drawDAG1(){
+  clearSVG(); addDefs();
+  dagLabel.textContent='DAG 1';
+  equation.innerHTML='\\(Y := f_Y(X,\\varepsilon)\\)';
+  regressionModelHTML('<div class="reg-green">Regression: \\(Y = \\beta_0 + \\beta_1 X + e\\) (Correct Causal Effect)</div>');
+  scmText.innerHTML='<p><b>X</b> is a causal parent of <b>Y</b>, while <b>ε</b> represents an exogenous disturbance.</p>';
+  caption.textContent='X and ε contribute to Y along clear straight paths.';
+  if(window.MathJax) MathJax.typesetPromise();
+  biasBtn.style.display = 'none';
+
+  addArrow(215,280,455,280);
+  addText(335,250,'Causal effect');
+  addArrow(502.5,150,502.5,235,'#dc2626');
+  
+  const xLiquid=addSquare(115,235,95,'X','Cause','#183028','xLiquid','#22a447');
+  const yGreen=E('rect',{id:'yGreen',x:455,y:330,width:95,height:0,fill:'#22a447'}); svg.appendChild(yGreen);
+  const yRed=E('rect',{id:'yRed',x:455,y:330,width:95,height:0,fill:'#dc2626'}); svg.appendChild(yRed);
+  svg.appendChild(E('rect',{x:455,y:235,width:95,height:95,fill:'none',stroke:'#183028','stroke-width':3}));
+  svg.appendChild(E('text',{x:502.5,y:290,'text-anchor':'middle','font-size':34,'font-weight':'700'},'Y'));
+  svg.appendChild(E('text',{x:502.5,y:355,'text-anchor':'middle','font-size':12,fill:'#526158'},'Outcome'));
+
+  const eLiquid=addSquare(455,55,95,'ε','Error','#dc2626','eLiquid','#dc2626',true);
+  addAssociationBox('Causal Association: X → Y');
+  return {xLiquid,eLiquid,yGreen,yRed};
+}
+
+function setLiquid(el, amount, bottom){
+  el.setAttribute('height',amount);
+  el.setAttribute('y',bottom-amount);
+}
+
+/* ---------------- DAG 2: Chain ---------------- */
+function drawDAG2(){
+  clearSVG(); addDefs();
+  dagLabel.textContent='DAG 2: Chain';
+  equation.innerHTML='\\(X_2 := f_{X_2}(X_1),\\quad Y := f_Y(X_2)\\)';
+  regressionModelHTML('<div class="reg-green">Regression (Total Effect): \\(Y = \\gamma_0 + \\gamma_1 X_1 + e\\)</div>');
+  scmText.innerHTML='<p>A <b>causal chain</b> represents mediated causation: X₁ affects X₂, which affects Y.</p>';
+  caption.textContent='Green liquid propagates sequentially along the chain.';
+  if(window.MathJax) MathJax.typesetPromise();
+  biasBtn.style.display = 'none';
+
+  addArrow(210,282,280,282);
+  addArrow(395,282,465,282);
+
+  const a=addSquare(115,235,95,'X₁','Cause','#183028','x1Liquid','#22a447');
+  const b=addSquare(280,235,95,'X₂','Mediator','#183028','x2Liquid','#22a447');
+  const c=addSquare(465,235,95,'Y','Outcome','#183028','y2Liquid','#22a447');
+  addAssociationBox('Causal Chain: X₁ → X₂ → Y');
+  return {a,b,c};
+}
+
+/* ---------------- DAG 3: Fork / Confounder ---------------- */
+function drawDAG3(){
+  clearSVG(); addDefs();
+  dagLabel.textContent='DAG 3: Fork / Confounder';
+  equation.innerHTML='\\(X := f_X(\\varepsilon),\\quad Y := f_Y(\\varepsilon)\\)';
+  regressionModelHTML(`
+    <div class="reg-red">Wrong: \\(Y = \\beta_0 + \\beta_1 X + e\\) (Confounded bias!)</div>
+    <div class="reg-green">Right: \\(Y = \\beta_0 + \\beta_1 X + \\beta_2 \\varepsilon + e\\) (Controls confounder)</div>
+  `);
+  scmText.innerHTML='<p>In a <b>fork</b>, common cause ε creates spurious association between X and Y.</p>';
+  caption.textContent='Confounder ε drives both X and Y. Click Play to observe non-causal association flow.';
+  if(window.MathJax) MathJax.typesetPromise();
+  biasBtn.style.display = 'none';
+
+  addArrow(310,140,200,235,'#dc2626');
+  addArrow(390,140,500,235,'#dc2626');
+  addText(240,180,'Confounding','#991b1b',11);
+
+  // Semicircular non-causal association path pushed higher up (peak at y=18, safely above epsilon node top y=45)
+  const forkAssocPath = E('path',{
+    id: 'forkAssocPath',
+    d: 'M 120 235 C 150 5, 500 5, 550 235',
+    fill: 'none',
+    stroke: 'transparent',
+    'stroke-width': 3,
+    'stroke-dasharray': '5 5'
+  });
+  svg.appendChild(forkAssocPath);
+
+  const forkAssocText = E('text',{id:'forkAssocText', fill:'transparent','font-size':11,'font-weight':'bold','text-anchor':'middle'});
+  const textPath = E('textPath',{href:'#forkAssocPath', startOffset:'25%'});
+  textPath.textContent = 'Non-causal Association (Spurious Flow)';
+  forkAssocText.appendChild(textPath);
+  svg.appendChild(forkAssocText);
+
+  const eps=addSquare(302.5,45,95,'ε','Confounder','#dc2626','forkELiquid','#dc2626',true);
+  const x=addSquare(115,235,95,'X','Exposure','#183028','forkXLiquid','#dc2626');
+  const y=addSquare(465,235,95,'Y','Outcome','#183028','forkYLiquid','#dc2626');
+
+  addAssociationBox('Fork Structure: ε → X and ε → Y');
+  return {eps,x,y,forkAssocPath,forkAssocText};
+}
+
+/* ---------------- DAG 4: Collider with Spurious Flow ---------------- */
+function drawDAG4(){
+  clearSVG(); addDefs();
+  dagLabel.textContent='DAG 4: Collider';
+  equation.innerHTML='\\(C := f_C(X,Y)\\)';
+  regressionModelHTML(`
+    <div class="reg-red">Wrong (Conditioning on C): \\(Y = \\beta_0 + \\beta_1 X + \\beta_2 C + e\\) (Collider bias!)</div>
+    <div class="reg-green">Right (Unconditioned): \\(Y = \\beta_0 + \\beta_1 X + e\\) (Valid)</div>
+  `);
+  scmText.innerHTML='<p><b>C</b> is a collider. Conditioning on C opens a spurious backdoor path between X and Y.</p>';
+  caption.textContent='Phase 1: X and Y fill collider C as two vertical halves, then mix into a new color. Click "Trigger Collider Bias" to view spurious flow back.';
+  if(window.MathJax) MathJax.typesetPromise();
+
+  biasBtn.style.display = 'inline-block';
+  biasBtn.textContent = '⚡ Trigger Collider Bias (Condition on C)';
+
+  addArrow(190,235,300,140,'#4b6bff');
+  addArrow(515,235,400,140,'#22a447');
+
+  const spuriousLeft = E('line',{id:'spuriousL', x1:330, y1:140, x2:190, y2:235, stroke:'transparent', 'stroke-width':4, 'stroke-dasharray':'4 4'});
+  const spuriousRight = E('line',{id:'spuriousR', x1:370, y1:140, x2:515, y2:235, stroke:'transparent', 'stroke-width':4, 'stroke-dasharray':'4 4'});
+  svg.appendChild(spuriousLeft);
+  svg.appendChild(spuriousRight);
+
+  const nonCausalLine = E('line',{id:'ncLine', x1:210, y1:282, x2:465, y2:282, stroke:'transparent', 'stroke-width':3, 'stroke-dasharray':'5 5'});
+  svg.appendChild(nonCausalLine);
+  const nonCausalText = E('text',{id:'ncText', x:337.5, y:270,'text-anchor':'middle',fill:'transparent','font-size':11,'font-weight':'bold'},'Spurious Correlation');
+  svg.appendChild(nonCausalText);
+
+  const x=addSquare(115,235,95,'X','Cause X','#183028','colliderXLiquid','#4b6bff');
+  const y=addSquare(465,235,95,'Y','Cause Y','#183028','yml','#22a447');
+
+  svg.appendChild(E('rect',{x:302.5,y:45,width:95,height:95,fill:'white',stroke:'#dc2626','stroke-width':3,'stroke-dasharray':''}));
+  
+  // Two vertical halves in Collider C
+  const cBlue = E('rect',{id:'cBlue', x:302.5, y:140, width:47.5, height:0, fill:'#4b6bff'});
+  const cGreen = E('rect',{id:'cGreen', x:350, y:140, width:47.5, height:0, fill:'#22a447'});
+  const cMixed = E('rect',{id:'cMixed', x:302.5, y:140, width:95, height:0, fill:'#6a35ff', opacity:0});
+  svg.appendChild(cBlue);
+  svg.appendChild(cGreen);
+  svg.appendChild(cMixed);
+
+  svg.appendChild(E('rect',{x:302.5,y:45,width:95,height:95,fill:'none',stroke:'#dc2626','stroke-width':3}));
+  svg.appendChild(E('text',{x:350,y:100,'text-anchor':'middle','font-size':34,'font-weight':'700',fill:'#183028'},'C'));
+  svg.appendChild(E('text',{x:350,y:156,'text-anchor':'middle','font-size':12,fill:'#526158'},'Collider'));
+
+  const xReturn = E('rect',{id:'xReturn', x:115, y:330, width:95, height:0, fill:'#6a35ff', opacity:0.8});
+  const yReturn = E('rect',{id:'yReturn', x:465, y:330, width:95, height:0, fill:'#6a35ff', opacity:0.8});
+  svg.appendChild(xReturn);
+  svg.appendChild(yReturn);
+
+  addAssociationBox('Collider Structure: X → C ← Y  •  Conditioning opens backdoor path');
+  return {x, y, cBlue, cGreen, cMixed, xReturn, yReturn, spuriousLeft, spuriousRight, nonCausalLine, nonCausalText};
+}
+
+function resetAnimation(){
+  cancelAnimationFrame(raf); running=false;
+  biasBtn.textContent='⚡ Trigger Collider Bias (Condition on C)';
+  let els;
+  if(currentCard===0) els=drawDAG1();
+  else if(currentCard===1) els=drawDAG2();
+  else if(currentCard===2) els=drawDAG3();
+  else els=drawDAG4();
+
+  if(currentCard===0){
+    setLiquid(els.xLiquid,95,330);
+    setLiquid(els.eLiquid,95,150);
+    setLiquid(els.yGreen,0,330);
+    setLiquid(els.yRed,0,330);
+  } else if(currentCard===1){
+    setLiquid(els.a,95,330); setLiquid(els.b,0,330); setLiquid(els.c,0,330);
+  } else if(currentCard===2){
+    setLiquid(els.eps,95,140);
+    setLiquid(els.x,0,330); setLiquid(els.y,0,330);
+    els.forkAssocPath.setAttribute('stroke', 'transparent');
+    els.forkAssocText.setAttribute('fill', 'transparent');
+  } else if(currentCard===3){
+    setLiquid(els.x,95,330); setLiquid(els.y,95,330);
+    els.cBlue.setAttribute('height', 0);
+    els.cGreen.setAttribute('height', 0);
+    els.cMixed.setAttribute('height', 0);
+    els.cMixed.style.opacity = 0;
+    els.cBlue.style.opacity = 1;
+    els.cGreen.style.opacity = 1;
+    els.xReturn.setAttribute('height', 0);
+    els.yReturn.setAttribute('height', 0);
+    els.spuriousLeft.setAttribute('stroke', 'transparent');
+    els.spuriousLeft.removeAttribute('marker-end');
+    els.spuriousRight.setAttribute('stroke', 'transparent');
+    els.spuriousRight.removeAttribute('marker-end');
+    els.nonCausalLine.setAttribute('stroke', 'transparent');
+    els.nonCausalText.setAttribute('fill', 'transparent');
+  }
+  playBtn.textContent='▶ Play Flow';
+}
+
+function playDAG1(){
+  const x=document.getElementById('xLiquid'), e=document.getElementById('eLiquid');
+  const yg=document.getElementById('yGreen'), yr=document.getElementById('yRed');
+  const start=performance.now(), duration=3000;
+  function frame(now){
+    const t=Math.min((now-start)/duration,1), q=smooth(t);
+    const transfer=47.5*q; 
+    setLiquid(x,95-transfer,330);
+    setLiquid(e,95-transfer,150);
+    setLiquid(yg,transfer,330);
+    yr.setAttribute('height',transfer);
+    yr.setAttribute('y',282.5-transfer);
+    if(t<1) raf=requestAnimationFrame(frame);
+    else {running=false;playBtn.textContent='▶ Replay Flow';}
+  }
+  raf=requestAnimationFrame(frame);
+}
+
+function playDAG2(){
+  const a=document.getElementById('x1Liquid'),b=document.getElementById('x2Liquid'),c=document.getElementById('y2Liquid');
+  const start=performance.now(),duration=3500;
+  function frame(now){
+    const t=Math.min((now-start)/duration,1);
+    const p1=smooth(Math.min(t/.45,1)), p2=smooth(Math.max(0,Math.min((t-.35)/.65,1)));
+    setLiquid(a,95-63.3*p1,330);
+    setLiquid(b,63.3*p1-31.6*p2,330);
+    setLiquid(c,31.6*p2,330);
+    if(t<1) raf=requestAnimationFrame(frame);
+    else {running=false;playBtn.textContent='▶ Replay Flow';}
+  }
+  raf=requestAnimationFrame(frame);
+}
+
+function playDAG3(){
+  const e=document.getElementById('forkELiquid'),x=document.getElementById('forkXLiquid'),y=document.getElementById('forkYLiquid');
+  const fPath=document.getElementById('forkAssocPath'), fText=document.getElementById('forkAssocText');
+  const start=performance.now(),duration=3500;
+  function frame(now){
+    const t=Math.min((now-start)/duration,1),q=smooth(t),transfer=24*q;
+    setLiquid(e,95-48*q,140);
+    setLiquid(x,transfer,330);
+    setLiquid(y,transfer,330);
+
+    if(t > 0.6){
+      fPath.setAttribute('stroke','#dc2626');
+      fText.setAttribute('fill','#991b1b');
+    }
+
+    if(t<1) raf=requestAnimationFrame(frame);
+    else {
+      running=false;
+      playBtn.textContent='▶ Replay Flow';
+      caption.textContent='Fork Association Complete: Confounder ε introduces a non-causal association path well above the node between X and Y.';
+    }
+  }
+  raf=requestAnimationFrame(frame);
+}
+
+function playDAG4(){
+  const x=document.getElementById('colliderXLiquid'), y=document.getElementById('yml');
+  const cb=document.getElementById('cBlue'), cg=document.getElementById('cGreen'), cm=document.getElementById('cMixed');
+  const start=performance.now(), duration=5000;
+  
+  function frame(now){
+    const t = Math.min((now - start) / duration, 1);
+    
+    // X and Y drain completely over the first 40% of time
+    const drainT = Math.min(t / 0.4, 1);
+    const qDrain = smooth(drainT);
+    const drainedAmount = 95 * qDrain;
+    setLiquid(x, 95 - drainedAmount, 330);
+    setLiquid(y, 95 - drainedAmount, 330);
+
+    // Blue and Green fill the two vertical halves of C up to t=0.45
+    if(t <= 0.45) {
+      const fillT = Math.min(t / 0.45, 1);
+      const val = 95 * smooth(fillT);
+      setLiquid(cb, val, 140);
+      setLiquid(cg, val, 140);
+    }
+    
+    // 1-second gap / pause from t=0.45 to t=0.7, then mixing occurs over 3 seconds from t=0.7 to t=1.0
+    if(t >= 0.7) {
+      const mixT = (t - 0.7) / 0.3;
+      const qMix = smooth(mixT);
+      
+      // Full height for mixed fluid
+      setLiquid(cm, 95, 140);
+      cm.style.opacity = qMix; // Gradually blend into mixed color
+      cb.style.opacity = 1 - qMix; // Fade out vertical halves
+      cg.style.opacity = 1 - qMix;
+    }
+
+    if(t < 1) {
+      raf = requestAnimationFrame(frame);
+    } else {
+      running = false;
+      playBtn.textContent = '▶ Replay Flow';
+      caption.textContent = 'Flow complete. Fluids filled vertical halves and mixed into a new color inside Collider C. Click "Trigger Collider Bias" to simulate conditioning.';
+    }
+  }
+  raf = requestAnimationFrame(frame);
+}
+
+function playColliderBias(){
+  if(running) return;
+  running=true;
+  biasBtn.textContent='Simulating Conditioning…';
+  
+  const spL = document.getElementById('spuriousL');
+  const spR = document.getElementById('spuriousR');
+  spL.setAttribute('stroke','#dc2626');
+  spL.setAttribute('marker-end','url(#arrowRed)');
+  spR.setAttribute('stroke','#dc2626');
+  spR.setAttribute('marker-end','url(#arrowRed)');
+
+  const xRet=document.getElementById('xReturn'), yRet=document.getElementById('yReturn');
+  const ncLine=document.getElementById('ncLine'), ncText=document.getElementById('ncText');
+  const start=performance.now(), duration=3500;
+
+  function frame(now){
+    const t=Math.min((now-start)/duration,1), q=smooth(t), val=47.5*q;
+    
+    xRet.setAttribute('height', val);
+    xRet.setAttribute('y', 330 - val);
+    yRet.setAttribute('height', val);
+    yRet.setAttribute('y', 330 - val);
+
+    if(t > 0.7){
+      ncLine.setAttribute('stroke','#dc2626');
+      ncText.setAttribute('fill','#991b1b');
+    }
+
+    if(t<1) {
+      raf=requestAnimationFrame(frame);
+    } else {
+      running=false;
+      biasBtn.textContent='⚡ Conditioned on C (Bias Active)';
+      caption.textContent='Collider Bias Active: Conditioning on C opens backdoor path and mixed fluid flows back, inducing spurious correlation between X and Y.';
+    }
+  }
+  raf=requestAnimationFrame(frame);
+}
+
+function play(){
+  if(running)return;
+  running=true; playBtn.textContent='Animating…';
+  if(currentCard===0) playDAG1();
+  else if(currentCard===1) playDAG2();
+  else if(currentCard===2) playDAG3();
+  else playDAG4();
+}
+
+function exportImage(){
+  const serializer=new XMLSerializer();
+  let source=serializer.serializeToString(svg);
+  source=source.replace('<svg','<svg xmlns="http://www.w3.org/2000/svg"');
+  const blob=new Blob([source],{type:'image/svg+xml;charset=utf-8'});
+  const url=URL.createObjectURL(blob), img=new Image();
+  img.onload=()=>{
+    const canvas=document.createElement('canvas');
+    canvas.width=svg.viewBox.baseVal.width*2;
+    canvas.height=svg.viewBox.baseVal.height*2;
+    const ctx=canvas.getContext('2d');
+    ctx.fillStyle='white';ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    URL.revokeObjectURL(url);
+    const link=document.createElement('a');
+    const names=['DAG_1_X_Y.png','DAG_2_Chain.png','DAG_3_Fork.png','DAG_4_Collider.png'];
+    link.download=names[currentCard];
+    link.href=canvas.toDataURL('image/png');link.click();
+  };
+  img.src=url;
+}
+
+navButtons.forEach(btn=>btn.addEventListener('click',()=>{
+  currentCard=Number(btn.dataset.card);
+  navButtons.forEach(b=>b.classList.toggle('active',b===btn));
+  resetAnimation();
+}));
+
+playBtn.addEventListener('click',play);
+biasBtn.addEventListener('click',playColliderBias);
+resetBtn.addEventListener('click',resetAnimation);
+exportBtn.addEventListener('click',exportImage);
+
+resetAnimation();
+</script>
+</body>
+</html>
