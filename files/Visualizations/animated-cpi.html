@@ -14,7 +14,7 @@
 .head{padding:17px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.kicker{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:750}.head h2,.charthead h2{margin:3px 0 0;color:var(--navy);font-weight:750;font-size:17px}.dot{width:10px;height:10px;border-radius:50%;margin-top:4px}.loading{background:#d97706}.success{background:#059669}.error{background:#dc2626}
 .control{padding:14px 17px;border-bottom:1px solid var(--line)}.control label{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:750;margin-bottom:6px}.control select{width:100%;border:1px solid #cbd5e1;border-radius:8px;padding:8px;background:#fff;color:var(--navy)}
 .selected{margin:14px 17px 10px;padding:12px;background:#f8fafc;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:9px}.selectedname{font-size:14px;font-weight:750;color:var(--navy);margin:5px 0 8px}.meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);padding-top:4px}.meta b{color:var(--navy)}
-.treehead{padding:8px 17px 7px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:end}.treehead h3{margin:4px 0 0;font-size:14px;color:var(--navy);font-weight:750}.action{border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:4px 7px;font-size:10px;color:#334155;cursor:pointer}.tree{flex:1;overflow:auto;padding:4px 9px 10px;min-height:360px}.tree-row{display:flex;align-items:center;min-height:31px;border-radius:6px;cursor:pointer;user-select:none}.tree-row:hover{background:#f8fafc}.tree-row.sel{background:#eef2f7;box-shadow:inset 3px 0 var(--gold)}.toggle{width:23px;height:24px;border:0;background:transparent;color:#64748b;cursor:pointer;font-size:15px}.toggle.empty{cursor:default;color:transparent}.tname{flex:1;min-width:0;font-size:11.5px;color:#334155;padding:5px 2px;line-height:1.25}.l0 .tname{font-weight:800;color:var(--navy)}.l1 .tname{font-weight:650}.tw{font-size:9.5px;color:#64748b;padding-right:4px}.children{display:none}.children.open{display:block}.note{margin:7px 12px 13px;padding:9px 10px;border:1px solid #e7e5e4;background:#fafaf9;border-radius:7px;color:#78716c;font-size:9.5px;line-height:1.45}
+.treehead{padding:8px 17px 7px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:end}.treehead h3{margin:4px 0 0;font-size:14px;color:var(--navy);font-weight:750}.action{border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:4px 7px;font-size:10px;color:#334155;cursor:pointer}.tree{flex:1;overflow:auto;padding:4px 9px 10px;min-height:360px}.tree-row{display:flex;align-items:center;min-height:30px;border-radius:6px;cursor:pointer;user-select:none}.tree-row:hover{background:#f8fafc}.tree-row.sel{background:#eef2f7;box-shadow:inset 3px 0 var(--gold)}.toggle{width:23px;height:24px;border:0;background:transparent;color:#64748b;cursor:pointer;font-size:15px}.toggle.empty{cursor:default;color:transparent}.tname{flex:1;min-width:0;font-size:11.5px;color:#334155;padding:5px 2px;line-height:1.25}.l0 .tname{font-weight:800;color:var(--navy)}.l1 .tname{font-weight:650}.tw{font-size:9.5px;color:#64748b;padding-right:4px}.children{display:none}.children.open{display:block}.note{margin:7px 12px 13px;padding:9px 10px;border:1px solid #e7e5e4;background:#fafaf9;border-radius:7px;color:#78716c;font-size:9.5px;line-height:1.45}
 .chart{display:flex;flex-direction:column;min-height:720px}.charthead{padding:14px 16px 10px;border-bottom:1px solid var(--line);min-height:92px;flex-shrink:0}.charthead h2{font-size:12px;text-transform:uppercase;letter-spacing:.08em}.sub{font-size:11px;color:var(--muted);margin-top:4px}.badge{display:inline-block;margin-top:8px;padding:5px 8px;border-radius:999px;background:#f8fafc;border:1px solid var(--line);font-size:10px;color:#475569}.badge.ok{background:#ecfdf5;color:#047857;border-color:#a7f3d0}.badge.warn{background:#fffbeb;color:#92400e;border-color:#fde68a}.wrap{position:relative;flex:1;min-height:500px;padding:15px 18px 10px}.wrap canvas{width:100%!important;height:100%!important}.footer{border-top:1px solid var(--line);padding:8px 16px;color:#94a3b8;font-size:10px;flex-shrink:0}.itemtitle{font-size:15px;font-weight:800;color:var(--navy);margin-top:5px}.stats{display:grid;grid-template-columns:1.4fr .7fr .9fr;gap:7px;margin-top:10px}.stats div{padding:6px 7px;background:#f8fafc;border:1px solid var(--line);border-radius:7px}.stats span{display:block;font-size:8.5px;text-transform:uppercase;letter-spacing:.05em;color:#64748b}.stats b{display:block;font-size:11px;color:var(--navy);margin-top:2px}.empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px}.hidden{display:none!important}
 @media(max-width:1250px){.layout{grid-template-columns:300px minmax(380px,1fr)}.chart:last-child{grid-column:2}}@media(max-width:850px){.layout{grid-template-columns:1fr}.chart:last-child{grid-column:auto}.side,.chart{min-height:600px}.wrap{min-height:420px}}
 
@@ -150,46 +150,519 @@ body{overflow:hidden}
 .tree-row.l1 .tname{color:color-mix(in srgb,var(--group-color) 78%,#334155)}
 .tree-row.sel{background:color-mix(in srgb,var(--group-color) 8%,white);box-shadow:inset 3px 0 var(--group-color)}
 .tree-row:hover{background:color-mix(in srgb,var(--group-color) 5%,white)}
-</style></head>
+</style>
+<style id="hierarchy-v7-style">
+.tree-row .tname {
+  display: block;
+  min-width: 0;
+  line-height: 1.25;
+}
+.tree-row .hierarchy-prefix {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: .15px;
+  opacity: .78;
+  white-space: nowrap;
+}
+.tree-row .division-colour-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: 1px;
+}
+</style>
+
+
+<style id="hierarchy-v8-style">
+.tree-row {
+  --group-color: #65727A;
+}
+.tree-row .hierarchy-prefix {
+  font-size: 8px;
+  font-weight: 600;
+  color: var(--group-color);
+  opacity: .88;
+  letter-spacing: .05px;
+  white-space: nowrap;
+}
+.tree-row .division-colour-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  min-width: 7px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: 1px;
+}
+.tree-row.l0 .hierarchy-prefix {
+  font-size: 8px;
+  font-weight: 700;
+}
+.tree-row.l1 .tname {
+  font-weight: 700;
+}
+.tree-row.l5 .tname {
+  font-weight: 500;
+}
+</style>
+
+
+<style id="hierarchy-v9-style">
+.tree-row {
+  position: relative;
+}
+.tree-row.l0 .hierarchy-prefix {
+  color: #2F5D62;
+  font-weight: 700;
+}
+.tree-row.l1 .hierarchy-prefix {
+  font-weight: 700;
+}
+.tree-row.l2 .hierarchy-prefix,
+.tree-row.l3 .hierarchy-prefix,
+.tree-row.l4 .hierarchy-prefix,
+.tree-row.l5 .hierarchy-prefix {
+  font-weight: 600;
+}
+</style>
+
+
+<style id="hierarchy-loading-style">
+#hierarchyTree .hierarchy-loading {
+  padding: 10px;
+  font-size: 11px;
+  color: #64748b;
+}
+#hierarchyTree .hierarchy-error {
+  padding: 10px;
+  font-size: 11px;
+  color: #b91c1c;
+}
+</style>
+
+</head>
 <body class="bg-stone-100 text-slate-800 min-h-screen flex flex-col">
 <header class="bg-slate-900 text-white shadow-md py-4 px-6 flex-shrink-0"><div class="max-w-[1600px] mx-auto"><h1 class="text-xl md:text-2xl font-bold">Consumer Price Index (CPI) Combined Dashboard</h1><p class="text-sm text-slate-300 mt-1">Interactive Hierarchy Analysis <span class="text-slate-400">(Credits: Prof. Kalyan K, IIMV; with chatGPT as TA)</span></p></div></header>
 <main class="flex-1 min-h-0 overflow-hidden"><div class="dashboard-shell"><div class="layout">
 <aside class="card side"><div class="head"><div><div class="kicker">Controls</div><h2>Hierarchy Navigator</h2></div><span id="statusDot" class="dot loading"></span></div>
 <div class="control"><label for="baseYearSelect">Base Year</label><select id="baseYearSelect"><option value="2024" selected>Base Year 2024</option></select></div>
 <div class="selected"><div class="kicker">Selected Node</div><div id="selectedName" class="selectedname">General Index</div><div class="meta"><span>Weight</span><b id="selectedWeight">—</b></div><div class="meta"><span>Hierarchy level</span><b id="selectedLevel">—</b></div><div class="meta"><span>Indentation</span><b id="selectedIndent">—</b></div></div>
+
+<div id="levelLegend" style="margin:0 12px 8px;padding:8px 10px;border:1px solid #e2e8f0;border-radius:7px;background:#f8fafc;font-size:9.5px;line-height:1.55;color:#64748b">
+    <div style="font-weight:750;color:#334155;margin-bottom:2px">CPI hierarchy levels</div>
+    <div><b>L0</b> General Index &nbsp;·&nbsp; <b>L1</b> Division</div>
+    <div><b>L2</b> Groups &nbsp;·&nbsp; <b>L3</b> Classes</div>
+    <div><b>L4</b> Sub-classes &nbsp;·&nbsp; <b>L5</b> Items</div>
+</div>
 <div class="treehead"><div><div class="kicker">Parsed hierarchy</div><h3>General Index</h3></div><button id="expandAllBtn" class="action">Expand all</button></div>
-<div id="hierarchyTree" class="tree"><div class="p-2 text-xs text-slate-500">Parsing spreadsheet hierarchy…</div></div>
-<div class="note"><b>+</b> Expand/collapse a branch. Click the item name to select it and update the charts.</div></aside>
+<div id="hierarchyTree" class="tree"><div class="p-2 text-xs text-slate-500">Parsing spreadsheet hierarchy…</div><div style="margin-top:8px;font-size:10.5px;line-height:1.35;color:#667085;"><strong>Hierarchy rule:</strong> General Index is Level 0. Divisions, Groups, Classes and Sub-classes occur as applicable; intermediate levels may be absent. Every terminal node is classified as <strong>Items</strong>.</div></div>
+<div class="note"><b>+</b> Expand/collapse a branch. Labels follow the CPI hierarchy: General Index → Division → Groups → Classes → Sub-classes → Items.</div></aside>
 <section class="card chart"><div class="charthead"><div class="kicker">Weight structure</div><h2 id="pieTitle">General Index</h2><div id="pieSubtitle" class="sub">Immediate children</div><span id="cumulativeCheck" class="badge">Children: —</span></div><div class="wrap"><canvas id="pieChart"></canvas><div id="pieEmpty" class="empty hidden">No child categories available for this selection.</div></div><div id="pieFooter" class="footer">Select any hierarchy level from the left panel.</div></section>
 <section class="card chart"><div class="charthead"><div class="kicker">Index trend</div><h2>Item selection</h2><div id="lineItemTitle" class="itemtitle">General Index</div><div class="stats"><div><span>Weight in basket</span><b id="lineWeight">—</b></div><div><span>Hierarchy level</span><b id="lineLevel">—</b></div><div><span>Indentation</span><b id="lineIndent">—</b></div></div></div><div class="wrap"><canvas id="lineChart"></canvas><div id="lineEmpty" class="empty hidden">No index observations available for this row.</div></div><div id="trendLabel" class="footer">—</div></section>
 </div></div></main>
 <footer class="bg-white border-t border-slate-200 py-3 px-6 text-xs text-slate-500 flex-shrink-0"><div class="max-w-[1600px] mx-auto flex justify-between"><span id="footerStatus">Loading workbook…</span><span>CPI Automated Analysis Dashboard</span></div></footer>
 <script>
 const filename="CPI-Combined-Base-2024.xlsx";let parsedItems=[],itemMap=new Map(),pieChartInstance=null,lineChartInstance=null,selectedItemId=null,expandedIds=new Set();
-const ROOT_COLORS=["#2F5D62","#486581","#6B4F71","#7A5C3E","#4F6F52","#A06A3B","#806A2A","#7B3F4B","#4B6584","#625772","#52665A","#8A5A44"];
+const DIVISION_COLORS = [
+  "#D94F4F", // red
+  "#E58A3A", // orange
+  "#D8B23A", // yellow/gold
+  "#65A85A", // green
+  "#3F9E9A", // teal
+  "#4D78B8", // blue
+  "#7656A6", // indigo
+  "#A64D82"  // violet/magenta
+];
+
+const LEVEL_LABELS = {
+  0: "General Index",
+  1: "Divisions",
+  2: "Groups",
+  3: "Classes",
+  4: "Sub-classes",
+  5: "Items"
+};
+
+function hierarchyLabel(level, isLeaf=false) {
+  if (isLeaf) return "Items";
+  const lv = Math.max(0, Math.min(5, Number(level) || 0));
+  return LEVEL_LABELS[lv];
+}
+function nodeHierarchyLabel(item) {
+  if (!item) return "Items";
+  const isLeaf = children(item).length === 0;
+  return hierarchyLabel(item.level, isLeaf);
+}
+
 window.addEventListener("DOMContentLoaded",()=>{document.getElementById("baseYearSelect").addEventListener("change",updateDashboard);document.getElementById("expandAllBtn").addEventListener("click",toggleExpandAll);loadExcelAutomatically()});
 function status(type){document.getElementById("statusDot").className="dot "+type}
-async function loadExcelAutomatically(){try{status("loading");const r=await fetch(filename,{cache:"no-store"});if(!r.ok)throw new Error(`HTTP ${r.status}. Place "${filename}" in the same folder and use a local web server.`);parseWorkbook(await r.arrayBuffer());status("success");document.getElementById("footerStatus").textContent=`Loaded file: ${filename}`}catch(e){console.error(e);status("error");document.getElementById("footerStatus").textContent=`Error: ${e.message}`;document.getElementById("hierarchyTree").innerHTML=`<div class="p-2 text-xs text-rose-600">${esc(e.message)}</div>`}}
+async function loadExcelAutomatically(){try{status("loading");const r=await fetch(filename,{cache:"no-store"});if(!r.ok)throw new Error(`HTTP ${r.status}. Place "${filename}" in the same folder and use a local web server.`);parseWorkbook(await r.arrayBuffer());status("success");document.getElementById("footerStatus").textContent=`Loaded file: ${filename} · Hierarchy rendered`}catch(e){console.error(e);status("error");document.getElementById("footerStatus").textContent=`Error: ${e.message}`;document.getElementById("hierarchyTree").innerHTML=`<div class="p-3 text-xs text-rose-600"><strong>Unable to build hierarchy.</strong><br>${esc(e.message)}</div>`}}
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
 function indentInfo(v){const raw=v==null?"":String(v);const expanded=raw.replace(/\t/g,"    ");const m=expanded.match(/^ */);return{raw,expanded,indent:m?m[0].length:0,name:expanded.trim()}}
 function num(v){if(v==null||v==="")return 0;if(typeof v==="number")return Number.isFinite(v)?v:0;const n=parseFloat(String(v).replace(/,/g,"").replace(/%/g,"").trim());return Number.isFinite(n)?n:0}
 function indexVal(v){if(v==null||v==="")return null;if(typeof v==="number")return Number.isFinite(v)?v:null;const n=parseFloat(String(v).replace(/,/g,"").replace(/%/g,"").trim());return Number.isFinite(n)?n:null}
-function assignHierarchy(rows){const stack=[],out=[];rows.forEach((row,ri)=>{if(!row||!row.length)return;const z=indentInfo(row[0]);if(!z.name)return;while(stack.length&&z.indent<stack[stack.length-1].indent)stack.pop();let level;if(!stack.length)level=0;else if(z.indent===stack[stack.length-1].indent){level=stack[stack.length-1].level;stack.pop()}else level=stack[stack.length-1].level+1;const parent=stack.length?stack[stack.length-1]:null;const item={id:out.length,sourceRow:ri,name:z.name,rawName:z.raw,indent:z.indent,level,parentId:parent?parent.id:null,parentName:parent?parent.name:null,weight:num(row[1]),values:[],headers:[]};out.push(item);stack.push(item)});return out}
-function parseWorkbook(buffer){const wb=XLSX.read(buffer,{type:"array",cellNF:true,cellText:true,raw:false});if(!wb.SheetNames.length)throw Error("Workbook contains no worksheets.");const ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:""});if(rows.length<=2)throw Error("The Excel sheet does not contain enough rows.");const data=rows.slice(2);let hi=-1;for(let i=0;i<data.length;i++){const row=data[i]||[];if(row.some(c=>String(c).toLowerCase().includes("weight"))||row.some(c=>/index|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec/i.test(String(c)))){hi=i;break}}if(hi<0)hi=0;const headers=data[hi]||[],valid=data.slice(hi+1);const wc=Math.max(1,headers.findIndex(h=>String(h).toLowerCase().includes("weight")));parsedItems=assignHierarchy(valid.map(r=>[r[0],r[wc]]));parsedItems.forEach(item=>{const row=valid[item.sourceRow]||[];for(let c=0;c<headers.length;c++){if(c===0||c===wc)continue;item.values.push(indexVal(row[c]));item.headers.push(String(headers[c]||"").trim())}});buildGeneralRoot();itemMap=new Map(parsedItems.map(x=>[x.id,x]));const root=getRoot();selectedItemId=root?root.id:null;expandedIds=new Set(root?[root.id]:[]);renderTree();updateDashboard()}
-function buildGeneralRoot(){let existing=parsedItems.find(x=>x.parentId===null&&x.name.toLowerCase()==="general index");if(existing)return;const old=parsedItems.slice();const idMap=new Map(old.map((x,i)=>[x.id,i+1]));old.forEach(x=>{x.id=idMap.get(x.id);if(x.parentId!==null)x.parentId=idMap.get(x.parentId);x.level++});const root={id:0,sourceRow:-1,name:"General Index",rawName:"General Index",indent:0,level:0,parentId:null,parentName:null,weight:old.filter(x=>x.level===1).reduce((s,x)=>s+x.weight,0),values:[],headers:[],synthetic:true};parsedItems=[root,...old];parsedItems.filter(x=>x.id!==0&&x.level===1).forEach(x=>{x.parentId=0;x.parentName="General Index"})}
-function getRoot(){return parsedItems.find(x=>x.parentId===null)}
+function assignHierarchy(rows){
+  const out = [];
+  const stack = [];
+
+  // Find the first genuine hierarchy row. It is always the General Index.
+  let firstValid = null;
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    if (!row || !row.length) continue;
+    const z = indentInfo(row[0]);
+    if (z.name) {
+      firstValid = { row, ri: i, z };
+      break;
+    }
+  }
+
+  if (!firstValid) return out;
+
+  const baseIndent = firstValid.z.indent;
+
+  rows.forEach((row, ri) => {
+    if (!row || !row.length) return;
+
+    const z = indentInfo(row[0]);
+    if (!z.name) return;
+
+    // The first hierarchy row is the General Index, regardless of
+    // how many spaces the Excel cell happens to contain.
+    if (out.length === 0) {
+      const item = {
+        id: 0,
+        sourceRow: ri,
+        name: "General Index",
+        rawName: z.raw,
+        indent: z.indent,
+        level: 0,
+        parentId: null,
+        parentName: null,
+        weight: num(row[1]),
+        values: [],
+        headers: [],
+        synthetic: false
+      };
+
+      out.push(item);
+      stack.length = 0;
+      stack.push(item);
+      return;
+    }
+
+    /*
+     * Parent is determined ONLY by actual indentation:
+     * pop all rows whose indentation is >= this row's indentation.
+     * The remaining top-of-stack is therefore the immediate parent.
+     */
+    while (
+      stack.length &&
+      z.indent <= stack[stack.length - 1].indent
+    ) {
+      stack.pop();
+    }
+
+    const parent = stack.length ? stack[stack.length - 1] : out[0];
+
+    /*
+     * Level is structural depth, not an absolute hard-coded Excel
+     * indentation. This makes 4/8/12/... spaces a natural convention
+     * but also tolerates missing Classes/Sub-classes and minor spacing
+     * differences.
+     */
+    let level = parent ? parent.level + 1 : 1;
+    level = Math.min(5, Math.max(1, level));
+
+    const item = {
+      id: out.length,
+      sourceRow: ri,
+      name: z.name,
+      rawName: z.raw,
+      indent: z.indent,
+      level: level,
+      parentId: parent ? parent.id : 0,
+      parentName: parent ? parent.name : "General Index",
+      weight: num(row[1]),
+      values: [],
+      headers: [],
+      synthetic: false
+    };
+
+    out.push(item);
+    stack.push(item);
+  });
+
+  // Ensure the root is always exactly General Index.
+  if (out.length) {
+    out[0].name = "General Index";
+    out[0].rawName = out[0].rawName || "General Index";
+    out[0].level = 0;
+    out[0].parentId = null;
+    out[0].parentName = null;
+  }
+
+  return out;
+}
+function parseWorkbook(buffer){
+  const wb = XLSX.read(buffer,{
+    type:"array",
+    cellNF:true,
+    cellText:true,
+    raw:false
+  });
+
+  if(!wb.SheetNames.length)
+    throw Error("Workbook contains no worksheets.");
+
+  const ws = wb.Sheets[wb.SheetNames[0]];
+  const rows = XLSX.utils.sheet_to_json(ws,{
+    header:1,
+    raw:false,
+    defval:""
+  });
+
+  if(rows.length<=2)
+    throw Error("The Excel sheet does not contain enough rows.");
+
+  const data = rows.slice(2);
+
+  let hi=-1;
+  for(let i=0;i<data.length;i++){
+    const row=data[i]||[];
+    if(
+      row.some(c=>String(c).toLowerCase().includes("weight")) ||
+      row.some(c=>/index|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec/i.test(String(c)))
+    ){
+      hi=i;
+      break;
+    }
+  }
+
+  if(hi<0) hi=0;
+
+  const headers=data[hi]||[];
+  const valid=data.slice(hi+1);
+  const wc=Math.max(
+    1,
+    headers.findIndex(h=>String(h).toLowerCase().includes("weight"))
+  );
+
+  parsedItems=assignHierarchy(valid.map(r=>[r[0],r[wc]]));
+
+  parsedItems.forEach(item=>{
+    const row=valid[item.sourceRow]||[];
+    for(let c=0;c<headers.length;c++){
+      if(c===0 || c===wc) continue;
+      item.values.push(indexVal(row[c]));
+      item.headers.push(String(headers[c]||"").trim());
+    }
+  });
+
+  // Calculate General Index weight from its immediate divisions when
+  // the workbook does not provide a usable root weight.
+  const root = parsedItems.find(x=>x.level===0 && x.parentId===null);
+  if(root && (!isFinite(root.weight) || root.weight===0)){
+    root.weight = parsedItems
+      .filter(x=>x.parentId===root.id)
+      .reduce((s,x)=>s+num(x.weight),0);
+  }
+
+  itemMap=new Map(parsedItems.map(x=>[x.id,x]));
+  selectedItemId=root ? root.id : null;
+
+  // Start with only General Index expanded.
+  expandedIds=new Set(root ? [root.id] : []);
+
+  renderTree();
+  hierarchyDiagnostics();
+  updateDashboard();
+}
+
+function getRoot() {
+  return parsedItems.find(x=>x.parentId===null && x.level===0);
+}
 function children(item){return item?parsedItems.filter(x=>x.parentId===item.id):[]}
 function toggleNode(id){expandedIds.has(id)?expandedIds.delete(id):expandedIds.add(id);renderTree()}
 function selectNode(id){selectedItemId=id;renderTree();updateDashboard()}
 function toggleExpandAll(){const nodes=parsedItems.filter(x=>children(x).length);const all=nodes.every(x=>expandedIds.has(x.id));expandedIds=all?new Set([getRoot()?.id].filter(x=>x!==undefined)):new Set(nodes.map(x=>x.id));document.getElementById("expandAllBtn").textContent=all?"Expand all":"Collapse all";renderTree()}
+
+function hierarchyDiagnostics() {
+  const root = getRoot();
+  if (!root) return;
+
+  const divisions = children(root);
+  console.info(
+    "CPI hierarchy:",
+    "Root =", root.name,
+    "| Divisions =", divisions.map(x => x.name),
+    "| Division count =", divisions.length
+  );
+
+  divisions.forEach(div => {
+    console.info(
+      "Division:", div.name,
+      "| Groups =", children(div).map(x => x.name)
+    );
+  });
+}
+
 function renderTree(){const box=document.getElementById("hierarchyTree");box.innerHTML="";const root=getRoot();if(!root){box.innerHTML='<div class="p-2 text-xs text-slate-500">No hierarchy rows found.</div>';return}const frag=document.createDocumentFragment();drawNode(root,frag);box.appendChild(frag);const sel=box.querySelector(".sel");if(sel)sel.scrollIntoView({block:"nearest"})}
-function drawNode(item,parent){const kids=children(item),node=document.createElement("div"),row=document.createElement("div");row.className=`tree-row l${item.level}${item.id===selectedItemId?" sel":""}`;row.style.paddingLeft=`${item.level*14}px`;row.style.setProperty("--group-color",rootColor(item));const b=document.createElement("button");b.className="toggle"+(kids.length?"":" empty");b.textContent=kids.length?(expandedIds.has(item.id)?"−":"+"):"•";b.onclick=e=>{e.stopPropagation();if(kids.length)toggleNode(item.id)};const n=document.createElement("span");n.className="tname";n.style.borderLeft="3px solid "+rootColor(item);n.style.paddingLeft="6px";n.textContent=item.name;n.title=item.name;const w=document.createElement("span");w.className="tw";w.textContent=num(item.weight).toFixed(2)+"%";row.append(b,n,w);row.onclick=()=>selectNode(item.id);node.appendChild(row);if(kids.length&&expandedIds.has(item.id)){const c=document.createElement("div");c.className="children open";kids.forEach(k=>drawNode(k,c));node.appendChild(c)}parent.appendChild(node)}
-function levelLabel(item){if(!item)return"—";if(item.name==="General Index"&&item.parentId===null)return"General Index";if(item.level===1)return"Group";if(item.level===2)return"Sub-group";return children(item).length===0?"Item":"Item"}
-function updateDashboard(){const item=itemMap.get(selectedItemId);if(!item)return;document.getElementById("selectedName").textContent=item.name;document.getElementById("selectedWeight").textContent=num(item.weight).toFixed(2)+"%";document.getElementById("selectedLevel").textContent=levelLabel(item);document.getElementById("selectedIndent").textContent=item.indent+" spaces";document.getElementById("pieTitle").textContent=item.name;document.getElementById("pieSubtitle").textContent=children(item).length?"Immediate children":"No lower-level children";document.getElementById("lineItemTitle").textContent=item.name;document.getElementById("lineWeight").textContent=num(item.weight).toFixed(2)+"%";document.getElementById("lineLevel").textContent=levelLabel(item);document.getElementById("lineIndent").textContent=item.indent+" spaces";renderPie(item,children(item));renderLine(item)}
+function drawNode(node, container, depth=0) {
+  const kids = children(node);
+  const hasChildren = kids.length > 0;
+  const expanded = expandedIds.has(node.id);
+
+  const row = document.createElement("div");
+  row.className = `tree-row l${Math.min(5, Math.max(0, node.level))}${selectedItemId === node.id ? " sel" : ""}`;
+  row.style.paddingLeft = `${depth * 14}px`;
+  row.dataset.id = node.id;
+  row.style.setProperty("--group-color", hierarchyColor(node));
+
+  const btn = document.createElement("button");
+  btn.className = `toggle${hasChildren ? "" : " empty"}`;
+  btn.type = "button";
+  btn.textContent = hasChildren ? (expanded ? "−" : "+") : "•";
+  btn.title = hasChildren ? (expanded ? "Collapse" : "Expand") : "Item";
+
+  const name = document.createElement("span");
+  name.className = "tname";
+
+  const label = nodeHierarchyLabel(node).toLowerCase();
+  const prefix = document.createElement("span");
+  prefix.className = "hierarchy-prefix";
+  prefix.textContent = `(${label}) `;
+
+  const dot = document.createElement("span");
+  dot.className = "division-colour-dot";
+  dot.style.backgroundColor = hierarchyColor(node);
+
+  name.appendChild(prefix);
+  name.appendChild(dot);
+  name.appendChild(document.createTextNode(node.name));
+
+  const wt = document.createElement("span");
+  wt.className = "tw";
+  wt.textContent = `${num(node.weight).toFixed(2)}%`;
+
+  row.appendChild(btn);
+  row.appendChild(name);
+  row.appendChild(wt);
+
+  row.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    selectNode(node.id);
+  });
+
+  btn.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    if (!hasChildren) return;
+    toggleNode(node.id);
+  });
+
+  container.appendChild(row);
+
+  if (hasChildren && expanded) {
+    const childBox = document.createElement("div");
+    childBox.className = "children open";
+    kids.forEach(ch => drawNode(ch, childBox, depth + 1));
+    container.appendChild(childBox);
+  }
+}
+function levelLabel(item){return item?nodeHierarchyLabel(item):"—"}
+function updateDashboard(){const item=itemMap.get(selectedItemId);if(!item)return;document.getElementById("selectedName").textContent=item.name;document.getElementById("selectedWeight").textContent=num(item.weight).toFixed(2)+"%";document.getElementById("selectedLevel").textContent=`${nodeHierarchyLabel(item)} (Level ${item.level})`;document.getElementById("selectedIndent").textContent=`${item.indent} spaces → Level ${item.level}`;document.getElementById("pieTitle").textContent=item.name;document.getElementById("pieSubtitle").textContent=children(item).length?"Immediate children":"No lower-level children";document.getElementById("lineItemTitle").textContent=item.name;document.getElementById("lineWeight").textContent=num(item.weight).toFixed(2)+"%";document.getElementById("lineLevel").textContent=`${nodeHierarchyLabel(item)} (Level ${item.level})`;document.getElementById("lineIndent").textContent=item.indent+" spaces";renderPie(item,children(item));renderLine(item)}
 function hexrgb(h){h=h.replace("#","");return{r:parseInt(h.slice(0,2),16),g:parseInt(h.slice(2,4),16),b:parseInt(h.slice(4,6),16)}}
 function mix(h,t,a){const x=hexrgb(h),y=hexrgb(t);return"#"+[x.r+(y.r-x.r)*a,x.g+(y.g-x.g)*a,x.b+(y.b-x.b)*a].map(v=>Math.round(v).toString(16).padStart(2,"0")).join("")}
-function rootColor(item){if(!item)return"#334E68";let x=item;while(x&&x.parentId!==null){const p=itemMap.get(x.parentId);if(!p||p.name==="General Index")break;x=p}if(!x||x.name==="General Index")return"#334E68";const roots=children(getRoot()),i=roots.findIndex(r=>r.id===x.id);return ROOT_COLORS[(i<0?0:i)%ROOT_COLORS.length]}
-function childColor(parent,i,total){const base=rootColor(parent);if(total<=1)return base;const ratio=i/(total-1);return mix(base,"#ffffff",.05+ratio*.35)}
+function hexToRgb(hex) {
+  const h = hex.replace("#","");
+  return {
+    r: parseInt(h.substring(0,2),16),
+    g: parseInt(h.substring(2,4),16),
+    b: parseInt(h.substring(4,6),16)
+  };
+}
+
+function rgbToHex(r,g,b) {
+  return "#" + [r,g,b].map(v =>
+    Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,"0")
+  ).join("");
+}
+
+function lightenColor(hex, amount) {
+  const c = hexToRgb(hex);
+  return rgbToHex(
+    c.r + (255-c.r)*amount,
+    c.g + (255-c.g)*amount,
+    c.b + (255-c.b)*amount
+  );
+}
+
+
+function getDivisionNodes() {
+  const root = getRoot();
+  return root ? children(root) : [];
+}
+
+function divisionRoot(item) {
+  if (!item) return null;
+  if (item.level === 1) return item;
+
+  let current = item;
+  const seen = new Set();
+
+  while (current && current.parentId !== null && current.parentId !== undefined) {
+    if (seen.has(current.id)) break;
+    seen.add(current.id);
+
+    const parent = parsedItems.find(x => x.id === current.parentId);
+    if (!parent) break;
+
+    if (parent.level === 1) return parent;
+    current = parent;
+  }
+  return null;
+}
+
+function divisionColor(item) {
+  const div = divisionRoot(item);
+  if (!div) return "#65727A";
+
+  const divisions = getDivisionNodes();
+  const idx = Math.max(0, divisions.findIndex(x => x.id === div.id));
+
+  if (!div._divisionColor) {
+    div._divisionColor = DIVISION_COLORS[idx % DIVISION_COLORS.length];
+  }
+  return div._divisionColor;
+}
+
+function hierarchyColor(item) {
+  if (!item) return "#65727A";
+  if (item.level === 0) return "#2F5D62";
+
+  const base = divisionColor(item);
+  if (item.level === 1) return base;
+
+  const lightening = {
+    2: 0.16,
+    3: 0.28,
+    4: 0.40,
+    5: 0.52
+  }[Math.min(5, Math.max(2, item.level))] || 0.52;
+
+  return lightenColor(base, lightening);
+}
+
+function rootColor(item) {
+  return hierarchyColor(item);
+}
+
+function childColor(parent, i, total) {
+  return hierarchyColor(parent);
+}
+
 function renderPie(item,kids){const empty=document.getElementById("pieEmpty"),badge=document.getElementById("cumulativeCheck");if(!kids.length){empty.classList.remove("hidden");if(pieChartInstance){pieChartInstance.destroy();pieChartInstance=null}badge.textContent="No children";badge.className="badge";document.getElementById("pieFooter").textContent="This hierarchy node has no parsed lower-level children.";return}empty.classList.add("hidden");const labels=kids.map(x=>x.name),data=kids.map(x=>num(x.weight)),colors=kids.map((x,i)=>childColor(item,i,kids.length)),sum=data.reduce((a,b)=>a+b,0),target=(item.synthetic||item.parentId===null)?100:num(item.weight),valid=Math.abs(sum-target)<=1.5;badge.textContent=`Children: ${sum.toFixed(2)}% · Target: ${target.toFixed(2)}%`;badge.className="badge "+(valid?"ok":"warn");document.getElementById("pieFooter").textContent=`${kids.length} immediate child categories · cumulative weight ${sum.toFixed(2)}%`;const ctx=document.getElementById("pieChart").getContext("2d");if(pieChartInstance)pieChartInstance.destroy();pieChartInstance=new Chart(ctx,{type:"pie",data:{labels,datasets:[{data,backgroundColor:colors,borderColor:"#fff",borderWidth:2,hoverOffset:7}]},options:{responsive:true,maintainAspectRatio:false,resizeDelay:80,plugins:{legend:{position:"bottom",labels:{boxWidth:13,boxHeight:13,padding:10,font:{size:10.5}}},tooltip:{callbacks:{label:c=>`${c.label}: ${num(c.raw).toFixed(2)}%`}}}}})}
-function renderLine(item){const empty=document.getElementById("lineEmpty"),data=(item.values||[]).slice(),labels=(item.headers||[]).slice();let last=-1;data.forEach((v,i)=>{if(v!==null)last=i});if(last>=0){data.splice(last+1);labels.splice(last+1)}const has=data.length&&data.some(v=>v!==null&&Number.isFinite(Number(v)));if(!has){empty.classList.remove("hidden");if(lineChartInstance){lineChartInstance.destroy();lineChartInstance=null}document.getElementById("trendLabel").textContent="No index observations available";return}empty.classList.add("hidden");document.getElementById("trendLabel").textContent=`${labels[0]||""} – ${labels[labels.length-1]||""}`;const ctx=document.getElementById("lineChart").getContext("2d");if(lineChartInstance)lineChartInstance.destroy();const color=rootColor(item);lineChartInstance=new Chart(ctx,{type:"line",data:{labels,datasets:[{label:item.name,data,borderColor:color,backgroundColor:mix(color,"#ffffff",.86),borderWidth:2.4,pointRadius:2,pointHoverRadius:5,fill:true,tension:.25,spanGaps:false}]},options:{responsive:true,maintainAspectRatio:false,resizeDelay:80,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false}},scales:{y:{beginAtZero:false,grid:{color:"#eef2f7"},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{autoSkip:true,maxTicksLimit:15,maxRotation:45,minRotation:0,font:{size:9}}}}}})}
+function renderLine(item){const empty=document.getElementById("lineEmpty"),data=(item.values||[]).slice(),labels=(item.headers||[]).slice();let last=-1;data.forEach((v,i)=>{if(v!==null)last=i});if(last>=0){data.splice(last+1);labels.splice(last+1)}const has=data.length&&data.some(v=>v!==null&&Number.isFinite(Number(v)));if(!has){empty.classList.remove("hidden");if(lineChartInstance){lineChartInstance.destroy();lineChartInstance=null}document.getElementById("trendLabel").textContent="No index observations available";return}empty.classList.add("hidden");document.getElementById("trendLabel").textContent=`${labels[0]||""} – ${labels[labels.length-1]||""}`;const ctx=document.getElementById("lineChart").getContext("2d");if(lineChartInstance)lineChartInstance.destroy();const color=hierarchyColor(item);lineChartInstance=new Chart(ctx,{type:"line",data:{labels,datasets:[{label:item.name,data,borderColor:color,backgroundColor:mix(color,"#ffffff",.86),borderWidth:2.4,pointRadius:2,pointHoverRadius:5,fill:true,tension:.25,spanGaps:false}]},options:{responsive:true,maintainAspectRatio:false,resizeDelay:80,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false}},scales:{y:{beginAtZero:false,grid:{color:"#eef2f7"},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{autoSkip:true,maxTicksLimit:15,maxRotation:45,minRotation:0,font:{size:9}}}}}})}
 </script></body></html>
