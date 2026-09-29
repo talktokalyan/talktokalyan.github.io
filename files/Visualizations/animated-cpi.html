@@ -242,6 +242,18 @@ body{overflow:hidden}
 }
 </style>
 
+
+<style id="treemap-v11-style">
+.treemap-container{position:relative;width:100%;height:100%;min-height:280px;overflow:hidden;background:#f8fafb;border-radius:8px;padding:4px;box-sizing:border-box}
+.treemap-cell{position:absolute;box-sizing:border-box;border:1px solid rgba(255,255,255,.9);border-radius:5px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;overflow:hidden;cursor:pointer;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35);transition:filter .12s,transform .12s;min-width:22px;min-height:22px}
+.treemap-cell:hover{filter:brightness(1.08);transform:scale(1.01);z-index:5}
+.treemap-cell .tm-name{font-size:clamp(9px,1vw,12px);font-weight:700;line-height:1.15;max-width:95%;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.treemap-cell .tm-share{font-size:clamp(9px,.9vw,11px);font-weight:600;margin-top:3px}
+.treemap-cell .tm-weight{font-size:9px;opacity:.9;margin-top:2px}
+.treemap-empty{height:100%;display:flex;align-items:center;justify-content:center;color:#64748b;font-size:11px}
+.treemap-tooltip{position:fixed;z-index:99999;pointer-events:none;display:none;background:rgba(24,32,40,.97);color:#fff;border-radius:6px;padding:7px 9px;font-size:10px;line-height:1.4;box-shadow:0 5px 18px rgba(0,0,0,.25);max-width:260px}
+.treemap-tooltip strong{font-size:11px}
+</style>
 </head>
 <body class="bg-stone-100 text-slate-800 min-h-screen flex flex-col">
 <header class="bg-slate-900 text-white shadow-md py-4 px-6 flex-shrink-0"><div class="max-w-[1600px] mx-auto"><h1 class="text-xl md:text-2xl font-bold">Consumer Price Index (CPI) Combined Dashboard</h1><p class="text-sm text-slate-300 mt-1">Interactive Hierarchy Analysis <span class="text-slate-400">(Credits: Prof. Kalyan K, IIMV; with chatGPT as TA)</span></p></div></header>
@@ -259,7 +271,7 @@ body{overflow:hidden}
 <div class="treehead"><div><div class="kicker">Parsed hierarchy</div><h3>General Index</h3></div><button id="expandAllBtn" class="action">Expand all</button></div>
 <div id="hierarchyTree" class="tree"><div class="p-2 text-xs text-slate-500">Parsing spreadsheet hierarchy…</div><div style="margin-top:8px;font-size:10.5px;line-height:1.35;color:#667085;"><strong>Hierarchy rule:</strong> General Index is Level 0. Divisions, Groups, Classes and Sub-classes occur as applicable; intermediate levels may be absent. Every terminal node is classified as <strong>Items</strong>.</div></div>
 <div class="note"><b>+</b> Expand/collapse a branch. Labels follow the CPI hierarchy: General Index → Division → Groups → Classes → Sub-classes → Items.</div></aside>
-<section class="card chart"><div class="charthead"><div class="kicker">Weight structure</div><h2 id="pieTitle">General Index</h2><div id="pieSubtitle" class="sub">Immediate children</div><span id="cumulativeCheck" class="badge">Children: —</span></div><div class="wrap"><canvas id="pieChart"></canvas><div id="pieEmpty" class="empty hidden">No child categories available for this selection.</div></div><div id="pieFooter" class="footer">Select any hierarchy level from the left panel.</div></section>
+<section class="card chart"><div class="charthead"><div class="kicker">Weight structure</div><h2 id="pieTitle">General Index</h2><div id="pieSubtitle" class="sub">Immediate children</div><span id="cumulativeCheck" class="badge">Children: —</span></div><div class="wrap"><div id="treeMapContainer" class="treemap-container" aria-label="Hierarchy treemap"></div><div id="pieEmpty" class="empty hidden">No child categories available for this selection.</div></div><div id="pieFooter" class="footer">Select any hierarchy level from the left panel.</div></section>
 <section class="card chart"><div class="charthead"><div class="kicker">Index trend</div><h2>Item selection</h2><div id="lineItemTitle" class="itemtitle">General Index</div><div class="stats"><div><span>Weight in basket</span><b id="lineWeight">—</b></div><div><span>Hierarchy level</span><b id="lineLevel">—</b></div><div><span>Indentation</span><b id="lineIndent">—</b></div></div></div><div class="wrap"><canvas id="lineChart"></canvas><div id="lineEmpty" class="empty hidden">No index observations available for this row.</div></div><div id="trendLabel" class="footer">—</div></section>
 </div></div></main>
 <footer class="bg-white border-t border-slate-200 py-3 px-6 text-xs text-slate-500 flex-shrink-0"><div class="max-w-[1600px] mx-auto flex justify-between"><span id="footerStatus">Loading workbook…</span><span>CPI Automated Analysis Dashboard</span></div></footer>
@@ -572,7 +584,7 @@ function drawNode(node, container, depth=0) {
   }
 }
 function levelLabel(item){return item?nodeHierarchyLabel(item):"—"}
-function updateDashboard(){const item=itemMap.get(selectedItemId);if(!item)return;document.getElementById("selectedName").textContent=item.name;document.getElementById("selectedWeight").textContent=num(item.weight).toFixed(2)+"%";document.getElementById("selectedLevel").textContent=`${nodeHierarchyLabel(item)} (Level ${item.level})`;document.getElementById("selectedIndent").textContent=`${item.indent} spaces → Level ${item.level}`;document.getElementById("pieTitle").textContent=item.name;document.getElementById("pieSubtitle").textContent=children(item).length?"Immediate children":"No lower-level children";document.getElementById("lineItemTitle").textContent=item.name;document.getElementById("lineWeight").textContent=num(item.weight).toFixed(2)+"%";document.getElementById("lineLevel").textContent=`${nodeHierarchyLabel(item)} (Level ${item.level})`;document.getElementById("lineIndent").textContent=item.indent+" spaces";renderPie(item,children(item));renderLine(item)}
+function updateDashboard(){const item=itemMap.get(selectedItemId);if(!item)return;document.getElementById("selectedName").textContent=item.name;document.getElementById("selectedWeight").textContent=num(item.weight).toFixed(2)+"%";document.getElementById("selectedLevel").textContent=`${nodeHierarchyLabel(item)} (Level ${item.level})`;document.getElementById("selectedIndent").textContent=`${item.indent} spaces → Level ${item.level}`;document.getElementById("pieTitle").textContent=item.name;document.getElementById("pieSubtitle").textContent=children(item).length?"Immediate children · area = share · hover for details":"No lower-level children";document.getElementById("lineItemTitle").textContent=item.name;document.getElementById("lineWeight").textContent=num(item.weight).toFixed(2)+"%";document.getElementById("lineLevel").textContent=`${nodeHierarchyLabel(item)} (Level ${item.level})`;document.getElementById("lineIndent").textContent=item.indent+" spaces";renderPie(item,children(item));renderLine(item)}
 function hexrgb(h){h=h.replace("#","");return{r:parseInt(h.slice(0,2),16),g:parseInt(h.slice(2,4),16),b:parseInt(h.slice(4,6),16)}}
 function mix(h,t,a){const x=hexrgb(h),y=hexrgb(t);return"#"+[x.r+(y.r-x.r)*a,x.g+(y.g-x.g)*a,x.b+(y.b-x.b)*a].map(v=>Math.round(v).toString(16).padStart(2,"0")).join("")}
 function hexToRgb(hex) {
@@ -663,6 +675,131 @@ function childColor(parent, i, total) {
   return hierarchyColor(parent);
 }
 
-function renderPie(item,kids){const empty=document.getElementById("pieEmpty"),badge=document.getElementById("cumulativeCheck");if(!kids.length){empty.classList.remove("hidden");if(pieChartInstance){pieChartInstance.destroy();pieChartInstance=null}badge.textContent="No children";badge.className="badge";document.getElementById("pieFooter").textContent="This hierarchy node has no parsed lower-level children.";return}empty.classList.add("hidden");const labels=kids.map(x=>x.name),data=kids.map(x=>num(x.weight)),colors=kids.map((x,i)=>childColor(item,i,kids.length)),sum=data.reduce((a,b)=>a+b,0),target=(item.synthetic||item.parentId===null)?100:num(item.weight),valid=Math.abs(sum-target)<=1.5;badge.textContent=`Children: ${sum.toFixed(2)}% · Target: ${target.toFixed(2)}%`;badge.className="badge "+(valid?"ok":"warn");document.getElementById("pieFooter").textContent=`${kids.length} immediate child categories · cumulative weight ${sum.toFixed(2)}%`;const ctx=document.getElementById("pieChart").getContext("2d");if(pieChartInstance)pieChartInstance.destroy();pieChartInstance=new Chart(ctx,{type:"pie",data:{labels,datasets:[{data,backgroundColor:colors,borderColor:"#fff",borderWidth:2,hoverOffset:7}]},options:{responsive:true,maintainAspectRatio:false,resizeDelay:80,plugins:{legend:{position:"bottom",labels:{boxWidth:13,boxHeight:13,padding:10,font:{size:10.5}}},tooltip:{callbacks:{label:c=>`${c.label}: ${num(c.raw).toFixed(2)}%`}}}}})}
+function renderPie(item,kids){
+  renderTreeMap(item,kids);
+}
+
+function treemapColor(item){
+  return item && item.level===1 ? divisionColor(item) : hierarchyColor(item);
+}
+
+function showTreemapTooltip(ev,item,parent){
+  let tip=document.getElementById("treemapTooltip");
+  if(!tip){
+    tip=document.createElement("div");
+    tip.id="treemapTooltip";
+    tip.className="treemap-tooltip";
+    document.body.appendChild(tip);
+  }
+  const pw=num(parent && parent.weight);
+  const share=pw>0 ? num(item.weight)/pw*100 : 0;
+  tip.innerHTML=`<strong>${esc(item.name)}</strong><br>${esc(nodeHierarchyLabel(item))}<br>Weight: ${num(item.weight).toFixed(2)}%<br>Share of ${esc(parent?parent.name:"parent")}: ${share.toFixed(2)}%`;
+  tip.style.display="block";
+  let x=ev.clientX+12,y=ev.clientY+12;
+  const r=tip.getBoundingClientRect();
+  if(x+r.width>innerWidth-8)x=ev.clientX-r.width-12;
+  if(y+r.height>innerHeight-8)y=ev.clientY-r.height-12;
+  tip.style.left=Math.max(5,x)+"px";
+  tip.style.top=Math.max(5,y)+"px";
+}
+
+function hideTreemapTooltip(){
+  const tip=document.getElementById("treemapTooltip");
+  if(tip)tip.style.display="none";
+}
+
+function renderTreeMap(parent,kids){
+  const box=document.getElementById("treeMapContainer");
+  if(!box)return;
+  box.innerHTML="";
+  hideTreemapTooltip();
+
+  if(!kids || !kids.length){
+    box.innerHTML='<div class="treemap-empty">No lower-level children.</div>';
+    return;
+  }
+
+  const data=kids.map((item,index)=>({
+    item,
+    value:Math.max(0,num(item.weight)),
+    index
+  })).filter(d=>d.value>0);
+
+  if(!data.length){
+    box.innerHTML='<div class="treemap-empty">No positive weights available.</div>';
+    return;
+  }
+
+  data.sort((a,b)=>b.value-a.value);
+
+  // Binary proportional treemap. Rectangle area is proportional to weight.
+  const cells=[];
+  function layout(arr,x,y,w,h){
+    if(!arr.length)return;
+    if(arr.length===1){
+      cells.push({...arr[0],x,y,w,h});
+      return;
+    }
+    const total=arr.reduce((s,d)=>s+d.value,0);
+    let accum=0,cut=1,bestDiff=Infinity;
+    for(let i=0;i<arr.length-1;i++){
+      accum+=arr[i].value;
+      const diff=Math.abs(accum-total/2);
+      if(diff<bestDiff){bestDiff=diff;cut=i+1;}
+    }
+    const a=arr.slice(0,cut),b=arr.slice(cut);
+    const ratio=a.reduce((s,d)=>s+d.value,0)/total;
+
+    if(w>=h){
+      const aw=w*ratio;
+      layout(a,x,y,aw,h);
+      layout(b,x+aw,y,w-aw,h);
+    }else{
+      const ah=h*ratio;
+      layout(a,x,y,w,ah);
+      layout(b,x,y+ah,w,h-ah);
+    }
+  }
+
+  layout(data,0,0,100,100);
+
+  const total=data.reduce((s,d)=>s+d.value,0);
+
+  cells.forEach(d=>{
+    const share=d.value/total*100;
+    const cell=document.createElement("div");
+    cell.className="treemap-cell";
+    cell.style.left=d.x+"%";
+    cell.style.top=d.y+"%";
+    cell.style.width="calc("+d.w+"% - 2px)";
+    cell.style.height="calc("+d.h+"% - 2px)";
+    cell.style.background=treemapColor(d.item);
+
+    const name=document.createElement("div");
+    name.className="tm-name";
+    name.textContent=d.item.name;
+
+    const sh=document.createElement("div");
+    sh.className="tm-share";
+    sh.textContent=share.toFixed(1)+"% share";
+
+    const wt=document.createElement("div");
+    wt.className="tm-weight";
+    wt.textContent=num(d.item.weight).toFixed(2)+"% basket weight";
+
+    cell.append(name,sh,wt);
+
+    cell.addEventListener("mouseenter",e=>showTreemapTooltip(e,d.item,parent));
+    cell.addEventListener("mousemove",e=>showTreemapTooltip(e,d.item,parent));
+    cell.addEventListener("mouseleave",hideTreemapTooltip);
+    cell.addEventListener("click",e=>{
+      e.stopPropagation();
+      selectNode(d.item.id);
+    });
+
+    box.appendChild(cell);
+  });
+}
+
 function renderLine(item){const empty=document.getElementById("lineEmpty"),data=(item.values||[]).slice(),labels=(item.headers||[]).slice();let last=-1;data.forEach((v,i)=>{if(v!==null)last=i});if(last>=0){data.splice(last+1);labels.splice(last+1)}const has=data.length&&data.some(v=>v!==null&&Number.isFinite(Number(v)));if(!has){empty.classList.remove("hidden");if(lineChartInstance){lineChartInstance.destroy();lineChartInstance=null}document.getElementById("trendLabel").textContent="No index observations available";return}empty.classList.add("hidden");document.getElementById("trendLabel").textContent=`${labels[0]||""} – ${labels[labels.length-1]||""}`;const ctx=document.getElementById("lineChart").getContext("2d");if(lineChartInstance)lineChartInstance.destroy();const color=hierarchyColor(item);lineChartInstance=new Chart(ctx,{type:"line",data:{labels,datasets:[{label:item.name,data,borderColor:color,backgroundColor:mix(color,"#ffffff",.86),borderWidth:2.4,pointRadius:2,pointHoverRadius:5,fill:true,tension:.25,spanGaps:false}]},options:{responsive:true,maintainAspectRatio:false,resizeDelay:80,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false}},scales:{y:{beginAtZero:false,grid:{color:"#eef2f7"},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{autoSkip:true,maxTicksLimit:15,maxRotation:45,minRotation:0,font:{size:9}}}}}})}
 </script></body></html>
