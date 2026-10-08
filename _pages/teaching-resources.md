@@ -24,14 +24,14 @@ author_profile: true
   border: 1px solid #ddd;
   border-radius: 10px;
   background: #fafafa;
-  min-height: 110px;
+  min-height: 90px;
   box-sizing: border-box;
 }
 
 .viz-card strong {
   display: block;
   margin-bottom: 15px;
-  line-height: 1.4;
+  line-height: 1.0;
 }
 
 .viz-card a {
