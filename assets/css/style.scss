@@ -1,0 +1,50 @@
+/* ----------------------------------------
+   Macroeconomics Visualization Grid
+   ---------------------------------------- */
+
+.visualization-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.viz-card {
+  padding: 20px;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px;
+  background: #fafafa;
+  transition: all 0.2s ease;
+}
+
+.viz-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.10);
+}
+
+.viz-card h3 {
+  margin-top: 0;
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.viz-card a {
+  font-weight: 600;
+}
+
+/* Two columns on tablets */
+
+@media (max-width: 1000px) {
+  .visualization-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* One column on mobile */
+
+@media (max-width: 600px) {
+  .visualization-grid {
+    grid-template-columns: 1fr;
+  }
+}

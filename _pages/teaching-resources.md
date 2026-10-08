@@ -8,17 +8,97 @@ author_profile: true
 
 ## Teaching
 
-### Macroeconomics 
-**Visualizations**
-  1.[Circularflow in a Macroeconomy](../files/Visualizations/animated-circularflow.html){:target="_blank"}
-  2.[Investment Spending-Gross Capital Formation(GCF)](../files/Visualizations/animation-GCF.html){:target="_blank"}
-  1.[India's Consumer price Index (Base=2024)](../files/Visualizations/animated-cpi.html){:target="_blank"}
-  1.[India's CPI Inflation](../files/Visualizations/india-cpi-inflation.html){:target="_blank"}
-  1.[India's Govt Budget](../files/Visualizations/animated-india-budget.html){:target="_blank"}
-  1.[India's Balance of Payments](../files/Visualizations/animated-bop.html){:target="_blank"}
-  1.[India's Economic Policy Uncertainty](../files/Visualizations/india-epu.html){:target="_blank"}
-  1.[Simulation of Labour Demand](../files/Visualizations/simulation-labour-demand.html){:target="_blank"}
-  1.[Simulation of IS-LM (Closed)](../files/Visualizations/simulation-is-lm.html){:target="_blank"}
+### Macroeconomics
+
+#### Visualizations
+
+<div class="visualization-grid">
+
+<div class="viz-card">
+
+**Circular Flow in a Macroeconomy**
+
+[View Visualization](../files/Visualizations/animated-circularflow.html){:target="_blank"}
+
+</div>
+
+<div class="viz-card">
+
+**Investment Spending – Gross Capital Formation (GCF)**
+
+[View Visualization](../files/Visualizations/animation-GCF.html){:target="_blank"}
+
+</div>
+
+<div class="viz-card">
+
+**India's Consumer Price Index (Base = 2024)**
+
+[View Visualization](../files/Visualizations/animated-cpi.html){:target="_blank"}
+
+</div>
+
+<div class="viz-card">
+
+**India's CPI Inflation**
+
+[View Visualization](../files/Visualizations/india-cpi-inflation.html){:target="_blank"}
+
+</div>
+
+</div>
+
+#### Indian Macroeconomic Data
+
+<div class="visualization-grid">
+
+<div class="viz-card">
+
+**India's Government Budget**
+
+[View Visualization](../files/Visualizations/animated-india-budget.html){:target="_blank"}
+
+</div>
+
+<div class="viz-card">
+
+**India's Balance of Payments**
+
+[View Visualization](../files/Visualizations/animated-bop.html){:target="_blank"}
+
+</div>
+
+<div class="viz-card">
+
+**India's Economic Policy Uncertainty**
+
+[View Visualization](../files/Visualizations/india-epu.html){:target="_blank"}
+
+</div>
+
+</div>
+
+#### Economic Simulations
+
+<div class="visualization-grid">
+
+<div class="viz-card">
+
+**Simulation of Labour Demand**
+
+[View Simulation](../files/Visualizations/simulation-labour-demand.html){:target="_blank"}
+
+</div>
+
+<div class="viz-card">
+
+**Simulation of IS–LM (Closed Economy)**
+
+[View Simulation](../files/Visualizations/simulation-is-lm.html){:target="_blank"}
+
+</div>
+
+</div>
 
 ### Introductory Econometrics (PhD Level)
 **Lecture Notes**
