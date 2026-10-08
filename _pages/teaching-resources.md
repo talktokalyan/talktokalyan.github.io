@@ -11,6 +11,7 @@ author_profile: true
 ### Macroeconomics 
 **Visualizations**
   1.[Circularflow in a Macroeconomy](../files/Visualizations/animated-circularflow.html){:target="_blank"}
+  2.[Investment Spending-Gross Capital Formation(GCF)](../files/Visualizations/animation-GCF.html){:target="_blank"}
   1.[India's Consumer price Index (Base=2024)](../files/Visualizations/animated-cpi.html){:target="_blank"}
   1.[India's CPI Inflation](../files/Visualizations/india-cpi-inflation.html){:target="_blank"}
   1.[India's Govt Budget](../files/Visualizations/animated-india-budget.html){:target="_blank"}

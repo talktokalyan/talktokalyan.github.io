@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gross Capital Formation Treemap — Base 2022-23</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+:root {
+    --ink:#17202a; --muted:#65717d; --border:#d9dee3;
+    --panel:#fff; --background:#f5f7f9;
+}
+* {box-sizing:border-box}
+body {
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    background:var(--background); color:var(--ink);
+}
+.page {max-width:1500px;margin:0 auto;padding:22px}
+.header {
+    background:var(--panel); border:1px solid var(--border); border-radius:14px;
+    padding:20px 24px 16px; margin-bottom:14px;
+}
+h1 {margin:0 0 5px;font-size:25px;font-weight:700}
+.subtitle {color:var(--muted);font-size:14px;line-height:1.45}
+.controls {
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:15px
+}
+.control {display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
+select {
+    border:1px solid #bfc7cf;border-radius:7px;padding:8px 12px;
+    background:white;font-size:14px;color:var(--ink);min-width:125px
+}
+.legend {
+    display:flex;flex-wrap:wrap;gap:16px;margin-top:14px;padding-top:12px;
+    border-top:1px solid #edf0f2
+}
+.legend-item {display:flex;align-items:center;gap:7px;font-size:13px;color:#3e4851}
+.dot {width:12px;height:12px;border-radius:3px;display:inline-block}
+.chart-panel {
+    background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden
+}
+#treemap {width:100%;height:760px}
+.footer {color:var(--muted);font-size:12px;margin:10px 3px 0;line-height:1.45}
+@media (max-width:700px) {
+    .page {padding:10px} h1 {font-size:20px} #treemap {height:620px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+<section class="header">
+    <h1>Gross Capital Formation by Economic Activity</h1>
+    <div class="subtitle">
+        Constant Prices · Base Year 2022-23 · Rs. million<br>
+        The <b>Total</b> observation and the first two metadata rows are excluded.
+        The treemap follows the indentation-based activity hierarchy in the source workbook.
+    </div>
+    <div class="controls">
+        <label class="control">Year
+            <select id="yearSelect"></select>
+        </label>
+    </div>
+    <div class="legend">
+        <div class="legend-item"><span class="dot" style="background:#2E7D32"></span>
+            Agriculture, Livestock, Forestry and Fishing</div>
+        <div class="legend-item"><span class="dot" style="background:#1565C0"></span>
+            Industry</div>
+        <div class="legend-item"><span class="dot" style="background:#EF6C00"></span>
+            Services</div>
+    </div>
+</section>
+
+<section class="chart-panel">
+    <div id="treemap"></div>
+</section>
+
+<div class="footer">
+    Source: GCF-BY-ACTIVITY.xlsx. Rectangle area represents gross capital formation
+    within the selected parent. Colour identifies the originating sector; lighter
+    shades indicate deeper levels of the activity hierarchy. Click a rectangle to
+    drill down and use the breadcrumb/path bar to move back up.
+</div>
+</div>
+
+<script>
+const YEARS = ["2022-23", "2023-24", "2024-25"];
+const RECORDS = [{"id": 0, "name": "Agriculture, Livestock, Forestry and Fishing", "level": 0, "parent": null, "sector": "Agriculture, Livestock, Forestry and Fishing", "color": "#2E7D32", "values": {"2022-23": 6147646.1, "2023-24": 5516751.6, "2024-25": 6091520.4}}, {"id": 1, "name": "Crops", "level": 1, "parent": 0, "sector": "Agriculture, Livestock, Forestry and Fishing", "color": "#4D9050", "values": {"2022-23": 5157485.0, "2023-24": 4550231.9, "2024-25": 5056382.4}}, {"id": 2, "name": "Livestock", "level": 1, "parent": 0, "sector": "Agriculture, Livestock, Forestry and Fishing", "color": "#4D9050", "values": {"2022-23": 544332.3, "2023-24": 508243.8, "2024-25": 555326.3}}, {"id": 3, "name": "Forestry and logging", "level": 1, "parent": 0, "sector": "Agriculture, Livestock, Forestry and Fishing", "color": "#4D9050", "values": {"2022-23": 97411.0, "2023-24": 82302.9, "2024-25": 95497.3}}, {"id": 4, "name": "Fishing and aquaculture", "level": 1, "parent": 0, "sector": "Agriculture, Livestock, Forestry and Fishing", "color": "#4D9050", "values": {"2022-23": 348417.7, "2023-24": 375973.0, "2024-25": 384314.3}}, {"id": 5, "name": "Industry", "level": 0, "parent": null, "sector": "Industry", "color": "#1565C0", "values": {"2022-23": 25140535.1, "2023-24": 27756685.3, "2024-25": 29355354.7}}, {"id": 6, "name": "Mining and quarrying", "level": 1, "parent": 5, "sector": "Industry", "color": "#387CC9", "values": {"2022-23": 1350240.5, "2023-24": 1565731.9, "2024-25": 1397590.2}}, {"id": 7, "name": "Manufacturing", "level": 1, "parent": 5, "sector": "Industry", "color": "#387CC9", "values": {"2022-23": 12370868.1, "2023-24": 13536707.7, "2024-25": 13872154.4}}, {"id": 8, "name": "Electricity, gas, water supply and other utility services", "level": 1, "parent": 5, "sector": "Industry", "color": "#387CC9", "values": {"2022-23": 4518371.9, "2023-24": 5742468.4, "2024-25": 6986310.2}}, {"id": 9, "name": "Construction", "level": 1, "parent": 5, "sector": "Industry", "color": "#387CC9", "values": {"2022-23": 6901054.5, "2023-24": 6911777.3, "2024-25": 7099299.9}}, {"id": 10, "name": "Services", "level": 0, "parent": null, "sector": "Services", "color": "#EF6C00", "values": {"2022-23": 54982577.8, "2023-24": 62827896.4, "2024-25": 68450669.0}}, {"id": 11, "name": "Trade, hotels, transport, communication & services related to broadcasting, storage", "level": 1, "parent": 10, "sector": "Services", "color": "#F18226", "values": {"2022-23": 14629255.9, "2023-24": 18030278.2, "2024-25": 18608770.8}}, {"id": 12, "name": "Trade, repair, hotels and restaurants", "level": 2, "parent": 11, "sector": "Services", "color": "#F3984C", "values": {"2022-23": 7415336.0, "2023-24": 8544493.0, "2024-25": 10246299.1}}, {"id": 13, "name": "Trade and repair services", "level": 3, "parent": 12, "sector": "Services", "color": "#F6AE72", "values": {"2022-23": 5539877.4, "2023-24": 6324036.0, "2024-25": 8043244.9}}, {"id": 14, "name": "Hotels and restaurants", "level": 3, "parent": 12, "sector": "Services", "color": "#F6AE72", "values": {"2022-23": 1875458.6, "2023-24": 2220457.0, "2024-25": 2203054.2}}, {"id": 15, "name": "Transport storage, communication and broadcasting services", "level": 2, "parent": 11, "sector": "Services", "color": "#F3984C", "values": {"2022-23": 7213919.9, "2023-24": 9485785.2, "2024-25": 8362471.7}}, {"id": 16, "name": "Railways", "level": 3, "parent": 15, "sector": "Services", "color": "#F6AE72", "values": {"2022-23": 1634307.7, "2023-24": 2389510.7, "2024-25": 2506326.0}}, {"id": 17, "name": "Transport by other means", "level": 3, "parent": 15, "sector": "Services", "color": "#F6AE72", "values": {"2022-23": 2320079.7, "2023-24": 3047268.2, "2024-25": 3233908.5}}, {"id": 18, "name": "Road transport", "level": 4, "parent": 17, "sector": "Services", "color": "#F8C499", "values": {"2022-23": 1407100.2, "2023-24": 1782926.7, "2024-25": 1926947.9}}, {"id": 19, "name": "Water transport", "level": 4, "parent": 17, "sector": "Services", "color": "#F8C499", "values": {"2022-23": 92854.8, "2023-24": 52689.2, "2024-25": 145491.9}}, {"id": 20, "name": "Air transport", "level": 4, "parent": 17, "sector": "Services", "color": "#F8C499", "values": {"2022-23": 247861.4, "2023-24": 528030.3, "2024-25": 526738.4}}, {"id": 21, "name": "Services incidental to transport", "level": 4, "parent": 17, "sector": "Services", "color": "#F8C499", "values": {"2022-23": 572263.3, "2023-24": 683622.1, "2024-25": 634730.3}}, {"id": 22, "name": "Storage", "level": 3, "parent": 15, "sector": "Services", "color": "#F6AE72", "values": {"2022-23": 151188.2, "2023-24": 237491.1, "2024-25": 94517.9}}, {"id": 23, "name": "Communication and broadcasting services", "level": 3, "parent": 15, "sector": "Services", "color": "#F6AE72", "values": {"2022-23": 3108344.3, "2023-24": 3811515.2, "2024-25": 2527719.3}}, {"id": 24, "name": "Financial, real estate, IT, professional services & ownership of dwelling", "level": 1, "parent": 10, "sector": "Services", "color": "#F18226", "values": {"2022-23": 26854940.6, "2023-24": 28884644.0, "2024-25": 32337432.0}}, {"id": 25, "name": "Financial services", "level": 2, "parent": 24, "sector": "Services", "color": "#F3984C", "values": {"2022-23": 1172124.1, "2023-24": 1353625.8, "2024-25": 1745990.3}}, {"id": 26, "name": "Real estate, ownership of dwelling and professional services", "level": 2, "parent": 24, "sector": "Services", "color": "#F3984C", "values": {"2022-23": 25682816.5, "2023-24": 27531018.2, "2024-25": 30591441.7}}, {"id": 27, "name": "Public administration, defence and other services", "level": 1, "parent": 10, "sector": "Services", "color": "#F18226", "values": {"2022-23": 13498381.4, "2023-24": 15912974.3, "2024-25": 17504466.1}}, {"id": 28, "name": "Public administration and defence", "level": 2, "parent": 27, "sector": "Services", "color": "#F3984C", "values": {"2022-23": 7628928.7, "2023-24": 9288340.7, "2024-25": 10241503.8}}, {"id": 29, "name": "Other services", "level": 2, "parent": 27, "sector": "Services", "color": "#F3984C", "values": {"2022-23": 5869452.7, "2023-24": 6624633.6, "2024-25": 7262962.4}}];
+
+const yearSelect = document.getElementById("yearSelect");
+YEARS.forEach(y => {
+    const option = document.createElement("option");
+    option.value = y;
+    option.textContent = y;
+    yearSelect.appendChild(option);
+});
+
+function buildTreemap(year) {
+    const ids = ["GCF_ROOT"];
+    const labels = ["Gross Capital Formation"];
+    const parents = [""];
+    const values = [null];
+    const colors = ["#263238"];
+    const custom = [["Overall", 0]];
+
+    RECORDS.forEach(r => {
+        ids.push("n" + r.id);
+        labels.push(r.name);
+        parents.push(r.parent === null ? "GCF_ROOT" : "n" + r.parent);
+        values.push(r.values[year]);
+        colors.push(r.color);
+        custom.push([r.sector, r.level]);
+    });
+
+    const trace = {
+        type:"treemap",
+        ids:ids,
+        labels:labels,
+        parents:parents,
+        values:values,
+        branchvalues:"total",
+        sort:false,
+        textinfo:"label+value",
+        texttemplate:"<b>%{label}</b><br>%{value:,.1f}",
+        hovertemplate:
+            "<b>%{label}</b><br>" +
+            "GCF: %{value:,.1f} Rs. million<br>" +
+            "Sector: %{customdata[0]}<br>" +
+            "Hierarchy level: %{customdata[1]}" +
+            "<extra></extra>",
+        customdata:custom,
+        marker:{
+            colors:colors,
+            line:{color:"white",width:2}
+        },
+        tiling:{packing:"squarify",pad:3},
+        pathbar:{visible:true,textfont:{size:13}}
+    };
+
+    const layout = {
+        margin:{l:8,r:8,t:8,b:8},
+        paper_bgcolor:"white",
+        plot_bgcolor:"white",
+        font:{
+            family:"-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif",
+            color:"#17202a"
+        },
+        uniformtext:{minsize:10,mode:"hide"}
+    };
+
+    Plotly.react("treemap",[trace],layout,{
+        responsive:true,
+        displaylogo:false,
+        modeBarButtonsToRemove:["select2d","lasso2d","autoScale2d"]
+    });
+}
+
+yearSelect.addEventListener("change", () => buildTreemap(yearSelect.value));
+buildTreemap(YEARS[0]);
+</script>
+</body>
+</html>
