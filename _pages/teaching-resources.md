@@ -20,22 +20,62 @@ author_profile: true
 }
 
 .viz-card {
-  padding: 18px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background: #fafafa;
+  padding: 20px;
+  border-radius: 12px;
   min-height: 90px;
   box-sizing: border-box;
+  border: 1px solid rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Pastel colours for each card */
+
+.viz-card:nth-child(1) {
+  background: #EAF4FF;
+}
+
+.viz-card:nth-child(2) {
+  background: #EAF8F0;
+}
+
+.viz-card:nth-child(3) {
+  background: #FFF4E5;
+}
+
+.viz-card:nth-child(4) {
+  background: #F3EDFF;
+}
+
+.viz-card:nth-child(5) {
+  background: #FFF0F3;
+}
+
+.viz-card:nth-child(6) {
+  background: #EAF9F8;
+}
+
+.viz-card:nth-child(7) {
+  background: #FFF8D9;
+}
+
+.viz-card:nth-child(8) {
+  background: #EEF1FF;
+}
+
+.viz-card:nth-child(9) {
+  background: #F2F8E9;
 }
 
 .viz-card strong {
   display: block;
   margin-bottom: 15px;
-  line-height: 1.0;
+  line-height: 1.4;
+  color: #333;
 }
 
 .viz-card a {
   font-weight: 600;
+  color: #2563eb;
   text-decoration: none;
 }
 
@@ -43,11 +83,20 @@ author_profile: true
   text-decoration: underline;
 }
 
+.viz-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.10);
+}
+
+/* Tablet */
+
 @media (max-width: 1000px) {
   .visualization-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* Mobile */
 
 @media (max-width: 600px) {
   .visualization-grid {
@@ -108,6 +157,15 @@ View Visualization
 <p>
 <a href="../files/Visualizations/animated-bop.html" target="_blank">
 View Visualization
+</a>
+</p>
+</div>
+
+<div class="viz-card">
+<strong>India's Policy Rates (RBI)</strong>
+<p>
+<a href="../files/Visualizations/india-rbi-policy-rates.html" target="_blank">
+View Info
 </a>
 </p>
 </div>
