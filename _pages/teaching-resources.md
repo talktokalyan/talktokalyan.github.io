@@ -12,6 +12,38 @@ author_profile: true
 
 #### Visualizations
 
+<style>
+.visualization-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.viz-card {
+  padding: 18px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.viz-card a {
+  font-weight: 600;
+}
+
+@media (max-width: 1000px) {
+  .visualization-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .visualization-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
 <div class="visualization-grid">
 
 <div class="viz-card">
@@ -46,12 +78,6 @@ author_profile: true
 
 </div>
 
-</div>
-
-#### Indian Macroeconomic Data
-
-<div class="visualization-grid">
-
 <div class="viz-card">
 
 **India's Government Budget**
@@ -75,12 +101,6 @@ author_profile: true
 [View Visualization](../files/Visualizations/india-epu.html){:target="_blank"}
 
 </div>
-
-</div>
-
-#### Economic Simulations
-
-<div class="visualization-grid">
 
 <div class="viz-card">
 
