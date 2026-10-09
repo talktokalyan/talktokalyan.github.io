@@ -126,6 +126,15 @@ View Visualization
 </div>
 
 <div class="viz-card">
+<strong>Index of Industrial Production (IIP)</strong>
+<p>
+<a href="../files/Visualizations/animated-iip.html" target="_blank">
+View Visualization
+</a>
+</p>
+</div>
+
+<div class="viz-card">
 <strong>India's Consumer Price Index (Base = 2024)</strong>
 <p>
 <a href="../files/Visualizations/animated-cpi.html" target="_blank">
