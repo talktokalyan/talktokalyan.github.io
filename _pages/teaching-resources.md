@@ -135,7 +135,7 @@ View Visualization
 </div>
 
 <div class="viz-card">
-<strong>India's Consumer Price Index (Base = 2024)</strong>
+<strong>India's Consumer Price Index (Base: 2024)</strong>
 <p>
 <a href="../files/Visualizations/animated-cpi.html" target="_blank">
 View Visualization
@@ -156,6 +156,15 @@ View Visualization
 <strong>India's CPI Inflation</strong>
 <p>
 <a href="../files/Visualizations/india-cpi-inflation.html" target="_blank">
+View Visualization
+</a>
+</p>
+</div>
+
+<div class="viz-card">
+<strong>India's Wholesale Price Index (Base: 2022-23)</strong>
+<p>
+<a href="../files/Visualizations/animated-wpi.html" target="_blank">
 View Visualization
 </a>
 </p>
