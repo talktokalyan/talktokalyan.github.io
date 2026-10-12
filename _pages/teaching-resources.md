@@ -144,6 +144,15 @@ View Visualization
 </div>
 
 <div class="viz-card">
+<strong>India's CPI (Core and Non-Core)</strong>
+<p>
+<a href="../files/Visualizations/animated-core-noncore-cpi.html" target="_blank">
+View Visualization
+</a>
+</p>
+</div>
+
+<div class="viz-card">
 <strong>India's CPI Inflation</strong>
 <p>
 <a href="../files/Visualizations/india-cpi-inflation.html" target="_blank">
