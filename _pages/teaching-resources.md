@@ -111,7 +111,7 @@ author_profile: true
 <strong>Circular Flow in a Macroeconomy</strong>
 <p>
 <a href="../files/Visualizations/animated-circularflow.html" target="_blank">
-View Visualization
+Open Visualization
 </a>
 </p>
 </div>
@@ -120,7 +120,7 @@ View Visualization
 <strong>Investment Spending – Gross Capital Formation (GCF)</strong>
 <p>
 <a href="../files/Visualizations/animated-gcf.html" target="_blank">
-View Visualization
+Open Visualization
 </a>
 </p>
 </div>
@@ -129,7 +129,7 @@ View Visualization
 <strong>Index of Industrial Production (IIP)</strong>
 <p>
 <a href="../files/Visualizations/animated-iip.html" target="_blank">
-View Visualization
+Open Visualization
 </a>
 </p>
 </div>
@@ -138,7 +138,7 @@ View Visualization
 <strong>India's Consumer Price Index (Base: 2024)</strong>
 <p>
 <a href="../files/Visualizations/animated-cpi.html" target="_blank">
-View Visualization
+Open Visualization
 </a>
 </p>
 </div>
@@ -147,7 +147,7 @@ View Visualization
 <strong>India's CPI (Core and Non-Core)</strong>
 <p>
 <a href="../files/Visualizations/animated-core-noncore-cpi.html" target="_blank">
-View Visualization
+Open Visualization
 </a>
 </p>
 </div>
@@ -156,7 +156,7 @@ View Visualization
 <strong>India's CPI Inflation</strong>
 <p>
 <a href="../files/Visualizations/india-cpi-inflation.html" target="_blank">
-View Visualization
+Open Visualization
 </a>
 </p>
 </div>
@@ -165,16 +165,27 @@ View Visualization
 <strong>India's Wholesale Price Index (Base: 2022-23)</strong>
 <p>
 <a href="../files/Visualizations/animated-wpi.html" target="_blank">
-View Visualization
+Open Visualization
 </a>
 </p>
 </div>
 
 <div class="viz-card">
+<strong>India's Potential GDP and Output Gap</strong>
+<p>
+<a href="../files/Visualizations/animated-potential-GDP.html
+.html" target="_blank">
+Open Visualization
+</a>
+</p>
+</div>
+
+
+<div class="viz-card">
 <strong>India's Government Budget</strong>
 <p>
 <a href="../files/Visualizations/animated-india-budget.html" target="_blank">
-View Visualization
+Open Visualization
 </a>
 </p>
 </div>
@@ -183,7 +194,7 @@ View Visualization
 <strong>India's Balance of Payments</strong>
 <p>
 <a href="../files/Visualizations/animated-bop.html" target="_blank">
-View Visualization
+Open Visualization
 </a>
 </p>
 </div>
@@ -201,7 +212,7 @@ View Info
 <strong>India's Economic Policy Uncertainty</strong>
 <p>
 <a href="../files/Visualizations/india-epu.html" target="_blank">
-View Visualization
+Open Visualization
 </a>
 </p>
 </div>
