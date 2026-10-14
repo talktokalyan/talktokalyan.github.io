@@ -173,8 +173,7 @@ Open Visualization
 <div class="viz-card">
 <strong>India's Potential GDP and Output Gap</strong>
 <p>
-<a href="../files/Visualizations/animated-potential-GDP.html
-.html" target="_blank">
+<a href="../files/Visualizations/animated-potential-GDP.html" target="_blank">
 Open Visualization
 </a>
 </p>
