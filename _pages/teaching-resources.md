@@ -179,6 +179,14 @@ Open Visualization
 </p>
 </div>
 
+<div class="viz-card">
+<strong>Short to Long-run Macroeconomy</strong>
+<p>
+<a href="../files/Visualizations/animated-short-to-long-run.html" target="_blank">
+Open Animation
+</a>
+</p>
+</div>
 
 <div class="viz-card">
 <strong>India's Government Budget</strong>
