@@ -182,7 +182,7 @@ Open Visualization
 <div class="viz-card">
 <strong>Short to Long-run Macroeconomy</strong>
 <p>
-<a href="../files/Visualizations/animated-short-to-long-run.html" target="_blank">
+<a href="../files/Visualizations/animated-short-2-long-run.html" target="_blank">
 Open Animation
 </a>
 </p>
