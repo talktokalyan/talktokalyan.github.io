@@ -189,6 +189,15 @@ Open Animation
 </div>
 
 <div class="viz-card">
+<strong>Savings in Indian Macroeconomy</strong>
+<p>
+<a href="../files/Visualizations/animated-savings.html" target="_blank">
+Open Animation
+</a>
+</p>
+</div>
+
+<div class="viz-card">
 <strong>India's Government Budget</strong>
 <p>
 <a href="../files/Visualizations/animated-india-budget.html" target="_blank">
