@@ -1,0 +1,269 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>India Balance of Payments — Animated</title><style>
+body{margin:0;font-family:Arial,sans-serif;background:#f7f9fc;color:#172033;overflow:hidden}header{height:82px;background:#fff;border-bottom:1px solid #dbe3ef;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}h1{margin:0;font-size:21px}.sub{font-size:12px;color:#64748b;margin-top:4px}.controls{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:end}button,select{padding:7px 10px;border:1px solid #dbe3ef;border-radius:7px;background:#fff}#play{background:#4f46e5;color:#fff}#stage{height:calc(100vh - 82px);position:relative;overflow:hidden}canvas{width:100%;height:100%}.tooltip{position:absolute;display:none;pointer-events:none;z-index:5;max-width:260px;background:rgba(15,23,42,.95);color:#fff;border-radius:8px;padding:9px 11px;font-size:12px;line-height:1.45;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+</style></head><body><header><div><h1>INDIA — BALANCE OF PAYMENTS</h1><div class="sub">World Bank API • current US dollars • parallel directional inflows and outflows (Prof. Kalyan Kolukuluri)</div></div><div class="controls"><button id="play">❚❚ Pause</button><button id="zoomIn">＋ Zoom</button><button id="zoomOut">－ Zoom</button><button id="reset">↻ Reset</button><select id="year"></select><select id="speed"><option value=".6">Slow</option><option value="1" selected>Normal</option><option value="1.8">Fast</option></select><button id="fetch">Fetch India Data</button></div></header><div id="stage"><canvas id="c"></canvas><div id="tooltip" class="tooltip"></div></div><script>
+/*
+================================================================================
+HOW THIS VISUALIZATION WORKS
+================================================================================
+The animation is drawn on an HTML5 <canvas>. The data below define:
+  1. NODES (N): each Balance of Payments category, its position, colour and size.
+  2. HIERARCHY LINKS (H): the structural parent-child relationships from the
+     original TikZ mind-map.
+  3. FLOW PAIRS (PAIRS): economically meaningful bidirectional relationships.
+     Each direction is drawn on a parallel path, offset from the opposite path.
+  4. IND: World Bank indicator codes mapped to nodes for which a direct
+     comparable API series is available.
+
+The animation loop redraws the complete diagram many times per second. Small
+particles move along the directional flow paths, creating the animated inflow
+and outflow effect.
+================================================================================
+*/
+
+// -----------------------------------------------------------------------------
+// 1. NODE DATA
+// id    = internal identifier
+// label = displayed text
+// x,y   = position in the virtual canvas
+// v     = magnitude used to calculate the circle radius
+// color = fill colour
+//
+// API values, once fetched, are stored in node.raw. The fetched value also
+// updates v, so node size can respond to the magnitude of available data.
+// -----------------------------------------------------------------------------
+const N=[
+['bop','Balance of\nPayments',900,430,100,'#f6ad55'],['current','Current A/c',500,235,50,'#93c5fd'],['trade','Trade A/c',240,150,34,'#93c5fd'],['exports','Exports',70,65,17,'#bfdbfe'],['imports','Imports',70,230,17,'#bfdbfe'],['primary','Primary income',285,315,8,'#bfdbfe'],['secondary','Secondary income\nTransfers',510,90,8,'#bfdbfe'],
+['capital','Capital A/c',520,680,12,'#f9a8d4'],['nonprod','Non-produced nonfinancial\nasset disposal',270,755,6,'#fbcfe8'],['captransfer','Capital transfers',490,850,6,'#fbcfe8'],
+['financial','Financial A/c\n(Earlier, Capital A/c)',1280,430,60,'#5eead4'],
+// Major Financial Account components at 270°, 0°, and 90° relative to Financial A/c.
+['direct','Direct Investment',1280,150,20,'#99f6e4'],['dieq','Equity',1450,80,10,'#ccfbf1'],['didebt','Debt',1450,205,10,'#ccfbf1'],
+['portfolio','Portfolio Investment',1580,430,20,'#99f6e4'],['pieq','Equity',1780,355,10,'#ccfbf1'],['pidebt','Debt',1780,500,10,'#ccfbf1'],
+['other','Other Investment',1280,720,20,'#99f6e4'],['adr','ADR/GDR',1600,560,4,'#ccfbf1'],['loans','Loans- ECBs',1690,670,5,'#ccfbf1'],['credit','Trade credit',1690,800,4,'#ccfbf1'],['nri','NRI Deposits',1580,920,4,'#ccfbf1'],['reserves','Change in\nReserve Assets',1680,270,7,'#ccfbf1']
+].map(([id,label,x,y,v,color])=>({id,label,x,y,v,color,raw:null,unit:''}));
+const M=Object.fromEntries(N.map(n=>[n.id,n]));
+// -----------------------------------------------------------------------------
+// 2. HIERARCHY LINKS
+// These lines reproduce the parent-child structure of the original TikZ diagram.
+// They are neutral structural connectors; animated arrows are defined separately.
+// Note: Change in Reserve Assets is now directly linked to Financial A/c.
+// -----------------------------------------------------------------------------
+const H=[['bop','current'],['current','trade'],['trade','exports'],['trade','imports'],['current','primary'],['current','secondary'],['bop','capital'],['capital','nonprod'],['capital','captransfer'],['bop','financial'],['financial','direct'],['direct','dieq'],['direct','didebt'],['financial','portfolio'],['portfolio','pieq'],['portfolio','pidebt'],['financial','other'],['other','adr'],['other','loans'],['other','credit'],['other','nri'],['financial','reserves']];
+// Bidirectional pairs: inward is blue, outward is orange. Geometry is parallel and offset 10 px.
+// -----------------------------------------------------------------------------
+// 3. ECONOMIC FLOW PAIRS
+// Every pair receives two animated directions:
+//   inward / receipt direction -> blue
+//   outward / payment direction -> orange
+// The two paths are drawn in parallel with a fixed geometric offset.
+// Pairs include the BOP centre-to-account links, Capital Account children,
+// and all Other Investment components, in addition to the existing flows.
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+/*
+CONSISTENT FLOW COLOUR CONVENTION
+
+Every relationship below is represented by TWO explicit directional flows:
+
+  INFLOW INTO THE DESTINATION NODE  = BLUE
+  OUTFLOW FROM THE SOURCE NODE      = ORANGE
+
+The first object in each pair is the blue receipt/inflow arrow.
+The second object is the orange payment/outflow arrow.
+
+Because direction is stored explicitly as {from,to}, colours no longer depend
+on how a pair happened to be ordered in the hierarchy.
+*/
+// -----------------------------------------------------------------------------
+const FLOWS=[
+ // Balance of Payments and major accounts
+ {from:'current',to:'bop',type:'inflow'},   {from:'bop',to:'current',type:'outflow'},
+ {from:'capital',to:'bop',type:'inflow'},   {from:'bop',to:'capital',type:'outflow'},
+ {from:'financial',to:'bop',type:'inflow'}, {from:'bop',to:'financial',type:'outflow'},
+
+ // Current Account
+ {from:'exports',to:'trade',type:'inflow'}, {from:'trade',to:'exports',type:'outflow'},
+ {from:'imports',to:'trade',type:'inflow'}, {from:'trade',to:'imports',type:'outflow'}, // Trade A/c → Imports
+ {from:'trade',to:'current',type:'inflow'}, {from:'current',to:'trade',type:'outflow'},
+ {from:'primary',to:'current',type:'inflow'}, {from:'current',to:'primary',type:'outflow'},
+ {from:'secondary',to:'current',type:'inflow'}, {from:'current',to:'secondary',type:'outflow'},
+
+ // Capital Account and its children
+ {from:'nonprod',to:'capital',type:'inflow'}, {from:'capital',to:'nonprod',type:'outflow'},
+ {from:'captransfer',to:'capital',type:'inflow'}, {from:'capital',to:'captransfer',type:'outflow'},
+
+ // Financial Account and major components
+ {from:'direct',to:'financial',type:'inflow'}, {from:'financial',to:'direct',type:'outflow'},
+ {from:'portfolio',to:'financial',type:'inflow'}, {from:'financial',to:'portfolio',type:'outflow'},
+ {from:'other',to:'financial',type:'inflow'}, {from:'financial',to:'other',type:'outflow'},
+ {from:'reserves',to:'financial',type:'inflow'}, {from:'financial',to:'reserves',type:'outflow'},
+
+ // Other Investment and its children
+ {from:'adr',to:'other',type:'inflow'}, {from:'other',to:'adr',type:'outflow'},
+ {from:'loans',to:'other',type:'inflow'}, {from:'other',to:'loans',type:'outflow'},
+ {from:'credit',to:'other',type:'inflow'}, {from:'other',to:'credit',type:'outflow'},
+ {from:'nri',to:'other',type:'inflow'}, {from:'other',to:'nri',type:'outflow'}
+];
+// -----------------------------------------------------------------------------
+// 4. WORLD BANK API INDICATOR MAP
+// The country code IND requests data for India.
+// Indicator values are requested from the World Bank API in current US dollars.
+// Only nodes with a sufficiently direct World Bank indicator mapping are updated.
+// -----------------------------------------------------------------------------
+const IND={
+exports:'BX.GSR.GNFS.CD',imports:'BM.GSR.GNFS.CD',current:'BN.CAB.XOKA.CD',
+direct:'BX.KLT.DINV.CD.WD'
+};
+const canvas=document.querySelector('#c'),ctx=canvas.getContext('2d'),stage=document.querySelector('#stage');let run=true,spd=1,S=1,ox=0,oy=0,baseS=1,panX=0,panY=0,hover=null,dragging=false,lastX=0,lastY=0;
+// Animated particles travel in the same direction as their corresponding flow.
+// Blue particles always represent inflows; orange particles always represent outflows.
+let particles=[]; FLOWS.forEach((f,i)=>{for(let j=0;j<3;j++)particles.push({i,p:j/3});});
+const r=n=>28+Math.sqrt(Math.max(4,n.v))*6.2;
+// -----------------------------------------------------------------------------
+// CANVAS LAYOUT AND INTERACTION
+// fit() centres the complete virtual diagram in the browser window.
+// S is the current zoom scale; panX/panY store drag-to-pan displacement.
+// -----------------------------------------------------------------------------
+function fit(){let d=devicePixelRatio||1;canvas.width=stage.clientWidth*d;canvas.height=stage.clientHeight*d;ctx.setTransform(d,0,0,d,0,0);baseS=Math.min(stage.clientWidth/1950,stage.clientHeight/980)*.93;S=baseS;panX=0;panY=0;ox=(stage.clientWidth-1950*S)/2;oy=(stage.clientHeight-930*S)/2}
+function screenToWorld(x,y){return{x:(x-ox-panX)/S,y:(y-oy-panY)/S}}
+function endpoints(A,B,offset,reverse=false){let dx=B.x-A.x,dy=B.y-A.y,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,nx=-uy,ny=ux;let sign=reverse?-1:1;let a={x:A.x+ux*r(A)+nx*offset*sign,y:A.y+uy*r(A)+ny*offset*sign};let b={x:B.x-ux*r(B)+nx*offset*sign,y:B.y-uy*r(B)+ny*offset*sign};return reverse?{a:b,b:a}:{a,b}}
+function money(x){if(x==null)return '—';let a=Math.abs(x),s=a>=1e12?(x/1e12).toFixed(2)+'T':a>=1e9?(x/1e9).toFixed(2)+'B':a>=1e6?(x/1e6).toFixed(1)+'M':x.toFixed(0);return '$'+s}
+// Draw one directional arrow. Its endpoint contains the arrowhead.
+function arrow(a,b,col){ctx.strokeStyle=col;ctx.globalAlpha=.65;ctx.lineWidth=2.2;ctx.setLineDash([6,5]);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.setLineDash([]);let q=Math.atan2(b.y-a.y,b.x-a.x);ctx.globalAlpha=.9;ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(b.x,b.y);ctx.lineTo(b.x-8*Math.cos(q-.45),b.y-8*Math.sin(q-.45));ctx.lineTo(b.x-8*Math.cos(q+.45),b.y-8*Math.sin(q+.45));ctx.closePath();ctx.fill();ctx.globalAlpha=1}
+// -----------------------------------------------------------------------------
+// ANIMATION LOOP
+// draw() redraws hierarchy links, parallel directional arrows, moving particles,
+// and nodes. requestAnimationFrame(draw) schedules the next animation frame.
+// Particle positions advance only while 'run' is true.
+// -----------------------------------------------------------------------------
+function draw(){ctx.clearRect(0,0,stage.clientWidth,stage.clientHeight);ctx.save();ctx.translate(ox+panX,oy+panY);ctx.scale(S,S);
+H.forEach(([a,b])=>{let A=M[a],B=M[b];ctx.strokeStyle='#cbd5e1';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);ctx.stroke()});
+// Draw every explicit flow. For opposite directions, endpoints() offsets the
+// two arrows onto parallel tracks so blue and orange paths do not overlap.
+FLOWS.forEach((f,i)=>{
+ let A=M[f.from],B=M[f.to];
+ let reverseOffset=i%2===1;
+ let P=endpoints(A,B,5,reverseOffset);
+// Reserve-assets ↔ Financial Account flows are highlighted in purple.
+let isReserveFlow=(f.from==='reserves'&&f.to==='financial')||(f.from==='financial'&&f.to==='reserves');
+let flowColor=isReserveFlow?'#7c3aed':(f.type==='inflow'?'#2563eb':'#f97316');
+arrow(P.a,P.b,flowColor);
+});
+// -----------------------------------------------------------------------------
+// FLOW ANNOTATIONS
+// Text boxes are placed at custom fractions of each connection and shifted
+// perpendicular to the line where necessary so that they remain clear of nodes.
+// -----------------------------------------------------------------------------
+function flowLabel(aId,bId,text,t,offset){
+  const A=M[aId],B=M[bId];
+  if(!A||!B) return;
+  const dx=B.x-A.x,dy=B.y-A.y,len=Math.hypot(dx,dy)||1;
+  const nx=-dy/len,ny=dx/len;
+  const x=A.x+dx*t+nx*offset;
+  const y=A.y+dy*t+ny*offset;
+
+  ctx.save();
+  ctx.font='bold 13px Arial';
+  const maxW=250, padX=11, padY=8;
+  const words=text.split(' '), lines=[];
+  let line='';
+  for(const word of words){
+    const test=line?line+' '+word:word;
+    if(ctx.measureText(test).width>maxW-padX*2 && line){
+      lines.push(line); line=word;
+    } else line=test;
+  }
+  if(line) lines.push(line);
+
+  const lineH=17;
+  const bw=Math.min(maxW,Math.max(...lines.map(s=>ctx.measureText(s).width))+padX*2);
+  const bh=lines.length*lineH+padY*2;
+  ctx.fillStyle='rgba(255,255,255,.97)';
+  ctx.strokeStyle='#64748b';
+  ctx.lineWidth=1.1;
+  ctx.beginPath();
+  ctx.roundRect(x-bw/2,y-bh/2,bw,bh,6);
+  ctx.fill(); ctx.stroke();
+  ctx.fillStyle='#111827';
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  lines.forEach((s,i)=>ctx.fillText(s,x,y-(lines.length-1)*lineH/2+i*lineH));
+  ctx.restore();
+}
+
+// Carefully positioned labels for the three central BOP relationships.
+flowLabel('current','bop','Inward receipt of revenue',0.50,-72);
+flowLabel('financial','bop','Receipt of inward foreign capital',0.50,-72);
+flowLabel('reserves','financial','Sale of foreign assets by RBI',0.48,62);
+flowLabel('capital','bop','Inward receipts of sale proceeds',0.50,72);
+
+particles.forEach(q=>{
+ let f=FLOWS[q.i],A=M[f.from],B=M[f.to];
+ let P=endpoints(A,B,5,q.i%2===1);
+ let x=P.a.x+(P.b.x-P.a.x)*q.p,y=P.a.y+(P.b.y-P.a.y)*q.p;
+ // Use the same purple colour for animated particles on the Reserve Assets link.
+let isReserveFlow=(f.from==='reserves'&&f.to==='financial')||(f.from==='financial'&&f.to==='reserves');
+ctx.fillStyle=isReserveFlow?'#7c3aed':(f.type==='inflow'?'#2563eb':'#f97316');
+ ctx.beginPath();ctx.arc(x,y,3.8,0,Math.PI*2);ctx.fill();
+ if(run)q.p=(q.p+.0032*spd)%1;
+});
+// Red dotted enclosure around Change in Reserve Assets.
+{
+ const reserveNode=M['reserves'];
+ if(reserveNode){
+   const rr=r(reserveNode)+14;
+   ctx.save();
+   ctx.strokeStyle='#dc2626';
+   ctx.lineWidth=2.2;
+   ctx.setLineDash([6,6]);
+   ctx.strokeRect(reserveNode.x-rr,reserveNode.y-rr,2*rr,2*rr);
+   ctx.restore();
+ }
+}
+N.forEach(n=>{let R=r(n);ctx.fillStyle=n.color;ctx.beginPath();ctx.arc(n.x,n.y,R,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(0,0,0,.25)';ctx.stroke();ctx.fillStyle='#172033';ctx.textAlign='center';ctx.textBaseline='middle';let fs=Math.max(8,Math.min(12,R*.28));ctx.font=`bold ${fs}px Arial`;let L=n.label.split('\n');L.forEach((t,i)=>ctx.fillText(t,n.x,n.y+(i-(L.length)/2)*fs*1.15));ctx.font=`bold ${Math.max(7,fs*.82)}px Arial`;ctx.fillStyle='#334155';ctx.fillText(n.raw==null?'No API value':money(n.raw),n.x,n.y+(L.length/2+0.7)*fs*1.15)});ctx.restore();requestAnimationFrame(draw)}
+for(let y=2025;y>=2000;y--)document.querySelector('#year').add(new Option(y,y));document.querySelector('#year').value=2024;
+// Zoom helper used by the + and - controls. Zoom is centred on the canvas.
+function buttonZoom(factor){
+ const cx=stage.clientWidth/2,cy=stage.clientHeight/2;
+ const before=screenToWorld(cx,cy);
+ S=Math.max(baseS*.45,Math.min(baseS*4,S*factor));
+ panX=cx-ox-before.x*S;
+ panY=cy-oy-before.y*S;
+}
+document.querySelector('#zoomIn').onclick=()=>buttonZoom(1.2);
+document.querySelector('#zoomOut').onclick=()=>buttonZoom(1/1.2);
+document.querySelector('#play').onclick=e=>{run=!run;e.target.textContent=run?'❚❚ Pause':'▶ Play'};document.querySelector('#reset').onclick=()=>{fit();particles.forEach((p,i)=>p.p=(i%3)/3)};document.querySelector('#speed').onchange=e=>spd=+e.target.value;
+// -----------------------------------------------------------------------------
+// WORLD BANK DATA FETCH
+// For each mapped indicator, JavaScript calls:
+// https://api.worldbank.org/v2/country/IND/indicator/{INDICATOR_CODE}
+//
+// The selected year is passed in the query string. The API returns JSON.
+// The first non-null observation is stored as node.raw and transformed into a
+// display magnitude (node.v) using a logarithmic scale so very large dollar
+// values remain visually manageable.
+// -----------------------------------------------------------------------------
+document.querySelector('#fetch').onclick=async()=>{let year=document.querySelector('#year').value,btn=document.querySelector('#fetch');btn.textContent='Fetching…';btn.disabled=true;try{await Promise.all(Object.entries(IND).map(async([node,code])=>{let u=`https://api.worldbank.org/v2/country/IND/indicator/${code}?date=${year}&format=json&per_page=100`;let j=await (await fetch(u)).json(),row=j?.[1]?.find(x=>x.value!=null);if(row){M[node].raw=row.value;M[node].v=Math.max(4,Math.log10(Math.abs(row.value))*3)}}));M.trade.v=(M.exports.v+M.imports.v)/2;alert(`India World Bank data loaded for ${year}. Nodes without directly comparable World Bank indicators retain their structural size.`)}catch(e){alert('World Bank API fetch failed: '+e.message)}finally{btn.textContent='Fetch India Data';btn.disabled=false}};
+const tooltip=document.querySelector('#tooltip');
+canvas.addEventListener('mousemove',e=>{
+ const rect=canvas.getBoundingClientRect(),sx=e.clientX-rect.left,sy=e.clientY-rect.top,w=screenToWorld(sx,sy);
+ const hit=N.find(n=>Math.hypot(n.x-w.x,n.y-w.y)<=r(n)); hover=hit;
+ if(hit){
+   const status=hit.raw!=null?`World Bank API value: ${money(hit.raw)}`:'No directly mapped World Bank API value';
+   tooltip.innerHTML=`<b>${hit.label.replace(/\n/g,' ')}</b><br>${status}<br>Node magnitude: ${hit.v.toFixed(2)}`;
+   tooltip.style.display='block';tooltip.style.left=(sx+16)+'px';tooltip.style.top=(sy+16)+'px';canvas.style.cursor='pointer';
+ }else{tooltip.style.display='none';canvas.style.cursor=dragging?'grabbing':'grab'}
+});
+canvas.addEventListener('mouseleave',()=>{hover=null;tooltip.style.display='none'});
+// Mouse wheel / trackpad zoom. The world point beneath the cursor remains
+// under the cursor while zooming, which makes zooming feel natural.
+canvas.addEventListener('wheel',e=>{
+ e.preventDefault();const rect=canvas.getBoundingClientRect(),mx=e.clientX-rect.left,my=e.clientY-rect.top,before=screenToWorld(mx,my);
+ const factor=e.deltaY<0?1.12:1/1.12;S=Math.max(baseS*.45,Math.min(baseS*4,S*factor));
+ panX=mx-ox-before.x*S;panY=my-oy-before.y*S;
+},{passive:false});
+// Mouse drag pans the diagram without altering any node coordinates.
+canvas.addEventListener('mousedown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;canvas.style.cursor='grabbing'});
+window.addEventListener('mouseup',()=>{dragging=false});
+window.addEventListener('mousemove',e=>{if(!dragging)return;panX+=e.clientX-lastX;panY+=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY});
+window.onresize=fit;fit();draw();
+</script></body></html>
