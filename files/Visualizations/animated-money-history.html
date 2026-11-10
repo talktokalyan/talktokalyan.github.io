@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A Short History of Money — Interactive Timeline</title>
+<style>
+:root{--ink:#1b3153;--muted:#5b6d82;--line:#d9e2ed;--paper:#fffdf8;--blue:#e6f1ff;--gold:#fff0c9;--mint:#e5f4e9;--rose:#ffe9e6}
+*{box-sizing:border-box}body{margin:0;background:#f2f5f8;color:var(--ink);font:15px/1.45 system-ui,Segoe UI,sans-serif}
+header{padding:22px 4vw;background:linear-gradient(110deg,#e4f0ff,#fff6e6 60%,#e9f6ed);border-bottom:1px solid var(--line)}
+.kicker{font-size:.72rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#637b99}
+h1{font:700 clamp(2rem,4vw,3rem) Georgia,serif;margin:4px 0;color:#142c51}header p{max-width:900px;margin:0;color:#4d6077}
+main{max-width:1450px;margin:auto;padding:18px 2vw 28px}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+button{border:1px solid #b9c9da;background:white;border-radius:99px;padding:9px 14px;font-weight:750;color:var(--ink);cursor:pointer}button:hover,button:focus{background:#e7f1ff;outline:2px solid #9bbbe0}
+#status{margin-left:auto;color:var(--muted);font-size:.85rem}.grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,.8fr);gap:15px;align-items:start}
+.panel{background:white;border:1px solid var(--line);border-radius:17px;overflow:hidden;box-shadow:0 7px 22px #203c5d12}
+.head{padding:12px 16px;background:#fbfcff;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}.head h2{font:700 1.1rem Georgia,serif;margin:0}.head small{color:var(--muted)}
+.map{padding:8px;background:#f7fbff}.map svg{display:block;width:100%;height:auto}.land{fill:#e4ecdf;stroke:#c2d0c1;stroke-width:1.4}.gridline{stroke:#dce6ef;stroke-dasharray:4 6;fill:none}.route{stroke:#dda04d;stroke-width:2.4;stroke-dasharray:7 7;fill:none;animation:dash 22s linear infinite}@keyframes dash{to{stroke-dashoffset:-300}}
+.pin{cursor:pointer}.pin circle{fill:#fff;stroke:#315b86;stroke-width:2.5}.pin text{font-size:11px;font-weight:900;fill:#1d3b61;text-anchor:middle;dominant-baseline:central;pointer-events:none}.pin.active circle,.pin:hover circle{fill:#ffdc8c;stroke:#a96321;stroke-width:4}
+.legend{padding:0 15px 12px;color:var(--muted);font-size:.77rem;display:flex;gap:15px;flex-wrap:wrap}
+.timeline{margin-top:14px}.events{display:flex;overflow-x:auto;padding:14px 12px 17px}.event{flex:0 0 155px;padding:9px 11px;border-top:3px solid #cbd9e7;position:relative;cursor:pointer}.event:before{content:"";position:absolute;top:-8px;left:12px;width:10px;height:10px;border:3px solid #6387ac;background:#fff;border-radius:50%}.event.active{background:#fff8e7;border-color:#d99a42}.event.active:before{background:#f2c56b;border-color:#b66c25}.event b{font-size:.7rem;color:#95631f}.event h3{font:700 .88rem Georgia,serif;margin:5px 0}.event p{font-size:.74rem;color:var(--muted);margin:0}
+.story{position:sticky;top:12px}.body{padding:16px}.hero{display:flex;gap:13px;align-items:center}.art{width:92px;height:92px;flex:0 0 92px;background:linear-gradient(135deg,#eaf3ff,#fff2d9);border:1px solid var(--line);border-radius:17px;display:grid;place-items:center}.art svg{width:78px;height:78px}.hero h2{font:700 1.28rem Georgia,serif;margin:0 0 4px}.place{font-size:.8rem;color:#557291;font-weight:750}.date{display:inline-block;margin-top:6px;background:#fff0c9;color:#79551e;border-radius:99px;padding:3px 9px;font-size:.7rem;font-weight:800}
+.story ol{padding-left:21px;margin:15px 0 0;font-size:.89rem;line-height:1.48}.story li{padding:2px 0}.caution{margin-top:13px;padding:10px 12px;background:#fff6e2;border-left:4px solid #dfa548;border-radius:10px;color:#654e2b;font-size:.81rem}
+.nav{display:flex;gap:8px;padding:0 16px 16px}.nav button{flex:1}.notes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.note{padding:14px 16px}.note h3{font:700 1rem Georgia,serif;margin:0 0 5px}.note p,.note li{font-size:.82rem;color:#52657b;line-height:1.5}.note ul{padding-left:18px;margin:5px 0 0}
+.sources{margin-top:14px;padding:14px 17px}.sources h3{font:700 1rem Georgia,serif;margin:0 0 7px}.sources ol{columns:2;column-gap:28px;padding-left:20px;margin:0}.sources li{font-size:.75rem;color:#53667c;margin:0 0 6px;break-inside:avoid}a{color:#235d96}
+footer{max-width:1450px;margin:0 auto 20px;padding:0 2vw;color:#333;font-size:.73rem}.credit{display:inline-block;border:1px solid #111;padding:5px 9px;background:transparent}
+@media(max-width:880px){.grid{grid-template-columns:1fr}.story{position:static}#status{margin-left:0}.sources ol{columns:1}}@media(max-width:560px){.notes{grid-template-columns:1fr}.event{flex-basis:140px}.hero{align-items:flex-start}.art{width:76px;height:76px;flex-basis:76px}.art svg{width:65px;height:65px}}
+</style></head>
+<body>
+<header><div class="kicker">Macroeconomics • Money, banking and exchange</div><h1>A short history of money</h1>
+<p>From clay counters and weighed silver to stone wealth, shells, cigarettes and state-backed credit instruments. Select a place on the map or a date on the timeline to open a short illustrated story.</p></header>
+<main>
+<div class="toolbar"><button id="play">▶ Play timeline</button><button id="pause">Ⅱ Pause</button><button id="reset">↺ Start again</button><span id="status">Explore 10 stops • dates are approximate where evidence is uncertain</span></div>
+<div class="grid"><section>
+<div class="panel"><div class="head"><h2>World map: places where money took unusual forms</h2><small>Click a numbered marker</small></div>
+<div class="map">
+<svg viewBox="0 0 900 430" role="img" aria-label="Schematic world map with locations of historical monetary forms">
+<rect width="900" height="430" rx="12" fill="#eff7fc"/>
+<g class="gridline"><path d="M20 105H880M20 215H880M20 325H880M225 15V415M450 15V415M675 15V415"/></g>
+<g class="land">
+<path d="M65 91l40-35 65-5 45 18 45 31-12 28-35 16-16 32-28 16-22-20-32-8-25-31-30-16z"/>
+<path d="M200 215l38 7 27 31-7 38 13 27-20 57-20 36-20-31-5-39-17-36z"/>
+<path d="M355 83l35-23 46 9 28 20 37 1 18 25-16 22-31 1-17 23-34-5-20-20-31-4-20-23z"/>
+<path d="M410 164l34-13 34 20 9 36-17 41-14 37-21 26-19-28-12-39-12-38z"/>
+<path d="M477 81l52-28 61 7 49 20 55-2 40 25 45 12 34 31-13 24-42 0-22 21-39-12-27 22-34-11-28-28-29-5-27-29-29-5-20-25z"/>
+<path d="M574 213l31 9 17 31-13 39-24 29-16-29-7-38z"/>
+<path d="M744 285l36-8 31 18-4 26-30 12-29-14z"/>
+</g>
+<path class="route" d="M455 135Q490 175 540 180T745 250M455 135Q350 160 245 145M455 135Q520 230 570 300"/>
+<g fill="#65778b" font-size="11" font-weight="700"><text x="105" y="205">NORTH AMERICA</text><text x="205" y="400">SOUTH AMERICA</text><text x="390" y="315">AFRICA</text><text x="395" y="42">EUROPE</text><text x="640" y="225">ASIA</text><text x="758" y="360">OCEANIA</text></g>
+<g id="pins">
+<g class="pin active" data-id="meso" transform="translate(466 148)" tabindex="0"><circle r="15"/><text y="1">1</text></g>
+<g class="pin" data-id="lydia" transform="translate(430 116)" tabindex="0"><circle r="15"/><text y="1">2</text></g>
+<g class="pin" data-id="india" transform="translate(574 185)" tabindex="0"><circle r="15"/><text y="1">3</text></g>
+<g class="pin" data-id="yap" transform="translate(756 252)" tabindex="0"><circle r="15"/><text y="1">4</text></g>
+<g class="pin" data-id="bahamas" transform="translate(245 155)" tabindex="0"><circle r="15"/><text y="1">5</text></g>
+<g class="pin" data-id="wampum" transform="translate(222 112)" tabindex="0"><circle r="15"/><text y="1">6</text></g>
+<g class="pin" data-id="maldives" transform="translate(546 230)" tabindex="0"><circle r="15"/><text y="1">7</text></g>
+<g class="pin" data-id="mefo" transform="translate(441 91)" tabindex="0"><circle r="15"/><text y="1">8</text></g>
+<g class="pin" data-id="pow" transform="translate(418 101)" tabindex="0"><circle r="15"/><text y="1">9</text></g>
+</g></svg></div><div class="legend"><span>🟡 Numbered marker = story</span><span>Map is schematic; locations are approximate</span><span>Bahamas marker = evidence check</span></div></div>
+<div class="panel timeline"><div class="head"><h2>Timeline of monetary forms</h2><small>Oldest to most recent</small></div><div class="events" id="events">
+<article class="event active" data-id="meso"><b>c. 7500–3350 BCE</b><h3>Clay accounting tokens</h3><p>Near East / Mesopotamia</p></article>
+<article class="event" data-id="meso2"><b>c. 2400–2000 BCE</b><h3>Barley &amp; weighed silver</h3><p>Mesopotamia</p></article>
+<article class="event" data-id="india"><b>c. 6th–5th century BCE</b><h3>Silver punch-marked coins</h3><p>Ancient India</p></article>
+<article class="event" data-id="lydia"><b>c. 650 BCE</b><h3>Electrum coinage</h3><p>Lydia, modern Türkiye</p></article>
+<article class="event" data-id="yap"><b>Traditional; recorded in 1800s</b><h3>Rai stone money</h3><p>Yap, Micronesia</p></article>
+<article class="event" data-id="maldives"><b>c. 5th–19th century CE</b><h3>Cowrie shell money</h3><p>India &amp; Indian Ocean</p></article>
+<article class="event" data-id="mefo"><b>1934–1938 CE</b><h3>Mefo bills</h3><p>Nazi Germany</p></article>
+<article class="event" data-id="pow"><b>c. 1943–1945 CE</b><h3>Cigarette currency</h3><p>German POW camps</p></article>
+<article class="event" data-id="wampum"><b>17th–18th century CE</b><h3>Wampum shell beads</h3><p>Northeastern North America</p></article>
+<article class="event" data-id="bahamas"><b>Historical claim check</b><h3>“Bahamas shell money?”</h3><p>Not substantiated as stated</p></article>
+</div></div></section>
+<aside class="panel story"><div class="head"><h2>Money story</h2><small id="count">Stop 1 of 10</small></div>
+<div class="body"><div class="hero"><div class="art" id="art"></div><div><h2 id="title">Clay accounting tokens</h2><div class="place" id="place"></div><span class="date" id="date"></span></div></div>
+<ol id="copy"></ol><div class="caution" id="caution"></div></div>
+<div class="nav"><button id="prev">← Previous</button><button id="next">Next story →</button></div></aside></div>
+<div class="notes">
+<section class="panel note"><h3>What makes an object “money”?</h3><p>Test each example against money’s functions: <b>medium of exchange</b>, <b>unit of account</b> and <b>store of value</b>. Some examples were money in a local social system; others were accounting devices, credit instruments or ceremonial wealth.</p></section>
+<section class="panel note"><h3>Important distinctions for the lecture</h3><ul><li>Clay tokens were primarily accounting counters—not automatically coins or general-purpose currency.</li><li>Rai stones could change ownership without being physically moved.</li><li>Mefo bills were state-guaranteed credit instruments, not circulating cash.</li><li>POW-camp cigarettes became a spontaneous local currency in conditions of scarcity.</li></ul></section>
+</div>
+<section class="panel sources"><h3>Sources and further reading</h3><ol>
+<li><a href="https://sites.utexas.edu/dsb/tokens/from-accounting-to-writing/" target="_blank" rel="noopener">Denise Schmandt-Besserat, Before Writing: Accounting with Tokens</a> — token chronology.</li>
+<li><a href="https://isac.uchicago.edu/sites/default/files/uploads/shared/docs/oimp36.pdf" target="_blank" rel="noopener">University of Chicago, Accounting and “Banking” in Early Mesopotamia</a> — clay records, barley and silver.</li>
+<li><a href="https://www.britishmuseum.org/sites/default/files/2021-05/Money_Gallery_LPG_2020_Room_68.pdf" target="_blank" rel="noopener">British Museum, Room 68: Money</a> — Mesopotamia and Lydian coinage.</li>
+<li><a href="https://www.rbi.org.in/commonman/English/Currency/Scripts/Ancient.aspx" target="_blank" rel="noopener">Reserve Bank of India, Ancient India Coinage</a> — punch-marked coins.</li>
+<li><a href="https://www.bankofcanadamuseum.ca/2024/07/rai-big-money/" target="_blank" rel="noopener">Bank of Canada Museum, Rai: Big Money</a> — Yap and Palau.</li>
+<li><a href="https://www.si.edu/object/nmnhanthropology_8428753" target="_blank" rel="noopener">Smithsonian, Rai Stone Disk</a> — value, ownership and ceremonial exchange.</li>
+<li><a href="https://www.cambridge.org/core/elements/shell-money/59F5D361C6CA7C596A8C168C84A960D0" target="_blank" rel="noopener">Cambridge, Shell Money: A Comparative Study</a> — cowries in India.</li>
+<li><a href="https://americanhistory.si.edu/explore/exhibitions/value-money/online/origins-money/forms-money" target="_blank" rel="noopener">Smithsonian, Forms of Money</a> — cowries, wampum and non-metallic money.</li>
+<li><a href="https://www.bundesbank.de/resource/blob/927730/25fef541e4458e82d064ac532464646f/mL/von-der-reichsbank-zur-bundesbank-data.pdf" target="_blank" rel="noopener">Deutsche Bundesbank, From the Reichsbank to the Bundesbank</a> — Mefo bills.</li>
+<li><a href="https://courses.cit.cornell.edu/econ4260/out/radford_pow.pdf" target="_blank" rel="noopener">R. A. Radford (1945), The Economic Organisation of a P.O.W. Camp</a> — cigarette currency.</li>
+</ol></section></main>
+<footer><span class="credit">CC BY-SA 4.0 • Prof. Kalyan Kolukuluri (2026) • with ChatGPT as TA</span></footer>
+<script>
+const S=[
+{id:"meso",title:"Clay accounting tokens",place:"Mesopotamia / wider Near East • present-day Iraq and neighbours",date:"c. 7500–3350 BCE",art:"tokens",lines:["Small clay shapes represented quantities of goods such as grain or animals.","Counters helped record what was stored, owed or transferred.","Different shapes stood for different commodities or measures.","They were part of an accounting technology used before writing.","Their use shows how record-keeping can precede coinage."],note:"These are best described as accounting tokens, not proven general-purpose money."},
+{id:"meso2",title:"Barley and weighed silver",place:"Southern Mesopotamia • present-day Iraq",date:"c. 2400–2000 BCE",art:"silver",lines:["Barley could be used directly to settle prices and obligations.","A land-sale tablet from about 2400–2200 BCE records a price in barley.","Silver was also weighed for loans and long-distance trade.","The shekel began as a unit of weight, not originally a coin.","Value could be recorded even when metal did not physically move."],note:"The system combined commodities, weights, records and credit—not a modern cash economy."},
+{id:"india",title:"Silver punch-marked coins",place:"Ancient India • northern subcontinent",date:"c. 6th–5th century BCE onward",art:"coin",lines:["Early Indian coinage is associated with silver punch-marked pieces.","Separate punches impressed symbols onto small metal blanks.","The Reserve Bank of India dates documented issues from the 7th–6th century BCE.","Early issues are associated with merchant groups and later states.","They reflect expanding trade and urban exchange."],note:"Indus seals are not securely identified as coins; the RBI notes that their monetary status is unresolved."},
+{id:"lydia",title:"Electrum coins",place:"Lydia • western Anatolia, modern Türkiye",date:"c. 650 BCE",art:"electrum",lines:["Some of the earliest known struck coins appeared in Lydia.","They were made from electrum, a natural gold–silver alloy.","A controlled weight helped make each piece recognisable in payment.","Punch marks and designs signalled an authorised issue.","Coinage spread through Greek cities and wider Mediterranean networks."],note:"The British Museum dates early Lydian electrum coinage to about 650 BCE; the exact origin story remains a historical reconstruction."},
+{id:"yap",title:"Rai stone money",place:"Yap • Federated States of Micronesia; stone quarried in Palau",date:"Traditional system; documented by the 19th century",art:"rai",lines:["Rai are large, circular stone discs, often with a central hole.","The stone was quarried in Palau and transported across the sea to Yap.","Value reflected size, workmanship, history and social significance.","Some stones stayed in place when ownership changed.","Rai marked important transfers, ceremonies, wealth and status."],note:"There is no securely established single start year; use “traditional, documented in historical accounts” rather than a precise ancient date."},
+{id:"maldives",title:"Cowrie shell money",place:"Maldives and Indian Ocean networks; used in India and beyond",date:"c. 5th century CE evidence in India; major Indian Ocean trade from c. 9th century",art:"shell",lines:["Small cowrie shells were durable, portable and recognisable.","They served as low-value money in parts of India and the Indian Ocean.","The Chinese pilgrim Faxian reported cowries in India in the early 5th century CE.","Maldivian cowries later circulated widely through Indian Ocean trade.","Shells could complement metal coins rather than replace them."],note:"Cowries are Indo-Pacific shells, not a currency originating in the Bahamas."},
+{id:"mefo",title:"Mefo bills: hidden state credit",place:"Nazi Germany",date:"1934–1938 CE",art:"bill",lines:["Mefo bills were promissory bills issued through a nominal company.","The German state guaranteed them and banks could rediscount them.","They helped finance rearmament while concealing public borrowing.","The scheme accumulated a large stock of short-term obligations.","It was discontinued in 1938."],note:"Mefo bills were credit and fiscal-financing instruments—not ordinary currency notes circulating among households."},
+{id:"pow",title:"Cigarette currency",place:"German prisoner-of-war camps",date:"c. 1943–1945; described in 1945",art:"cigarette",lines:["Prisoners traded food, services and small consumer goods.","Cigarettes became a common medium of exchange and unit of account.","They were portable, divisible into convenient quantities and widely desired.","Prices emerged in cigarette units; exchange boards helped circulate information.","Shortages and changing supplies affected their purchasing power."],note:"R. A. Radford’s 1945 account is a classic case study of spontaneous monetary order in a restricted economy."},
+{id:"wampum",title:"Wampum shell beads",place:"Northeastern North America • Indigenous communities",date:"Longstanding Indigenous use; monetary role in 17th–18th centuries",art:"wampum",lines:["Wampum consisted of beads made from marine shells, including quahog and whelk.","Indigenous peoples used it in diplomacy, ceremony, memory and exchange.","In parts of colonial northeastern North America it also served monetary functions.","Strings and belts carried meaning beyond a simple price tag.","Its value depended on social relationships and accepted conventions."],note:"Wampum is not a Bahamas currency; it is associated especially with northeastern North America."},
+{id:"bahamas",title:"Bahamas shells? A fact-check",place:"The Bahamas • Caribbean",date:"No verified historical currency date established",art:"shell",lines:["Seashells have served as money in many societies around the world.","But evidence reviewed here does not establish a distinctive Bahamas shell currency.","Cowrie money is documented across Asia, Africa and the Indian Ocean.","Wampum is associated with northeastern North America, not the Bahamas.","The marker distinguishes geography from a familiar shell-money story."],note:"Do not teach “Bahamas seashell money” as established fact without a specific primary source."}
+];
+const icons={
+tokens:`<svg viewBox="0 0 100 100"><g fill="#c78d5a" stroke="#654b38" stroke-width="3"><path d="M15 27l20-10 20 10-20 10zM15 27v17l20 10V37zM55 27v17L35 54V37zM50 62l18-9 18 9-18 10zM50 62v17l18 9V72zM86 62v17l-18 9V72z"/></g></svg>`,
+silver:`<svg viewBox="0 0 100 100"><path d="M15 60l12-28 45-9 14 27-11 26-45 5z" fill="#cbd5df" stroke="#52677e" stroke-width="4"/><text x="51" y="61" text-anchor="middle" font-size="18" fill="#52677e">Ag</text></svg>`,
+coin:`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="#d9dfe5" stroke="#52677e" stroke-width="4"/><circle cx="50" cy="50" r="27" fill="none" stroke="#91a2b5" stroke-width="2"/><path d="M32 48q18-20 36 0l-5 21H37z" fill="#687d94"/></svg>`,
+electrum:`<svg viewBox="0 0 100 100"><path d="M17 57L29 31 53 20 78 33 83 62 61 80 33 76Z" fill="#d9ae42" stroke="#604b25" stroke-width="4"/><path d="M29 45l22-10 24 9-18 18-25-4z" fill="#f4d77d" stroke="#604b25" stroke-width="2"/></svg>`,
+rai:`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#c9d0d1" stroke="#53616b" stroke-width="4"/><circle cx="50" cy="50" r="12" fill="#fff" stroke="#53616b" stroke-width="3"/></svg>`,
+shell:`<svg viewBox="0 0 100 100"><path d="M15 60q3-32 35-42 31 11 35 42-8 23-35 25Q23 82 15 60Z" fill="#f2e4d2" stroke="#8c6a55" stroke-width="3"/><path d="M50 20v62M35 25l8 54M65 25l-8 54M24 38l18 39M76 38 58 77" stroke="#b08a70" stroke-width="2.5" fill="none"/></svg>`,
+bill:`<svg viewBox="0 0 100 100"><rect x="14" y="22" width="72" height="55" rx="5" fill="#e9e0bd" stroke="#6b614b" stroke-width="3"/><rect x="21" y="29" width="58" height="41" rx="3" fill="none" stroke="#9b8b61" stroke-width="2"/><circle cx="50" cy="49" r="13" fill="#d3c69e" stroke="#9b8b61" stroke-width="2"/><text x="50" y="53" text-anchor="middle" font-size="9" fill="#51472f">MEFO</text></svg>`,
+cigarette:`<svg viewBox="0 0 100 100"><g transform="rotate(-28 50 50)"><rect x="14" y="39" width="72" height="19" rx="4" fill="#fff" stroke="#263f60" stroke-width="3"/><rect x="14" y="39" width="16" height="19" fill="#d7a56d" stroke="#263f60" stroke-width="2"/></g></svg>`,
+wampum:`<svg viewBox="0 0 100 100"><path d="M15 35q35-22 70 0v32q-35 22-70 0z" fill="#d6d8e6" stroke="#4e5d78" stroke-width="3"/><g fill="#fff" stroke="#64748b"><circle cx="25" cy="35" r="5"/><circle cx="39" cy="30" r="5"/><circle cx="53" cy="29" r="5"/><circle cx="67" cy="30" r="5"/></g></svg>`
+};
+let current=0,clock=null;const $=id=>document.getElementById(id);
+function show(i,scroll=true){current=(i+S.length)%S.length;let s=S[current];$("title").textContent=s.title;$("place").textContent=s.place;$("date").textContent=s.date;$("art").innerHTML=icons[s.art];$("copy").innerHTML=s.lines.map(t=>`<li>${t}</li>`).join("");$("caution").textContent=s.note;$("count").textContent=`Stop ${current+1} of ${S.length}`;$("status").textContent=s.title+" • "+s.place;
+document.querySelectorAll(".event").forEach(e=>e.classList.toggle("active",e.dataset.id===s.id));document.querySelectorAll(".pin").forEach(p=>p.classList.toggle("active",p.dataset.id===s.id));
+let ev=document.querySelector(`.event[data-id="${s.id}"]`);if(scroll&&ev)ev.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});}
+function stop(){if(clock){clearInterval(clock);clock=null}}
+$("play").onclick=()=>{stop();clock=setInterval(()=>show(current+1),5200)};$("pause").onclick=stop;$("reset").onclick=()=>{stop();show(0)};
+$("next").onclick=()=>show(current+1);$("prev").onclick=()=>show(current-1);
+document.querySelectorAll(".pin,.event").forEach(e=>{e.addEventListener("click",()=>{stop();show(S.findIndex(s=>s.id===e.dataset.id))});e.addEventListener("keydown",k=>{if(k.key==="Enter"||k.key===" "){k.preventDefault();e.click()}})});
+show(0,false);
+</script></body></html>
