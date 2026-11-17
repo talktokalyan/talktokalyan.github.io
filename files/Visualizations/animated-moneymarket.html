@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The G-Sec File </title>
+<style>
+:root{--black:#030507;--gold:#d8b76b;--gold2:#f0d99e;--red:#a51d2d;--white:#f5f1e8;--muted:#c4c0b6;--line:#806a3d;--green:#8ec8a5}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--black);color:var(--white);font-family:Arial,Helvetica,sans-serif}
+body{background:radial-gradient(ellipse at 50% 45%,#111821 0,#05080c 62%,#000 100%)}
+#screen{height:100%;width:100%;position:relative;overflow:hidden}
+#topline{position:absolute;z-index:20;top:0;left:0;width:100%;height:3px;background:#28221a}
+#progress{height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--gold))}
+#hud{position:absolute;z-index:15;top:18px;left:24px;right:24px;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+.brand{font-size:10px;letter-spacing:.35em;color:var(--gold);text-transform:uppercase}
+.controls{pointer-events:auto;display:flex;gap:8px}
+button{cursor:pointer;background:#080a0d;border:1px solid var(--line);color:var(--gold2);padding:9px 13px;font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+button:hover{background:#20151a;border-color:var(--gold)}
+#scene{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:70px 5vw 42px}
+.scene-inner{width:min(1200px,100%);height:100%;display:flex;align-items:center;justify-content:center;position:relative}
+.eyebrow{font-size:10px;letter-spacing:.42em;color:var(--gold);text-transform:uppercase;margin-bottom:16px}
+h1,h2{font-family:Georgia,serif;font-weight:400;text-transform:uppercase;letter-spacing:.08em;margin:0;line-height:1.1}
+h1{font-size:clamp(38px,7vw,88px)}h2{font-size:clamp(27px,4vw,48px)}
+.gold{color:var(--gold)}.red{color:#df7b82}.white{color:var(--white)}
+.sub{font-size:clamp(12px,1.4vw,17px);line-height:1.65;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.title-scene{width:100%;text-align:center}
+.rule{width:min(420px,60vw);height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:24px auto}
+.credit-layout{height:100%;width:100%;position:relative}
+.photo-frame{position:absolute;left:2%;top:8%;width:min(43vw,490px);height:min(62vh,410px);border:1px solid var(--line);padding:5px;background:#07090d;box-shadow:0 15px 55px #000c}
+.photo-frame img{width:100%;height:100%;object-fit:contain;background:#050608}.photo-frame.contain img{object-fit:contain}
+.photo-frame.cover img{object-fit:cover}
+.credit-copy{position:absolute;right:2%;bottom:9%;width:min(48%,590px);text-align:right}
+.char{font-size:clamp(13px,1.35vw,17px);letter-spacing:.17em;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
+.real{font-size:clamp(13px,1.35vw,17px);letter-spacing:.12em;color:#f1f1f1;text-transform:uppercase;line-height:1.5}
+.role{font-size:clamp(13px,1.35vw,17px);letter-spacing:.10em;color:#d98b91;text-transform:uppercase;line-height:1.55;margin-top:8px}
+.description{font-size:clamp(12px,1.1vw,14px);line-height:1.65;color:var(--muted);margin-top:15px}
+.no-photo{position:absolute;left:2%;top:15%;width:min(43vw,490px);height:min(55vh,360px);display:flex;align-items:center;justify-content:center;border:1px solid var(--line);background:linear-gradient(145deg,#101720,#030507)}
+.no-photo .monogram{font:400 clamp(110px,20vw,220px) Georgia,serif;color:#5b4a2c;text-shadow:0 0 35px #d8b76b22}
+.no-photo .smallmark{position:absolute;bottom:18px;font-size:9px;letter-spacing:.3em;color:var(--gold);text-transform:uppercase}
+.diagram-scene{width:min(1050px,100%);text-align:center}
+.diagram-scene .eyebrow{margin-bottom:10px}
+.diagram{display:flex;flex-direction:column;align-items:center;gap:10px;margin:20px auto 0}
+.block{min-width:200px;max-width:350px;border:1px solid var(--line);background:linear-gradient(140deg,#121a24,#080c11);padding:13px 20px;box-shadow:0 6px 22px #0007}
+.block strong{display:block;font:18px Georgia,serif;letter-spacing:.04em;color:var(--gold2)}
+.block small{display:block;color:var(--muted);font-size:11px;line-height:1.5;margin-top:5px}
+.arrow{color:var(--gold);font-size:23px;line-height:1}
+.rowblocks{display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:14px;width:min(720px,100%)}
+.rowblocks.three{grid-template-columns:repeat(3,minmax(150px,1fr))}
+.mini{border:1px solid #625435;background:#0d131b;padding:13px 10px}
+.mini strong{display:block;color:var(--gold2);font:17px Georgia,serif}
+.mini small{display:block;color:var(--muted);font-size:10px;line-height:1.45;margin-top:5px}
+.flow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.flowbox{min-width:190px;border:1px solid var(--line);background:#101720;padding:14px}
+.flowbox strong{font:18px Georgia,serif;color:var(--gold2)}
+.flowbox small{display:block;color:var(--muted);font-size:11px;margin-top:5px}
+.flowarrow{font-size:23px;color:var(--gold)}
+.step{width:min(900px,100%);border:1px solid #685735;background:#0b1119;padding:18px;margin:10px auto;text-align:left;opacity:.35;transform:scale(.98);transition:all .65s ease}
+.step.active{opacity:1;transform:scale(1);border-color:var(--gold);box-shadow:0 0 25px #d8b76b20}
+.step-head{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.step-content{display:flex;align-items:center;justify-content:space-around;gap:12px;flex-wrap:wrap}
+.actor{border:1px solid #566171;background:#121d2a;padding:13px 16px;min-width:170px;text-align:center}
+.actor b{display:block;font:17px Georgia,serif;color:var(--white)}
+.actor small{display:block;font-size:10px;color:var(--muted);margin-top:5px}
+.transaction{font-size:11px;line-height:1.6;color:var(--gold2);text-align:center;max-width:220px}
+.callmoney{border:1px dashed #8b7770;padding:13px 18px;margin:16px auto 0;width:min(780px,100%);color:var(--muted);font-size:12px;line-height:1.6}
+.callmoney b{color:#e6a0a5}
+.liquidity{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:min(900px,100%);margin:20px auto}
+.liqbox{border:1px solid #3b5b49;border-top:3px solid var(--green);padding:18px;text-align:left;background:#0b1412}
+.liqbox.absorb{border-color:#653b40;border-top-color:#cf747b;background:#160d10}
+.liqbox h3{font:20px Georgia,serif;margin:0 0 10px;color:var(--gold2)}
+.liqbox p{font-size:12px;line-height:1.6;color:var(--muted);margin:0}
+.caption{font-size:10px;color:#9b9588;letter-spacing:.16em;text-transform:uppercase;margin-top:18px}
+.final{width:100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center}
+.final img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.42) contrast(1.1)}
+.final:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0009,#0002 50%,#000a)}
+.final-text{position:relative;z-index:2;text-align:center;text-shadow:0 4px 25px #000}
+.final-text h1{font-size:clamp(42px,8vw,100px)}
+.final-text .sub{color:#fff}
+.fade{animation:fadein .8s ease both}
+@keyframes fadein{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+#startscreen{position:absolute;z-index:30;inset:0;background:radial-gradient(ellipse at center,#172333,#030507 70%);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+.startcard{max-width:700px}
+.startcard p{font-size:13px;line-height:1.7;color:var(--muted)}
+#start{padding:14px 25px;font-size:11px}
+
+/* Dramatic title reveal and protagonist credit choreography */
+/* Opening title: slow reveal, red strike-through, then BOND */
+.title-scene{animation:title-slow-reveal 1.8s ease-out both}
+@keyframes title-slow-reveal{
+  0%{opacity:0;transform:scale(1.12);filter:blur(9px);letter-spacing:.24em}
+  70%{opacity:1;transform:scale(1);filter:blur(0)}
+  100%{opacity:1;transform:scale(1);filter:blur(0)}
+}
+.title-transform{display:inline-block;position:relative;white-space:nowrap}
+.old-title{color:var(--gold);position:relative;display:inline-block;animation:fade-old .45s ease forwards;animation-delay:2.15s}
+.old-title:after{content:"";position:absolute;left:0;top:50%;height:5px;width:100%;background:#d71920;transform:scaleX(0);transform-origin:left;animation:strike-gsec .8s ease forwards;animation-delay:1.85s}
+.new-title{color:#e32636;display:inline-block;position:absolute;left:0;top:0;opacity:0;animation:reveal-bond 1.25s ease forwards;animation-delay:2.65s;text-shadow:0 0 18px #e3263666}
+@keyframes strike-gsec{to{transform:scaleX(1)}}
+@keyframes fade-old{to{opacity:.22}}
+@keyframes reveal-bond{
+  0%{opacity:0;transform:translateY(14px);letter-spacing:.35em}
+  100%{opacity:1;transform:translateY(0);letter-spacing:.08em}
+}
+.liq-sequence{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:min(1000px,100%);margin:14px auto 0;text-align:left}
+.liq-case{border:1px solid #5c5037;background:linear-gradient(145deg,#101a20,#080c11);padding:13px 15px;min-height:270px}
+.liq-case.absorb-case{border-color:#684147;background:linear-gradient(145deg,#1a1115,#090b10)}
+.liq-case h3{font:19px Georgia,serif;color:var(--gold2);margin:0 0 8px;text-align:center}
+.liq-step{display:grid;grid-template-columns:30px 1fr;align-items:center;gap:9px;padding:7px 8px;margin:6px 0;border:1px solid #34404a;background:#080d13;opacity:.28;transform:translateY(5px);transition:opacity .35s,transform .35s,border-color .35s}
+.liq-step.active{opacity:1;transform:translateY(0);border-color:var(--gold);box-shadow:0 0 15px #d8b76b18}
+.liq-step .n{font:16px Georgia,serif;color:var(--gold)}
+.liq-step strong{display:block;font-size:11px;letter-spacing:.06em;color:var(--white);text-transform:uppercase}
+.liq-step small{display:block;font-size:10px;color:var(--muted);line-height:1.4;margin-top:2px}
+.arrow-indicator{display:inline-flex;align-items:center;justify-content:center;width:26px;height:30px;font-size:27px;font-weight:bold;line-height:1;opacity:0;transform:translateY(8px);transition:opacity .45s,transform .45s}
+.liq-step.active .arrow-indicator{opacity:1;transform:translateY(0)}
+.up{color:#8ed2a2}.down{color:#e58b91}
+.corridor-note{width:min(1000px,100%);margin:10px auto 0;padding:9px 12px;border:1px solid #665535;background:#0a0e14;color:var(--muted);font-size:10px;line-height:1.55;text-align:center}
+.corridor-note strong{color:var(--gold2)}
+@media(max-width:700px){.liq-sequence{grid-template-columns:1fr;gap:8px}.liq-case{min-height:unset;padding:9px}.liq-step{padding:5px 7px;margin:4px 0}.corridor-note{font-size:9px}}
+
+#footer-credit{position:absolute;z-index:18;left:0;right:0;bottom:7px;text-align:center;font-size:9px;line-height:1.4;letter-spacing:.09em;color:#c8b98f;text-transform:uppercase;pointer-events:none;text-shadow:0 1px 5px #000}
+.repo-flow{width:min(980px,100%);margin:14px auto 0}
+.repo-institutions{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:center}
+.repo-bank,.repo-rbi{border:1px solid var(--line);background:linear-gradient(145deg,#121d2a,#070b11);padding:17px 12px;text-align:center;min-height:76px}
+.repo-bank strong,.repo-rbi strong{font:20px Georgia,serif;color:var(--gold2);display:block}
+.repo-bank small,.repo-rbi small{display:block;font-size:10px;color:var(--muted);margin-top:5px}
+.repo-arrows{position:relative;height:220px;margin:4px auto 0}
+.repo-arrows svg{width:100%;height:100%;overflow:visible}
+.repo-path{fill:none;stroke:var(--gold);stroke-width:2.8;stroke-linecap:round;stroke-dasharray:700;stroke-dashoffset:700;marker-end:url(#repoArrow);opacity:0}
+.repo-path.go{opacity:1;animation:draw-path 1.55s ease forwards}
+@keyframes draw-path{to{stroke-dashoffset:0}}
+.repo-label{position:absolute;opacity:0;color:var(--gold2);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:#080c12;padding:5px 9px;border:1px solid #6e5b35;transition:opacity .35s}
+.repo-label.show{opacity:1}
+.repo-label.l1{left:10%;top:8%}.repo-label.l2{right:9%;top:37%}.repo-label.l3{right:9%;bottom:9%}.repo-label.l4{left:9%;bottom:9%}
+.repo-stepno{color:#e7d5ad;font-weight:bold;margin-right:5px}
+.repo-note{font-size:10px;letter-spacing:.13em;color:var(--muted);text-transform:uppercase;margin-top:0}
+@media(max-width:700px){
+ #footer-credit{font-size:7px;bottom:3px;padding:0 4px}
+ .credit-layout .photo-frame,.credit-layout .no-photo{animation:portrait-journey-mobile 13s ease both}
+ .credit-layout .credit-copy{animation:credit-journey-mobile 13s ease both}
+ @keyframes portrait-journey-mobile{0%{opacity:0;transform:translate(-55vw,-35vh)}15%,55%{opacity:1;transform:translate(0,0)}78%,100%{opacity:0;transform:translate(-55vw,-35vh)}}
+ @keyframes credit-journey-mobile{0%{opacity:0;transform:translate(55vw,35vh)}15%,55%{opacity:1;transform:translate(0,0)}78%,100%{opacity:0;transform:translate(55vw,35vh)}}
+ .repo-arrows{height:190px}.repo-label{font-size:8px;padding:4px 5px}
+}
+
+@media(max-width:700px){
+ #hud{left:10px;right:10px;top:10px}.brand{font-size:8px;letter-spacing:.2em}button{padding:7px 8px;font-size:8px}
+ #scene{padding:60px 4vw 25px}.credit-layout{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+ .photo-frame,.no-photo{position:relative;left:auto;top:auto;width:min(62vw,260px);height:min(34vh,210px)}
+ .credit-copy{position:relative;right:auto;bottom:auto;width:100%;text-align:center}
+ .rowblocks,.rowblocks.three{grid-template-columns:1fr 1fr}.block{min-width:160px}.liquidity{grid-template-columns:1fr;gap:9px}
+ .step{padding:10px}.actor{min-width:130px}
+}
+</style>
+</head>
+<body>
+<div id="screen">
+ <div id="topline"><div id="progress"></div></div>
+ <div id="hud"><div class="brand">The G-Sec Files · India</div><div class="controls"><button id="pause">Pause</button><button id="mute" aria-pressed="false">Mute</button><button id="replay">Replay</button></div></div>
+ <main id="scene"></main>
+ <div id="footer-credit">CC-BY-SA · Prof. Kalyan K · ChatGPT as TA &nbsp; | &nbsp; Music Credits: Luis Humanoide (from Pixabay)</div>
+ <div id="startscreen"><div class="startcard">
+  <div class="eyebrow">A Bank Treasury Mission</div><div class="sub">A cinematic market briefing</div><div class="rule"></div>
+  <div class="sub">Press to begin</div>
+  <p>Character introductions. Market interactions. A two-step repo transaction. RBI liquidity operations.</p>
+  <p>Music: Luis Humanoide · Supplied soundtrack · 2:09.6</p>
+  <button id="start">Begin Mission</button>
+ </div></div>
+ <audio id="music" src="bond.mp3" preload="auto"></audio>
+</div>
+<script>
+const TOTAL=125;
+const A='';
+const scenes=[
+
+{t:5,d:13,html:`
+<div class="scene-inner">
+  <div class="title-scene fade">
+    <div class="eyebrow">A sovereign debt affair</div>
+
+    <h1>
+      THE
+      <span class="title-transform">
+        <span class="old-title">G-SEC</span>
+        <span class="new-title">BOND</span>
+      </span>
+      FILES
+    </h1>
+
+    <div class="rule"></div>
+    <div class="sub">
+      India's Government Securities & Money Markets
+    </div>
+  </div>
+</div>`},
+{t:10,d:13,html:`<div class="scene-inner"><div class="credit-layout fade"><div class="photo-frame contain"><img src="${A}nirmala_sitharaman.png" alt="Smt. Nirmala Sitharaman"></div><div class="credit-copy"><div class="char">M · The Mastermind</div><div class="real">Smt. Nirmala Sitharaman</div><div class="role">Finance Minister · Government of India</div><div class="description">The Government's borrowing programme is financed through the issuance of Treasury Bills and dated securities.</div></div></div></div>`},
+{t:23,d:13,html:`<div class="scene-inner"><div class="credit-layout fade"><div class="photo-frame cover"><img src="${A}Anuradha_Thakur_DEA_Secretary.jpg" alt="Anuradha Thakur"></div><div class="credit-copy"><div class="char">Bill Tanner · The Chief of Staff</div><div class="real">Ms. Anuradha Thakur</div><div class="role">Secretary · Department of Economic Affairs</div><div class="description">Coordinates economic affairs and the Government's borrowing programme.</div></div></div></div>`},
+{t:36,d:13,html:`<div class="scene-inner"><div class="credit-layout fade"><div class="photo-frame cover"><img src="${A}Sanjay_Malhotra_RBI_Governor.jpg" alt="Sanjay Malhotra"></div><div class="credit-copy"><div class="char">The Governor · The Central Banker</div><div class="real">Shri Sanjay Malhotra</div><div class="role">Governor · Reserve Bank of India</div><div class="description">Monetary policy, liquidity management and government securities operations.</div></div></div></div>`},
+{t:49,d:13,html:`<div class="scene-inner"><div class="credit-layout fade"><div class="photo-frame"><img src="${A}Nand_Kishore_CCIL_MD.jpg" alt="Nand Kishore"></div><div class="credit-copy"><div class="char">Q · The Quartermaster</div><div class="real">Mr. Nand Kishore</div><div class="role">Managing Director · CCIL</div><div class="description">Clearing, settlement and collateral-management infrastructure for financial markets.</div></div></div></div>`},
+{t:62,d:17,html:`<div class="scene-inner"><div class="diagram-scene fade"><div class="eyebrow">The specialist agents</div><h2>Primary <span class="gold">Dealers</span></h2><div class="rowblocks three" style="margin:20px auto"><div class="mini"><img src="${A}PNB_GILTS_PD.png" style="max-width:100%;height:54px;object-fit:contain"><small>Primary Dealer</small></div><div class="mini"><img src="${A}ICICI_PD.png" style="max-width:100%;height:54px;object-fit:contain"><small>Primary Dealer</small></div><div class="mini"><img src="${A}sbi_dfhi_pd.jpeg" style="max-width:100%;height:54px;object-fit:contain"><small>Primary Dealer</small></div></div><div class="arrow">↕</div><div class="rowblocks"><div class="block"><strong>Primary Dealers</strong><small>Participate in auctions · make markets · trade G-Secs</small></div><div class="block"><strong>Bank Treasuries</strong><small>Manage liquidity · hold and trade securities · borrow and lend</small></div></div><div class="caption">The specialist dealers and bank treasury desks</div></div></div>`},
+{t:79,d:10,html:`<div class="scene-inner"><div class="diagram-scene fade"><div class="eyebrow">Market infrastructure</div><h2><span class="gold">Q</span> is in control</h2><div style="margin:15px auto"><img src="${A}CCIL.jpeg" style="height:min(24vh,190px);max-width:65%;object-fit:contain;background:white;padding:8px"></div><div class="block" style="margin:auto"><strong>CCIL</strong><small>Clearing · Settlement · Tri-party collateral management</small></div><div class="caption">Infrastructure provider — not the cash lender or borrower</div></div></div>`},
+{t:89,d:22,html:`<div class="scene-inner"><div class="diagram-scene fade"><div class="eyebrow">The secured liquidity operation</div><h2>Repo: <span class="gold">four movements</span></h2>
+<div class="repo-flow">
+ <div class="repo-institutions">
+  <div class="repo-bank"><strong>Bank</strong><small>Needs short-term liquidity · owns eligible G-Secs</small></div>
+  <div class="repo-rbi"><strong>Reserve Bank of India</strong><small>Provides liquidity against eligible collateral</small></div>
+ </div>
+ <div class="repo-phase phase-one" id="phase1">STEP 1 · BANK PLEDGES SECURITIES & RECEIVES LIQUIDITY</div>
+ <div class="repo-arrows">
+  <svg viewBox="0 0 900 220" preserveAspectRatio="none" aria-label="Four sequential repo transaction flows">
+   <defs><marker id="repoArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#d8b76b" stroke-width="1.2"/></marker></defs>
+   <path id="rp1" class="repo-path" d="M150 18 C 230 78, 670 78, 750 18"/>
+   <path id="rp2" class="repo-path" d="M750 54 C 670 112, 230 112, 150 54"/>
+   <path id="rp3" class="repo-path" d="M150 132 C 230 190, 670 190, 750 132"/>
+   <path id="rp4" class="repo-path" d="M750 168 C 670 214, 230 214, 150 168"/>
+  </svg>
+  <div id="rl1" class="repo-label l1"><span class="repo-stepno">01</span>Bank pledges G-Secs to RBI</div>
+  <div id="rl2" class="repo-label l2"><span class="repo-stepno">02</span>RBI advances cash to bank</div>
+  <div id="rl3" class="repo-label l3"><span class="repo-stepno">03</span>Bank repays cash + repo interest</div>
+  <div id="rl4" class="repo-label l4"><span class="repo-stepno">04</span>RBI returns G-Secs to bank</div>
+ </div>
+ <div class="repo-phase phase-two" id="phase2">STEP 2 · BANK REPAYS & COLLATERAL IS RELEASED</div>
+ <div class="repo-note">Four movements in sequence · pledge → cash loan → repayment → securities returned</div>
+</div>
+<div class="callmoney"><b>CALL MONEY:</b> unsecured overnight borrowing and lending between eligible participants. The four-step sequence above depicts a repo with the RBI, not a call-money loan.</div>
+</div></div>`},
+{t:111,d:12,html:`<div class="scene-inner"><div class="diagram-scene fade"><div class="eyebrow">The Governor's move</div><h2>RBI manages <span class="gold">liquidity</span></h2>
+<div class="liq-sequence">
+ <section class="liq-case" id="liqBuy">
+  <h3>RBI BUYS G-SECS</h3>
+  <div class="liq-step" id="buy1"><span class="n">01</span><div><strong>RBI purchases bonds</strong><small>Payment is made to the banking system</small></div></div>
+  <div class="liq-step" id="buy2"><span class="n">02</span><div><strong>Liquidity is injected</strong><small>Banking-system reserves increase</small></div></div>
+  <div class="liq-step" id="buy3"><span class="arrow-indicator up">↑</span><div><strong>Bond prices rise</strong><small>Higher demand / purchase pressure</small></div></div>
+  <div class="liq-step" id="buy4"><span class="arrow-indicator down">↓</span><div><strong>Bond yields fall</strong><small>Price and yield move inversely</small></div></div>
+ </section>
+ <section class="liq-case absorb-case" id="liqSell">
+  <h3>RBI SELLS G-SECS / ABSORBS</h3>
+  <div class="liq-step" id="sell1"><span class="n">01</span><div><strong>RBI sells G-Secs</strong><small>Or absorbs funds through a reverse-repo operation</small></div></div>
+  <div class="liq-step" id="sell2"><span class="n">02</span><div><strong>Liquidity is absorbed</strong><small>Banking-system reserves decrease</small></div></div>
+  <div class="liq-step" id="sell3"><span class="arrow-indicator down">↓</span><div><strong>Bond prices fall</strong><small>Selling pressure / lower demand</small></div></div>
+  <div class="liq-step" id="sell4"><span class="arrow-indicator up">↑</span><div><strong>Bond yields rise</strong><small>Price and yield move inversely</small></div></div>
+ </section>
+</div>
+<div class="corridor-note"><strong>POLICY RATE CORRIDOR:</strong> The policy repo rate is the policy anchor. The <strong>MSF sets the upper ceiling</strong> and the <strong>SDF sets the lower floor</strong> for overnight rates. The fixed-rate reverse repo historically served as the floor; the SDF replaced it as the floor in April 2022.</div>
+<div class="caption">Reserve liquidity is not the same as broad money</div>
+</div></div>`},
+{t:123,d:6.645688,html:`<div class="final fade"><img src="${A}Bond_CallMoney.webp" alt="Bond at the call money dealing room"><div class="final-text"><div class="eyebrow">Agent 007</div><h1>Bond...<br><span class="gold">James Bond.</span></h1><div class="rule"></div><div class="sub">The G-Sec Trader · From the Bank Treasury</div><div class="sub gold" style="margin-top:10px">A Licence to Buy and Sell</div></div></div>`}
+];
+let running=false,paused=false,elapsed=0,startClock=0,raf=0,lastScene=-1;
+const audio=document.getElementById('music'),root=document.getElementById('scene'),bar=document.getElementById('progress');
+const muteButton=document.getElementById('mute');
+muteButton.addEventListener('click',()=>{
+ audio.muted=!audio.muted;
+ muteButton.textContent=audio.muted?'Unmute':'Mute';
+ muteButton.setAttribute('aria-pressed',String(audio.muted));
+});
+function drawScene(i){if(i===lastScene)return;lastScene=i;root.innerHTML=scenes[i].html;}
+function tick(now){
+ if(!running)return;
+ elapsed=(now-startClock)/1000;
+ const t=Math.min(elapsed,TOTAL);
+ let i=0;for(let j=0;j<scenes.length;j++)if(t>=scenes[j].t)i=j;
+ drawScene(i);
+ bar.style.width=(100*t/TOTAL)+'%';
+ if(i===7){
+   const local=t-scenes[i].t;
+   const phase1=document.getElementById('phase1'),phase2=document.getElementById('phase2');
+   if(phase1)phase1.classList.toggle('show',local>=1.0);
+   if(phase2)phase2.classList.toggle('show',local>=10.0);
+   const steps=[{id:'rp1',label:'rl1',at:2.0},{id:'rp2',label:'rl2',at:5.5},{id:'rp3',label:'rl3',at:11.0},{id:'rp4',label:'rl4',at:14.5}];
+   steps.forEach(x=>{const path=document.getElementById(x.id),lab=document.getElementById(x.label);if(path)path.classList.toggle('go',local>=x.at);if(lab)lab.classList.toggle('show',local>=x.at+0.45)});
+ }
+ if(i===8){
+   const local=t-scenes[i].t;
+   const ids=['buy1','buy2','buy3','buy4','sell1','sell2','sell3','sell4'];
+   ids.forEach((id,k)=>{const el=document.getElementById(id);if(el)el.classList.toggle('active',local>=k%4*2 && (k<4 ? local<8 : local>=0));});
+   // Both directions are taught in parallel: each successive stage is revealed every two seconds.
+   ['buy1','sell1'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('active',local>=0);});
+   ['buy2','sell2'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('active',local>=2);});
+   ['buy3','sell3'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('active',local>=4);});
+   ['buy4','sell4'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('active',local>=6);});
+ }
+ if(t>=TOTAL){running=false;document.getElementById('pause').textContent='Play';return}
+ raf=requestAnimationFrame(tick);
+}
+async function begin(){
+ document.getElementById('startscreen').style.display='none';
+ try{await audio.play()}catch(e){document.getElementById('startscreen').style.display='flex';return}
+ running=true;paused=false;elapsed=0;startClock=performance.now();lastScene=-1;document.getElementById('pause').textContent='Pause';raf=requestAnimationFrame(tick);
+}
+document.getElementById('start').onclick=begin;
+document.getElementById('pause').onclick=()=>{
+ if(running){running=false;paused=true;audio.pause();cancelAnimationFrame(raf);document.getElementById('pause').textContent='Play'}
+ else if(paused){audio.play();running=true;paused=false;startClock=performance.now()-elapsed*1000;document.getElementById('pause').textContent='Pause';raf=requestAnimationFrame(tick)}
+ else if(audio.ended||audio.currentTime>=TOTAL){reset()}
+ else {audio.play();running=true;startClock=performance.now()-elapsed*1000;document.getElementById('pause').textContent='Pause';raf=requestAnimationFrame(tick)}
+};
+function reset(){running=false;paused=false;cancelAnimationFrame(raf);audio.pause();audio.currentTime=0;elapsed=0;lastScene=-1;bar.style.width='0';root.innerHTML='';document.getElementById('startscreen').style.display='flex';document.getElementById('pause').textContent='Pause'}
+document.getElementById('replay').onclick=reset;
+</script>
+</body>
+</html>
