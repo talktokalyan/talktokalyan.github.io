@@ -108,21 +108,20 @@ author_profile: true
 <div class="visualization-grid">
 
 <div class="viz-card">
-<strong>Circular Flow in a Macroeconomy</strong>
+
 <p>
 <a href="../files/Visualizations/animated-circularflow.html" target="_blank">
-Open Visualization
+<strong>Circular Flow in a Macroeconomy</strong>
 </a>
 </p>
-</div>
 
-<div class="viz-card">
-<strong>Investment Spending – Gross Capital Formation (GCF)</strong>
+
 <p>
 <a href="../files/Visualizations/animated-gcf.html" target="_blank">
-Open Visualization
+<strong>Investment Spending – Gross Capital Formation (GCF)</strong>
 </a>
 </p>
+
 </div>
 
 <div class="viz-card">
