@@ -216,7 +216,7 @@ Open Visualization
 </div>
 
 <div class="viz-card">
-<strong>Money - Historical Timeline</strong>
+<strong>Money Historical Timeline</strong>
 <p>
 <a href="../files/Visualizations/animated-money-history.html" target="_blank">
 Open Historical timeline
@@ -225,10 +225,10 @@ Open Historical timeline
 </div>
 
 <div class="viz-card">
-<strong>Money - GSEC FILES</strong>
+<strong>Money GSEC FILES</strong>
 <p>
 <a href="../files/Visualizations/animated-moneymarket.html" target="_blank">
-Open Historical timeline
+Open GSEC animation
 </a>
 </p>
 </div>
