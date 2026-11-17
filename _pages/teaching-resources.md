@@ -225,6 +225,15 @@ Open Historical timeline
 </div>
 
 <div class="viz-card">
+<strong>Money: GSEC FILES</strong>
+<p>
+<a href="../files/Visualizations/animated-moneymarket.html" target="_blank">
+Open Historical timeline
+</a>
+</p>
+</div>
+
+<div class="viz-card">
 <strong>India's Policy Rates (RBI)</strong>
 <p>
 <a href="../files/Visualizations/india-rbi-policy-rates.html" target="_blank">
