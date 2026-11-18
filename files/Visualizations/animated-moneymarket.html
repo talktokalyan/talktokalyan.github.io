@@ -151,6 +151,60 @@ h1{font-size:clamp(38px,7vw,88px)}h2{font-size:clamp(27px,4vw,48px)}
  .rowblocks,.rowblocks.three{grid-template-columns:1fr 1fr}.block{min-width:160px}.liquidity{grid-template-columns:1fr;gap:9px}
  .step{padding:10px}.actor{min-width:130px}
 }
+
+/* Cinematic character-to-real-world reveal */
+.dual-credit{position:absolute;inset:0;width:100%;height:100%;overflow:hidden}
+.dual-photo{position:absolute;left:3%;top:9%;width:min(39vw,500px);height:min(67vh,470px);padding:7px;border:1px solid var(--line);background:#07090d;box-shadow:0 18px 55px #000d}
+.dual-photo img{position:absolute;inset:7px;width:calc(100% - 14px);height:calc(100% - 14px);object-fit:contain;background:#050608}
+.dual-photo .movie-shot{animation:movie-out 13s ease both}
+.dual-photo .real-shot{opacity:0;animation:real-in 13s ease both}
+.dual-copy{position:absolute;right:2%;bottom:9%;width:min(51%,650px);text-align:right;opacity:1}
+.dual-copy .char{font-size:clamp(20px,2.0vw,29px);font-weight:700;letter-spacing:.12em;color:var(--gold2);margin-bottom:18px;opacity:0;animation:char-in 13s ease both}
+.dual-copy .real{font-size:clamp(20px,2vw,28px);font-weight:700;letter-spacing:.06em;color:#fff;line-height:1.35;opacity:0;animation:copy-in 13s ease both}
+.dual-copy .role{font-size:clamp(17px,1.55vw,22px);font-weight:600;color:#e6a0a5;line-height:1.4;margin-top:9px;opacity:0;animation:copy-in 13s ease both}
+.dual-copy .description{font-size:clamp(16px,1.35vw,19px);line-height:1.55;color:#ddd7ca;margin-top:15px;letter-spacing:.025em;opacity:0;animation:copy-in 13s ease both}
+.dual-credit:before{content:"";position:absolute;left:46%;top:8%;height:78%;width:1px;background:linear-gradient(transparent,#806a3d,transparent);opacity:.6}
+@keyframes movie-out{
+  0%{opacity:0;transform:translate(-55vw,-38vh) scale(.94)}
+  8%,27%{opacity:1;transform:translate(0,0) scale(1)}
+  39%{opacity:0;transform:translate(0,0) scale(1)}
+  100%{opacity:0}
+}
+@keyframes char-in{
+  0%{opacity:0;transform:translate(55vw,38vh)}
+  8%,78%{opacity:1;transform:translate(0,0)}
+  100%{opacity:0;transform:translate(55vw,38vh)}
+}
+@keyframes real-in{
+  0%,35%{opacity:0;transform:translate(-55vw,-38vh) scale(.94)}
+  48%,78%{opacity:1;transform:translate(0,0) scale(1)}
+  100%{opacity:0;transform:translate(-55vw,-38vh) scale(.96)}
+}
+@keyframes copy-in{
+  0%,43%{opacity:0;transform:translate(55vw,38vh)}
+  54%,78%{opacity:1;transform:translate(0,0)}
+  100%{opacity:0;transform:translate(55vw,38vh)}
+}
+@media(max-width:700px){
+ .dual-photo{left:5%;top:8%;width:40vw;height:42vh}
+ .dual-copy{right:4%;bottom:8%;width:50%}
+ .dual-copy .char{font-size:clamp(14px,3vw,20px)}
+ .dual-copy .real{font-size:clamp(14px,3vw,20px)}
+ .dual-copy .role{font-size:clamp(12px,2.5vw,17px)}
+ .dual-copy .description{font-size:clamp(11px,2.2vw,15px)}
+}
+.agent-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;width:min(1050px,100%);margin:25px auto}
+.agent-card{border:1px solid var(--line);background:linear-gradient(145deg,#121a24,#080c11);padding:20px 14px;min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.agent-card img{max-width:95%;height:86px;object-fit:contain;margin-bottom:12px}
+.agent-card strong{font:20px Georgia,serif;color:var(--gold2);text-align:center}
+.agent-card small{font-size:13px;line-height:1.5;color:var(--muted);text-align:center;margin-top:8px}
+.yield-chart{width:min(900px,100%);margin:28px auto 0;border:1px solid var(--line);background:#080d13;padding:18px 22px}
+.yield-chart svg{width:100%;height:auto;display:block}
+.yield-chart .axis{stroke:#a99a78;stroke-width:2;fill:none}
+.yield-chart .curve{stroke:#e0bf75;stroke-width:5;fill:none;stroke-linecap:round}
+.yield-chart .gridline{stroke:#34404a;stroke-width:1;stroke-dasharray:5 7}
+.yield-chart text{fill:#e9e2d4;font:17px Arial,sans-serif}
+
 </style>
 </head>
 <body>
@@ -169,82 +223,131 @@ h1{font-size:clamp(38px,7vw,88px)}h2{font-size:clamp(27px,4vw,48px)}
  <audio id="music" src="bond.mp3" preload="auto"></audio>
 </div>
 <script>
-const TOTAL=125;
+const TOTAL=129.645714;
 const A='';
 const scenes=[
-
-{t:5,d:13,html:`
-<div class="scene-inner">
-  <div class="title-scene fade">
-    <div class="eyebrow">A sovereign debt affair</div>
-
-    <h1>
-      THE
-      <span class="title-transform">
-        <span class="old-title">G-SEC</span>
-        <span class="new-title">BOND</span>
-      </span>
-      FILES
-    </h1>
-
-    <div class="rule"></div>
-    <div class="sub">
-      India's Government Securities & Money Markets
-    </div>
-  </div>
-</div>`},
-{t:10,d:13,html:`<div class="scene-inner"><div class="credit-layout fade"><div class="photo-frame contain"><img src="${A}nirmala_sitharaman.png" alt="Smt. Nirmala Sitharaman"></div><div class="credit-copy"><div class="char">M · The Mastermind</div><div class="real">Smt. Nirmala Sitharaman</div><div class="role">Finance Minister · Government of India</div><div class="description">The Government's borrowing programme is financed through the issuance of Treasury Bills and dated securities.</div></div></div></div>`},
-{t:23,d:13,html:`<div class="scene-inner"><div class="credit-layout fade"><div class="photo-frame cover"><img src="${A}Anuradha_Thakur_DEA_Secretary.jpg" alt="Anuradha Thakur"></div><div class="credit-copy"><div class="char">Bill Tanner · The Chief of Staff</div><div class="real">Ms. Anuradha Thakur</div><div class="role">Secretary · Department of Economic Affairs</div><div class="description">Coordinates economic affairs and the Government's borrowing programme.</div></div></div></div>`},
-{t:36,d:13,html:`<div class="scene-inner"><div class="credit-layout fade"><div class="photo-frame cover"><img src="${A}Sanjay_Malhotra_RBI_Governor.jpg" alt="Sanjay Malhotra"></div><div class="credit-copy"><div class="char">The Governor · The Central Banker</div><div class="real">Shri Sanjay Malhotra</div><div class="role">Governor · Reserve Bank of India</div><div class="description">Monetary policy, liquidity management and government securities operations.</div></div></div></div>`},
-{t:49,d:13,html:`<div class="scene-inner"><div class="credit-layout fade"><div class="photo-frame"><img src="${A}Nand_Kishore_CCIL_MD.jpg" alt="Nand Kishore"></div><div class="credit-copy"><div class="char">Q · The Quartermaster</div><div class="real">Mr. Nand Kishore</div><div class="role">Managing Director · CCIL</div><div class="description">Clearing, settlement and collateral-management infrastructure for financial markets.</div></div></div></div>`},
-{t:62,d:17,html:`<div class="scene-inner"><div class="diagram-scene fade"><div class="eyebrow">The specialist agents</div><h2>Primary <span class="gold">Dealers</span></h2><div class="rowblocks three" style="margin:20px auto"><div class="mini"><img src="${A}PNB_GILTS_PD.png" style="max-width:100%;height:54px;object-fit:contain"><small>Primary Dealer</small></div><div class="mini"><img src="${A}ICICI_PD.png" style="max-width:100%;height:54px;object-fit:contain"><small>Primary Dealer</small></div><div class="mini"><img src="${A}sbi_dfhi_pd.jpeg" style="max-width:100%;height:54px;object-fit:contain"><small>Primary Dealer</small></div></div><div class="arrow">↕</div><div class="rowblocks"><div class="block"><strong>Primary Dealers</strong><small>Participate in auctions · make markets · trade G-Secs</small></div><div class="block"><strong>Bank Treasuries</strong><small>Manage liquidity · hold and trade securities · borrow and lend</small></div></div><div class="caption">The specialist dealers and bank treasury desks</div></div></div>`},
-{t:79,d:10,html:`<div class="scene-inner"><div class="diagram-scene fade"><div class="eyebrow">Market infrastructure</div><h2><span class="gold">Q</span> is in control</h2><div style="margin:15px auto"><img src="${A}CCIL.jpeg" style="height:min(24vh,190px);max-width:65%;object-fit:contain;background:white;padding:8px"></div><div class="block" style="margin:auto"><strong>CCIL</strong><small>Clearing · Settlement · Tri-party collateral management</small></div><div class="caption">Infrastructure provider — not the cash lender or borrower</div></div></div>`},
-{t:89,d:22,html:`<div class="scene-inner"><div class="diagram-scene fade"><div class="eyebrow">The secured liquidity operation</div><h2>Repo: <span class="gold">four movements</span></h2>
-<div class="repo-flow">
- <div class="repo-institutions">
+ {t:0,d:8,html:`
+ <div class="scene-inner"><div class="title-scene fade">
+   <div class="eyebrow">A Bank Treasury Mission</div>
+   <h1>THE <span class="title-transform"><span class="old-title">G-SEC</span><span class="new-title">BOND</span></span> FILES</h1>
+   <div class="rule"></div><div class="sub">India's Government Securities & Money Markets</div>
+ </div></div>`},
+ {t:8,d:13,html:`<div class="scene-inner"><div class="dual-credit">
+      <div class="dual-photo">
+        <img class="movie-shot" src="${A}Judi-Dench-M.png" alt="Judi Dench as M">
+        <img class="real-shot" src="${A}nirmala_sitharaman.png" alt="Smt. Nirmala Sitharaman">
+      </div>
+      <div class="dual-copy">
+        <div class="char">M · THE MASTERMIND</div>
+        <div class="real">Smt. Nirmala Sitharaman</div>
+        <div class="role">Finance Minister · Government of India</div>
+        <div class="description">Sets the sovereign borrowing programme and fiscal financing priorities; the Government raises funds through Treasury Bills and dated G-Secs.</div>
+      </div>
+    </div></div>`},
+ {t:21,d:13,html:`<div class="scene-inner"><div class="dual-credit">
+      <div class="dual-photo">
+        <img class="movie-shot" src="${A}Bill-Tanner.png" alt="Bill Tanner">
+        <img class="real-shot" src="${A}Anuradha_Thakur_DEA_Secretary.jpg" alt="Ms. Anuradha Thakur">
+      </div>
+      <div class="dual-copy">
+        <div class="char">BILL TANNER / M’S CHIEF OF STAFF</div>
+        <div class="real">Ms. Anuradha Thakur</div>
+        <div class="role">Secretary · Department of Economic Affairs</div>
+        <div class="description">Coordinates the Government’s economic-affairs machinery and the sovereign borrowing programme.</div>
+      </div>
+    </div></div>`},
+ {t:34,d:13,html:`<div class="scene-inner"><div class="dual-credit">
+      <div class="dual-photo">
+        <img class="movie-shot" src="${A}Desmond-Llewelyn-Q.jpg" alt="Desmond Llewelyn as Q">
+        <img class="real-shot" src="${A}Sanjay_Malhotra_RBI_Governor.jpg" alt="Shri Sanjay Malhotra">
+      </div>
+      <div class="dual-copy">
+        <div class="char"> Q / QUARTERMASTER</div>
+        <div class="real">Shri Sanjay Malhotra</div>
+        <div class="role">Governor · Reserve Bank of India</div>
+        <div class="description">Leads the central bank responsible for monetary policy, liquidity management and the Government’s debt-management operations as banker to Government.</div>
+      </div>
+    </div></div>`},
+ {t:47,d:13,html:`<div class="scene-inner"><div class="dual-credit">
+      <div class="dual-photo">
+        <img class="movie-shot" src="${A}John-Cleese-R.png" alt="R character card: John Cleese">
+        <img class="real-shot" src="${A}Nand_Kishore_CCIL_MD.jpg" alt="Mr. Nand Kishore">
+      </div>
+      <div class="dual-copy">
+        <div class="char"> R / Q’S TECHNICAL SPECIALIST</div>
+        <div class="real">Mr. Nand Kishore</div>
+        <div class="role">Managing Director · CCIL</div>
+        <div class="description">Oversees market infrastructure that supports clearing, settlement and collateral management for Government securities and money markets.</div>
+      </div>
+    </div></div>`},
+ {t:60,d:13,html:`<div class="scene-inner"><div class="dual-credit">
+      <div class="dual-photo">
+        <img class="movie-shot" src="${A}James-Bond.png" alt="James Bond">
+        <img class="real-shot" src="${A}Bond_CallMoney(1).webp" alt="Contemporary G-Sec trader">
+      </div>
+      <div class="dual-copy">
+        <div class="char">PIERCE BROSNAN · MR. BOND · JAMES BOND · 007</div>
+        <div class="real">The G-Sec Trader</div>
+        <div class="role">Bank Treasury · Government Securities Dealer</div>
+        <div class="description">Executes the mission: price, trade and manage sovereign bonds; monitor yields, liquidity, duration and risk on the trading floor.</div>
+      </div>
+    </div></div>`},
+ {t:73,d:11,html:`<div class="scene-inner"><div class="diagram-scene fade"><div class="eyebrow">The specialist agents</div><h2>THE <span class="gold">00s</span> · MARKET-MAKING AGENTS</h2>
+ <div class="agent-grid">
+  <div class="agent-card"><img src="${A}PNB_GILTS_PD(1).png" alt="PNB Gilts logo"><strong>PNB Gilts</strong><small>Standalone Primary Dealer · auction participation and market-making</small></div>
+  <div class="agent-card"><img src="${A}ICICI_PD(1).png" alt="ICICI Securities Primary Dealership logo"><strong>ICICI Securities PD</strong><small>Standalone Primary Dealer · underwriting, bidding and secondary-market liquidity</small></div>
+  <div class="agent-card"><img src="${A}sbi_dfhi_pd(1).jpeg" alt="SBI DFHI logo"><strong>SBI DFHI</strong><small>Standalone Primary Dealer · market-making and trading in Government securities</small></div>
+  <div class="agent-card"><div class="monogram gold">SCB</div><strong>Scheduled Commercial Banks</strong><small>Hold G-Secs; manage SLR portfolios, liquidity and treasury positions</small></div>
+  <div class="agent-card"><div class="monogram gold">RRB</div><strong>Regional Rural Banks</strong><small>Eligible investors in Government securities; manage statutory and investment portfolios</small></div>
+  <div class="agent-card"><div class="monogram gold">00</div><strong>Bank Treasury Desks</strong><small>Bid, invest, trade, repo and manage interest-rate risk</small></div>
+ </div><div class="caption">Institutional marks are supplied logos where available; SCB / RRB are category labels, not official logos.</div>
+ </div></div>`},
+ {t:84,d:8,html:`<div class="scene-inner"><div class="diagram-scene fade"><div class="eyebrow">Market infrastructure</div><h2><span class="gold">Q</span> · THE SYSTEMS BEHIND THE MISSION</h2>
+ <div style="margin:12px auto"><img src="${A}CCIL(1).jpeg" style="height:min(23vh,180px);max-width:55%;object-fit:contain;background:white;padding:8px" alt="CCIL logo"></div>
+ <div class="block" style="margin:auto"><strong>CCIL · Clearing Corporation of India Ltd.</strong><small>Clearing · settlement · collateral management · tri-party repo infrastructure</small></div>
+ <div class="caption">Market infrastructure provider — not the cash lender or borrower in an RBI repo operation</div></div></div>`},
+ {t:92,d:16,html:`<div class="scene-inner"><div class="diagram-scene fade"><div class="eyebrow">The secured liquidity operation</div><h2>REPO · <span class="gold">FOUR MOVEMENTS</span></h2>
+ <div class="repo-flow"><div class="repo-institutions">
   <div class="repo-bank"><strong>Bank</strong><small>Needs short-term liquidity · owns eligible G-Secs</small></div>
   <div class="repo-rbi"><strong>Reserve Bank of India</strong><small>Provides liquidity against eligible collateral</small></div>
  </div>
- <div class="repo-phase phase-one" id="phase1">STEP 1 · BANK PLEDGES SECURITIES & RECEIVES LIQUIDITY</div>
- <div class="repo-arrows">
-  <svg viewBox="0 0 900 220" preserveAspectRatio="none" aria-label="Four sequential repo transaction flows">
-   <defs><marker id="repoArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#d8b76b" stroke-width="1.2"/></marker></defs>
-   <path id="rp1" class="repo-path" d="M150 18 C 230 78, 670 78, 750 18"/>
-   <path id="rp2" class="repo-path" d="M750 54 C 670 112, 230 112, 150 54"/>
-   <path id="rp3" class="repo-path" d="M150 132 C 230 190, 670 190, 750 132"/>
-   <path id="rp4" class="repo-path" d="M750 168 C 670 214, 230 214, 150 168"/>
-  </svg>
-  <div id="rl1" class="repo-label l1"><span class="repo-stepno">01</span>Bank pledges G-Secs to RBI</div>
-  <div id="rl2" class="repo-label l2"><span class="repo-stepno">02</span>RBI advances cash to bank</div>
-  <div id="rl3" class="repo-label l3"><span class="repo-stepno">03</span>Bank repays cash + repo interest</div>
-  <div id="rl4" class="repo-label l4"><span class="repo-stepno">04</span>RBI returns G-Secs to bank</div>
- </div>
- <div class="repo-phase phase-two" id="phase2">STEP 2 · BANK REPAYS & COLLATERAL IS RELEASED</div>
- <div class="repo-note">Four movements in sequence · pledge → cash loan → repayment → securities returned</div>
-</div>
-<div class="callmoney"><b>CALL MONEY:</b> unsecured overnight borrowing and lending between eligible participants. The four-step sequence above depicts a repo with the RBI, not a call-money loan.</div>
-</div></div>`},
-{t:111,d:12,html:`<div class="scene-inner"><div class="diagram-scene fade"><div class="eyebrow">The Governor's move</div><h2>RBI manages <span class="gold">liquidity</span></h2>
-<div class="liq-sequence">
- <section class="liq-case" id="liqBuy">
-  <h3>RBI BUYS G-SECS</h3>
-  <div class="liq-step" id="buy1"><span class="n">01</span><div><strong>RBI purchases bonds</strong><small>Payment is made to the banking system</small></div></div>
-  <div class="liq-step" id="buy2"><span class="n">02</span><div><strong>Liquidity is injected</strong><small>Banking-system reserves increase</small></div></div>
-  <div class="liq-step" id="buy3"><span class="arrow-indicator up">↑</span><div><strong>Bond prices rise</strong><small>Higher demand / purchase pressure</small></div></div>
-  <div class="liq-step" id="buy4"><span class="arrow-indicator down">↓</span><div><strong>Bond yields fall</strong><small>Price and yield move inversely</small></div></div>
- </section>
- <section class="liq-case absorb-case" id="liqSell">
-  <h3>RBI SELLS G-SECS / ABSORBS</h3>
-  <div class="liq-step" id="sell1"><span class="n">01</span><div><strong>RBI sells G-Secs</strong><small>Or absorbs funds through a reverse-repo operation</small></div></div>
-  <div class="liq-step" id="sell2"><span class="n">02</span><div><strong>Liquidity is absorbed</strong><small>Banking-system reserves decrease</small></div></div>
-  <div class="liq-step" id="sell3"><span class="arrow-indicator down">↓</span><div><strong>Bond prices fall</strong><small>Selling pressure / lower demand</small></div></div>
-  <div class="liq-step" id="sell4"><span class="arrow-indicator up">↑</span><div><strong>Bond yields rise</strong><small>Price and yield move inversely</small></div></div>
- </section>
-</div>
-<div class="corridor-note"><strong>POLICY RATE CORRIDOR:</strong> The policy repo rate is the policy anchor. The <strong>MSF sets the upper ceiling</strong> and the <strong>SDF sets the lower floor</strong> for overnight rates. The fixed-rate reverse repo historically served as the floor; the SDF replaced it as the floor in April 2022.</div>
-<div class="caption">Reserve liquidity is not the same as broad money</div>
-</div></div>`},
-{t:123,d:6.645688,html:`<div class="final fade"><img src="${A}Bond_CallMoney.webp" alt="Bond at the call money dealing room"><div class="final-text"><div class="eyebrow">Agent 007</div><h1>Bond...<br><span class="gold">James Bond.</span></h1><div class="rule"></div><div class="sub">The G-Sec Trader · From the Bank Treasury</div><div class="sub gold" style="margin-top:10px">A Licence to Buy and Sell</div></div></div>`}
+ <div class="repo-arrows"><svg viewBox="0 0 900 220" preserveAspectRatio="none" aria-label="Four sequential repo transaction flows">
+  <defs><marker id="repoArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#d8b76b" stroke-width="1.2"/></marker></defs>
+  <path id="rp1" class="repo-path" d="M150 18 C 230 78, 670 78, 750 18"/><path id="rp2" class="repo-path" d="M750 54 C 670 112, 230 112, 150 54"/>
+  <path id="rp3" class="repo-path" d="M150 132 C 230 190, 670 190, 750 132"/><path id="rp4" class="repo-path" d="M750 168 C 670 214, 230 214, 150 168"/>
+ </svg>
+ <div id="rl1" class="repo-label l1">01 · Bank transfers eligible G-Secs to RBI</div><div id="rl2" class="repo-label l2">02 · RBI advances cash</div>
+ <div id="rl3" class="repo-label l3">03 · Bank repays principal + repo interest</div><div id="rl4" class="repo-label l4">04 · RBI returns G-Secs</div></div>
+ <div class="repo-note">Collateralised borrowing · sale with an agreement to repurchase</div></div>
+ <div class="callmoney"><b>CALL MONEY IS DIFFERENT:</b> unsecured overnight borrowing and lending between eligible participants. It does not involve G-Sec collateral.</div>
+ </div></div>`},
+ {t:108,d:11,html:`<div class="scene-inner"><div class="diagram-scene fade"><div class="eyebrow">The Governor's move</div><h2>RBI MANAGES <span class="gold">LIQUIDITY</span></h2>
+ <div class="liq-sequence">
+  <section class="liq-case" id="liqBuy"><h3>REPO / LIQUIDITY INJECTION</h3>
+   <div class="liq-step" id="buy1"><span class="n">01</span><div><strong>RBI provides cash against G-Sec collateral</strong><small>Repo injects short-term liquidity</small></div></div>
+   <div class="liq-step" id="buy2"><span class="n">02</span><div><strong>Banking-system reserves rise</strong><small>Liquidity conditions ease</small></div></div>
+   <div class="liq-step" id="buy3"><span class="arrow-indicator up">↑</span><div><strong>Bond prices tend to rise</strong><small>Improved liquidity can support demand for bonds</small></div></div>
+   <div class="liq-step" id="buy4"><span class="arrow-indicator down">↓</span><div><strong>Bond yields tend to fall</strong><small>Bond prices and yields move inversely</small></div></div>
+  </section>
+  <section class="liq-case absorb-case" id="liqSell"><h3>REVERSE REPO / LIQUIDITY ABSORPTION</h3>
+   <div class="liq-step" id="sell1"><span class="n">01</span><div><strong>Banks place funds with RBI</strong><small>Reverse repo absorbs liquidity against collateral</small></div></div>
+   <div class="liq-step" id="sell2"><span class="n">02</span><div><strong>Banking-system reserves fall</strong><small>Liquidity conditions tighten</small></div></div>
+   <div class="liq-step" id="sell3"><span class="arrow-indicator down">↓</span><div><strong>Bond prices tend to fall</strong><small>Tighter liquidity can weaken demand for bonds</small></div></div>
+   <div class="liq-step" id="sell4"><span class="arrow-indicator up">↑</span><div><strong>Bond yields tend to rise</strong><small>Bond prices and yields move inversely</small></div></div>
+  </section>
+ </div><div class="corridor-note"><strong>RATE CORRIDOR:</strong> Policy repo rate = anchor · MSF = upper ceiling · SDF = lower floor. A reverse repo is collateralised; SDF absorbs liquidity without collateral.</div>
+ </div></div>`},
+ {t:119,d:10.645714,html:`<div class="scene-inner"><div class="diagram-scene fade"><div class="eyebrow">The trader’s final instrument</div><h2>READING THE <span class="gold">YIELD CURVE</span></h2>
+ <div class="yield-chart"><svg viewBox="0 0 900 430" role="img" aria-label="Illustrative upward-sloping government securities yield curve">
+  <g class="gridline"><path d="M95 80H850M95 145H850M95 210H850M95 275H850M95 340H850"/></g>
+  <path class="axis" d="M95 45V340H850"/>
+  <path class="curve" d="M110 295 C210 278 285 250 370 225 S560 168 650 132 S780 93 835 70"/>
+  <g><text x="18" y="55">Yield</text><text x="430" y="405">Residual maturity</text>
+  <text x="105" y="370">3M</text><text x="300" y="370">1Y</text><text x="500" y="370">5Y</text><text x="690" y="370">10Y</text><text x="810" y="370">30Y</text>
+  <text x="110" y="25">ILLUSTRATIVE · NOT LIVE MARKET DATA</text></g>
+ </svg></div><div class="sub" style="margin-top:18px">A yield curve plots yields against maturities. Its slope reflects expectations, term premia and market conditions.</div>
+ <div class="caption">Agent 007’s briefing is complete · Government securities are the mission</div>
+ </div></div>`}
 ];
 let running=false,paused=false,elapsed=0,startClock=0,raf=0,lastScene=-1;
 const audio=document.getElementById('music'),root=document.getElementById('scene'),bar=document.getElementById('progress');
@@ -262,7 +365,7 @@ function tick(now){
  let i=0;for(let j=0;j<scenes.length;j++)if(t>=scenes[j].t)i=j;
  drawScene(i);
  bar.style.width=(100*t/TOTAL)+'%';
- if(i===7){
+ if(i===8){
    const local=t-scenes[i].t;
    const phase1=document.getElementById('phase1'),phase2=document.getElementById('phase2');
    if(phase1)phase1.classList.toggle('show',local>=1.0);
@@ -270,7 +373,7 @@ function tick(now){
    const steps=[{id:'rp1',label:'rl1',at:2.0},{id:'rp2',label:'rl2',at:5.5},{id:'rp3',label:'rl3',at:11.0},{id:'rp4',label:'rl4',at:14.5}];
    steps.forEach(x=>{const path=document.getElementById(x.id),lab=document.getElementById(x.label);if(path)path.classList.toggle('go',local>=x.at);if(lab)lab.classList.toggle('show',local>=x.at+0.45)});
  }
- if(i===8){
+ if(i===9){
    const local=t-scenes[i].t;
    const ids=['buy1','buy2','buy3','buy4','sell1','sell2','sell3','sell4'];
    ids.forEach((id,k)=>{const el=document.getElementById(id);if(el)el.classList.toggle('active',local>=k%4*2 && (k<4 ? local<8 : local>=0));});

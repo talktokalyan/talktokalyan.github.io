@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+<defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#182333"/><stop offset="1" stop-color="#030507"/></linearGradient></defs>
+<rect width="800" height="1000" fill="url(#g)"/>
+<rect x="35" y="35" width="730" height="930" fill="none" stroke="#d8b76b" stroke-width="5"/>
+<circle cx="400" cy="365" r="210" fill="none" stroke="#806a3d" stroke-width="5"/>
+<text x="400" y="465" fill="#d8b76b" font-family="Georgia,serif" font-size="300" text-anchor="middle">R</text>
+<text x="400" y="720" fill="#f5f1e8" font-family="Arial,sans-serif" font-size="54" text-anchor="middle" letter-spacing="8">JOHN CLEESE</text>
+<text x="400" y="800" fill="#c4c0b6" font-family="Arial,sans-serif" font-size="36" text-anchor="middle" letter-spacing="6">Q'S TECHNICAL SPECIALIST</text>
+</svg>
