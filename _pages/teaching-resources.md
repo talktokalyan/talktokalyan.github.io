@@ -228,10 +228,10 @@ Open Visualization
 </div>
 
 <div class="viz-card">
-<strong>Simulation of Labour Demand</strong>
+<strong>LABOUR MARKET</strong>
 <p>
 <a href="../files/Visualizations/simulation-labour-demand.html" target="_blank">
-View Simulation
+Simulation of Labour Demand
 </a>
 </p>
 </div>
