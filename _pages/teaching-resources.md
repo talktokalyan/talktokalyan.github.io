@@ -178,16 +178,16 @@ Savings in Indian Macroeconomy
 
 <p>
 <a href="../files/Visualizations/animated-gcf.html" target="_blank">
-<strong>Investment Spending – Gross Capital Formation (GCF)</strong>
+Investment Spending – Gross Capital Formation (GCF)
 </a>
 </p>
 </div>
 
 <div class="viz-card">
-<strong>India's Government Budget</strong>
+<strong>GOVT BUDGET</strong>
 <p>
 <a href="../files/Visualizations/animated-india-budget.html" target="_blank">
-Open Visualization
+India's Government Budget
 </a>
 </p>
 </div>
