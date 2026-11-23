@@ -214,14 +214,7 @@ Open Visualization
 </p>
 </div>
 
-<div class="viz-card">
-<strong>Money Historical Timeline</strong>
-<p>
-<a href="../files/Visualizations/animated-money-history.html" target="_blank">
-Open Historical timeline
-</a>
-</p>
-</div>
+
 
 <div class="viz-card">
 <strong>Money GSEC FILES</strong>
