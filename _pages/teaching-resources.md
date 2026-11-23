@@ -108,10 +108,11 @@ author_profile: true
 <div class="visualization-grid">
 
 <div class="viz-card">
+<strong>OUTPUT MEASURES IN AN ECONOMY</strong>
 
 <p>
 <a href="../files/Visualizations/animated-circularflow.html" target="_blank">
-<strong>Circular Flow in a Macroeconomy</strong>
+Circular Flow in a Macroeconomy
 </a>
 </p>
 
@@ -122,49 +123,36 @@ author_profile: true
 </a>
 </p>
 
-</div>
 
-<div class="viz-card">
-<strong>Index of Industrial Production (IIP)</strong>
 <p>
 <a href="../files/Visualizations/animated-iip.html" target="_blank">
-Open Visualization
+Index of Industrial Production (IIP)
 </a>
 </p>
 </div>
 
 <div class="viz-card">
-<strong>India's Consumer Price Index (Base: 2024)</strong>
+<strong>PRICE INDICES IN AN ECONOMY</strong>
+
 <p>
 <a href="../files/Visualizations/animated-cpi.html" target="_blank">
-Open Visualization
+India's Consumer Price Index (Base: 2024)
 </a>
 </p>
-</div>
 
-<div class="viz-card">
-<strong>India's CPI (Core and Non-Core)</strong>
 <p>
 <a href="../files/Visualizations/animated-core-noncore-cpi.html" target="_blank">
-Open Visualization
-</a>
+India's CPI (Core and Non-Core)</a>
 </p>
-</div>
-
-<div class="viz-card">
-<strong>India's CPI Inflation</strong>
 <p>
 <a href="../files/Visualizations/india-cpi-inflation.html" target="_blank">
-Open Visualization
+India's CPI Inflation
 </a>
 </p>
-</div>
 
-<div class="viz-card">
-<strong>India's Wholesale Price Index (Base: 2022-23)</strong>
 <p>
 <a href="../files/Visualizations/animated-wpi.html" target="_blank">
-Open Visualization
+India's Wholesale Price Index (Base: 2022-23)
 </a>
 </p>
 </div>
