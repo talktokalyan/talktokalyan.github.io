@@ -118,13 +118,6 @@ Circular Flow in a Macroeconomy
 
 
 <p>
-<a href="../files/Visualizations/animated-gcf.html" target="_blank">
-<strong>Investment Spending – Gross Capital Formation (GCF)</strong>
-</a>
-</p>
-
-
-<p>
 <a href="../files/Visualizations/animated-iip.html" target="_blank">
 Index of Industrial Production (IIP)
 </a>
@@ -176,10 +169,16 @@ Open Animation
 </div>
 
 <div class="viz-card">
-<strong>Savings in Indian Macroeconomy</strong>
+<strong>SAVINGS AND INVESTMENT</strong>
 <p>
 <a href="../files/Visualizations/animated-savings.html" target="_blank">
-Open Animation
+Savings in Indian Macroeconomy
+</a>
+</p>
+
+<p>
+<a href="../files/Visualizations/animated-gcf.html" target="_blank">
+<strong>Investment Spending – Gross Capital Formation (GCF)</strong>
 </a>
 </p>
 </div>
@@ -194,10 +193,10 @@ Open Visualization
 </div>
 
 <div class="viz-card">
-<strong>India's Balance of Payments</strong>
+<strong>EXTERNAL ACCOUNTS</strong>
 <p>
 <a href="../files/Visualizations/animated-bop.html" target="_blank">
-Open Visualization
+India's Balance of Payments
 </a>
 </p>
 </div>
@@ -205,19 +204,16 @@ Open Visualization
 
 
 <div class="viz-card">
-<strong>Money GSEC FILES</strong>
+<strong>MONEY</strong>
 <p>
 <a href="../files/Visualizations/animated-moneymarket.html" target="_blank">
-Open GSEC animation
+G-SECs and MONEY MARKET
 </a>
 </p>
-</div>
 
-<div class="viz-card">
-<strong>India's Policy Rates (RBI)</strong>
 <p>
 <a href="../files/Visualizations/india-rbi-policy-rates.html" target="_blank">
-View Info
+India's Policy Rates (RBI)
 </a>
 </p>
 </div>
